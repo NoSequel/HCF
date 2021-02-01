@@ -7,20 +7,16 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class  ClassBoardProvider implements BoardProvider {
 
-    private final ClassController classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+    private final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
 
     @Override
     public List<String> getStrings(Player player) {
-        final List<String> strings = new ArrayList<>();
-
-        classController.getClasses().stream()
+        return classController.getClasses().stream()
                 .filter(clazz -> clazz.getEquipped().contains(player))
-                .map(clazz -> clazz.getStrings(player))
-                .forEach(strings::addAll);
-
-        return strings;
+                .map(clazz -> clazz.getStrings(player)).findFirst().orElseGet(ArrayList::new);
     }
 }

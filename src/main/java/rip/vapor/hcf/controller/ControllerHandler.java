@@ -16,7 +16,7 @@ public class ControllerHandler {
      * @param <T>   the type of the controller
      * @return the controller
      */
-    public <T extends Controller> T findController(Class<T> clazz) {
+    public <T extends Controller> T find(Class<T> clazz) {
         return clazz.cast(this.controllers.stream()
                 .filter(controller -> controller.getClass().equals(clazz))
                 .findFirst().orElse(null));
@@ -30,13 +30,13 @@ public class ControllerHandler {
      * @return the registered controller | or the previously registered controller.
      */
     @SuppressWarnings("unchecked")
-    public <T extends Controller> T registerController(Controller controller) {
+    public <T extends Controller> T register(Controller controller) {
         if (this.controllers.add(controller)) {
             controller.enable();
             return (T) controller;
         }
 
-        return (T) this.findController(controller.getClass());
+        return (T) this.find(controller.getClass());
     }
 
     /**
@@ -44,9 +44,9 @@ public class ControllerHandler {
      *
      * @param controller the controller to get unregistered
      */
-    public void unregisterController(Class<? extends Controller> controller) {
-        if (this.findController(controller) != null) {
-            this.controllers.remove(this.findController(controller));
+    public void unregister(Class<? extends Controller> controller) {
+        if (this.find(controller) != null) {
+            this.controllers.remove(this.find(controller));
         }
 
         System.out.println("Tried unregistering controller which isn't registered");

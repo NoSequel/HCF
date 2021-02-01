@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class SystemTeamCommand implements Controllable<TeamController> {
 
     private final TeamController controller = this.getController();
-    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().findController(PlayerDataController.class);
+    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
 
     @Command(label = "systemteam", aliases = {"systeam", "steam"})
     @Subcommand(label = "help", parentLabel = "systemteam")

@@ -19,7 +19,7 @@ import rip.vapor.hcf.timers.impl.ArcherSpeedTimer;
 
 public class SpeedItemAbility extends Ability {
 
-    private final ArcherSpeedTimer timer = Vapor.getInstance().getHandler().findController(TimerController.class).findTimer(ArcherSpeedTimer.class);
+    private final ArcherSpeedTimer timer = Vapor.getInstance().getHandler().find(TimerController.class).findTimer(ArcherSpeedTimer.class);
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -64,7 +64,7 @@ public class SpeedItemAbility extends Ability {
      * @return the state of the archer class
      */
     private boolean equippedArcher(Player player) {
-        final ClassController classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+        final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
         final ArcherClass archerClass = classController.findClass(ArcherClass.class);
 
         return archerClass.getEquipped().contains(player);

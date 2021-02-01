@@ -19,7 +19,7 @@ public interface Controllable<T extends Controller> {
                 .findFirst().orElse(null);
 
         if (interfaceClass != null) {
-            return Vapor.getInstance().getHandler().findController((Class<T>) interfaceClass.getActualTypeArguments()[0]);
+            return Vapor.getInstance().getHandler().find((Class<T>) interfaceClass.getActualTypeArguments()[0]);
         }
 
         throw new IllegalStateException("No interface by name Controllable found.");

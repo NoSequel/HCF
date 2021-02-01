@@ -1,5 +1,6 @@
 package rip.vapor.hcf;
 
+import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
 import rip.vapor.hcf.listeners.EnvironmentListener;
 import rip.vapor.hcf.listeners.combatwall.CombatWallListener;
 import rip.vapor.hcf.logger.CombatLoggerController;
@@ -34,6 +35,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 @Getter
 public class Vapor extends JavaPlugin {
 
@@ -47,6 +50,9 @@ public class Vapor extends JavaPlugin {
         // register the instance
         instance = this;
 
+        // save default config
+        this.saveDefaultConfig();
+        this.debugConfig();
 
         // setup database controller
         final DatabaseController controller = new DatabaseController(
@@ -63,16 +69,16 @@ public class Vapor extends JavaPlugin {
         controller.setDataHandler(new MongoDataHandler(controller));
 
         // register controllers
-        this.handler.registerController(controller);
-        this.handler.registerController(new TeamController());
-        this.handler.registerController(new PlayerDataController());
-        this.handler.registerController(new TimerController());
-        this.handler.registerController(new ClassController());
-        this.handler.registerController(new TaskController());
-        this.handler.registerController(new CombatLoggerController(this));
+        this.handler.register(controller);
+        this.handler.register(new TeamController());
+        this.handler.register(new PlayerDataController());
+        this.handler.register(new TimerController());
+        this.handler.register(new ClassController());
+        this.handler.register(new TaskController());
+        this.handler.register(new CombatLoggerController(this));
 
         // register commands
-        final CommandController commandController = handler.registerController(new CommandController("hcteams"));
+        final CommandController commandController = handler.register(new CommandController("vapor"));
         commandController.registerCommand(
                 new TeamCommand(),
                 new SystemTeamCommand(),
@@ -92,9 +98,10 @@ public class Vapor extends JavaPlugin {
         pluginManager.registerEvents(new EquipListener(), this);
         pluginManager.registerEvents(new EnvironmentListener(), this);
         pluginManager.registerEvents(new CombatWallListener(), this);
+        pluginManager.registerEvents(new EnchantmentLimiterListener(), this);
 
         // setup scoreboard
-        new Assemble(this, new BoardProviderHandler()).setAssembleStyle(AssembleStyle.MODERN);
+        new Assemble(this, new BoardProviderHandler()).setTicks(1L);
     }
 
     @Override
@@ -102,5 +109,18 @@ public class Vapor extends JavaPlugin {
         Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer("The server is shutting down"));
 
         handler.getControllers().forEach(Controller::disable);
+    }
+
+    /**
+     * Debug the config to the console
+     */
+    private void debugConfig() {
+        Bukkit.getLogger().log(Level.INFO, "Loading config.yml");
+        Bukkit.getLogger().log(Level.INFO, "    [ Kitmap Enabled: " + VaporConstants.KITMAP_ENABLED + " ]");
+
+
+        // potion limits
+        VaporConstants.ENCHANTMENT_LIMITS
+                .forEach(((enchantment, integer) -> Bukkit.getLogger().log(Level.INFO, "    [ Enchantment Limit " + enchantment.getName() + ": " + integer + " ]")));
     }
 }

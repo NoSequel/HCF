@@ -61,14 +61,14 @@ public class TeamController implements Controller, DataController<Team, TeamData
 
     @Override
     public void disable() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().findController(DatabaseController.class);
+        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
 
         teams.forEach(loadable -> controller.getDataHandler().save(loadable, "teams"));
     }
 
     @Override
     public void loadAll() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().findController(DatabaseController.class);
+        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
 
         controller.getDataHandler().loadAll(this, "teams", Team.class);
     }

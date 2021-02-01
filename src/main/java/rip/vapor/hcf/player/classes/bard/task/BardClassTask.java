@@ -9,7 +9,7 @@ import rip.vapor.hcf.util.tasks.Task;
 
 public class BardClassTask extends Task {
 
-    private final ClassController classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+    private final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
     private final BardClass bardClass = classController.findClass(BardClass.class);
 
     public BardClassTask() {

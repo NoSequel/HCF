@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public class CombatTimer extends Timer {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
     public CombatTimer() {
         super("Combat", ChatColor.RED + ChatColor.BOLD.toString() + "Spawn Tag", false, 30000);

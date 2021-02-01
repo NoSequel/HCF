@@ -23,8 +23,8 @@ import java.util.Optional;
 
 public class CombatLoggerListener implements Listener, Controllable<CombatLoggerController> {
 
-    private final PlayerDataController playerController = Vapor.getInstance().getHandler().findController(PlayerDataController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final PlayerDataController playerController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

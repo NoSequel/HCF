@@ -71,7 +71,7 @@ public class PlayerTeamData extends SaveableTeamData {
         this.members.add(player.getUniqueId());
         final DTRData data = this.getTeam().findData(DTRData.class);
 
-        data.setMaxDtr(data.getMaxDtr()+1.1D);
+        data.setMaxDtr(data.getMaxDtr() + 1.1D);
     }
 
     /**
@@ -98,9 +98,8 @@ public class PlayerTeamData extends SaveableTeamData {
      * Promote a player to a higher role
      *
      * @param uuid the player
-     * @return the new role of the player
      */
-    public PlayerRole promotePlayer(UUID uuid) {
+    public void promotePlayer(UUID uuid) {
         if (this.members.remove(uuid)) {
             this.captains.add(uuid);
         } else if (this.captains.remove(uuid)) {
@@ -108,17 +107,14 @@ public class PlayerTeamData extends SaveableTeamData {
         } else {
             this.members.add(uuid);
         }
-
-        return this.getRole(uuid);
     }
 
     /**
      * Promote a player to a higher role
      *
      * @param uuid the player
-     * @return the new role of the player
      */
-    public PlayerRole demotePlayer(UUID uuid) {
+    public void demotePlayer(UUID uuid) {
         if (this.captains.remove(uuid)) {
             this.members.add(uuid);
         } else if (this.coLeaders.remove(uuid)) {
@@ -126,8 +122,6 @@ public class PlayerTeamData extends SaveableTeamData {
         } else {
             this.members.add(uuid);
         }
-
-        return this.getRole(uuid);
     }
 
     /**
@@ -230,10 +224,14 @@ public class PlayerTeamData extends SaveableTeamData {
 
     }
 
+    /**
+     * Get the team assigned to this {@link PlayerTeamData} object
+     *
+     * @return the team
+     */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().findController(TeamController.class).getTeams().stream()
+        return Vapor.getInstance().getHandler().find(TeamController.class).getTeams().stream()
                 .filter($team -> $team.getData().contains(this))
                 .findFirst().orElse(null);
     }
-
 }

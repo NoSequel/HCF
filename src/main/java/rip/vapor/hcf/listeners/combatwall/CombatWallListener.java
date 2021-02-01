@@ -19,8 +19,8 @@ import java.util.*;
 
 public class CombatWallListener implements Listener {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
     private final Map<Player, List<Location>> visualizedBlocks = new HashMap<>();
 
     @EventHandler
@@ -34,6 +34,10 @@ public class CombatWallListener implements Listener {
 
         if (!combatWallType.equals(CombatWallType.NONE)) {
             final CombatWallData data = this.getWallLocation(player, combatWallType);
+
+            if (this.isTeamApplicable(combatWallType, this.teamController.findTeam(event.getTo()))) {
+                event.setTo(event.getFrom());
+            }
 
             if (data != null) {
                 this.visualizeWall(player, data);

@@ -11,7 +11,7 @@ public enum TeamType {
     PLAYER_TEAM(false) {
         @Override
         public String formatName(Team team, Player player) {
-            final Team team1 = (Vapor.getInstance().getHandler().findController(TeamController.class).findTeam(player));
+            final Team team1 = (Vapor.getInstance().getHandler().find(TeamController.class).findTeam(player));
 
             return (team1 != null && team1.equals(team) ? ChatColor.DARK_GREEN : ChatColor.YELLOW) + team.getFormattedName();
         }

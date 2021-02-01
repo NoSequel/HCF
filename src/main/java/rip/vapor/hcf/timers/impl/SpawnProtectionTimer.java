@@ -19,7 +19,7 @@ import java.util.Map;
 public class SpawnProtectionTimer extends Timer {
 
     private final Map<Player, PlayerData> data = new HashMap<>();
-    private final PlayerDataController controller = Vapor.getInstance().getHandler().findController(PlayerDataController.class);
+    private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);
 
     public SpawnProtectionTimer() {
         super("SpawnProt", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);

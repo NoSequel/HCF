@@ -12,15 +12,18 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncPlayerChatEvent event) {
-        event.setCancelled(true);
-        final Player player = event.getPlayer();
-        final Team team = teamController.findTeam(player);
+        if (!event.isCancelled()) {
+            event.setCancelled(true);
 
-        event.getRecipients().forEach(recipient -> recipient.sendMessage(this.getTeamString(team, recipient) + event.getFormat()));
+            final Player player = event.getPlayer();
+            final Team team = teamController.findTeam(player);
+
+            event.getRecipients().forEach(recipient -> recipient.sendMessage(this.getTeamString(team, recipient) + event.getFormat()));
+        }
     }
 
     /**

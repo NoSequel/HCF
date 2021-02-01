@@ -56,14 +56,14 @@ public class PlayerDataController implements Controller, DataController<PlayerDa
 
     @Override
     public void disable() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().findController(DatabaseController.class);
+        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
 
         playerData.forEach(loadable -> controller.getDataHandler().save(loadable, "profiles"));
     }
 
     @Override
     public void load(PlayerData loadable) {
-        final DatabaseController controller = Vapor.getInstance().getHandler().findController(DatabaseController.class);
+        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
 
         controller.getDataHandler().load(this, loadable, "profiles");
     }

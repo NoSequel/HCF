@@ -1,6 +1,7 @@
 package rip.vapor.hcf.listeners.team;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataController;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
@@ -22,33 +23,33 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathListeners implements Listener {
 
-    private final PlayerDataController controller = Vapor.getInstance().getHandler().findController(PlayerDataController.class);
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
         final PlayerData playerData = controller.findPlayerData(player.getUniqueId());
         final Team team = teamController.findTeam(player);
-        final DeathbanData data;
 
-        if (player.getKiller() != null) {
-            data = new PlayerDeathbanData(player.getKiller().getUniqueId(), 30000);
-        } else {
-            data = new NaturalDeathbanData(NaturalDeathbanType.UNDEFINED, 30000);
-        }
+        if (!VaporConstants.KITMAP_ENABLED) {
+            final DeathbanData data = player.getKiller() == null
+                    ? new NaturalDeathbanData(NaturalDeathbanType.UNDEFINED, 30000)
+                    : new PlayerDeathbanData(player.getKiller().getUniqueId(), 30000);
 
-        if (teamController.findTeam(player) != null) {
-            final PlayerTeamData teamData = team.findData(PlayerTeamData.class);
-            final DTRData dtrData = team.findData(DTRData.class);
+            if (teamController.findTeam(player) != null) {
+                final PlayerTeamData teamData = team.findData(PlayerTeamData.class);
+                final DTRData dtrData = team.findData(DTRData.class);
 
-            teamData.broadcast(ChatColor.RED + "Member Death: " + ChatColor.WHITE + player.getName() + ChatColor.YELLOW + " (" + dtrData.getDtr() + " -> " + NumberUtil.round(dtrData.getDtr()-1.0D, 1) + ")");
-            dtrData.setDtr(dtrData.getDtr()-1.0D);
+                teamData.broadcast(ChatColor.RED + "Member Death: " + ChatColor.WHITE + player.getName() + ChatColor.YELLOW + " (" + dtrData.getDtr() + " -> " + NumberUtil.round(dtrData.getDtr() - 1.0D, 1) + ")");
+                dtrData.setDtr(dtrData.getDtr() - 1.0D);
+            }
+
+            playerData.addData(data);
+            data.kickPlayer(player);
         }
 
         player.getInventory().clear();
-        playerData.addData(data);
-        data.kickPlayer(player);
         event.setDeathMessage(null);
     }
 }

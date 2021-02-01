@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class TimerCommand {
 
-    private final TimerController controller = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TimerController controller = Vapor.getInstance().getHandler().find(TimerController.class);
 
     @Command(label = "timer", permission = "staff")
     @Subcommand(label = "help", parentLabel = "timer", permission = "staff")
@@ -28,21 +28,21 @@ public class TimerCommand {
         });
     }
 
-    @Subcommand(label="start", permission = "staff", parentLabel = "timer")
+    @Subcommand(label = "start", permission = "staff", parentLabel = "timer")
     public void start(Player player, Timer timer, Player target, @Parameter(name = "duration", value = "0") String $duration) {
         long duration = Long.parseLong($duration) == 0L ? timer.getDefaultDuration() : Long.parseLong($duration);
 
         timer.start(target, duration);
         player.sendMessage(ChatColor.GOLD + "You have started the " + ChatColor.WHITE + timer.getName() + ChatColor.GOLD + " timer for " + ChatColor.WHITE + target.getName());
 
-        if($duration.equals("0")) {
+        if ($duration.equals("0")) {
             player.sendMessage(ChatColor.YELLOW + "The duration has been defaulted to the timer's default duration.");
         }
     }
 
-    @Subcommand(label="stop", permission="staff", parentLabel = "timer")
+    @Subcommand(label = "stop", permission = "staff", parentLabel = "timer")
     public void stop(Player player, Timer timer, Player target) {
-        if(timer.isOnCooldown(target)) {
+        if (timer.isOnCooldown(target)) {
             timer.cancel(target);
 
             player.sendMessage(ChatColor.GOLD + "Cancelled timer for " + ChatColor.WHITE + target.getName());
@@ -51,7 +51,7 @@ public class TimerCommand {
         }
     }
 
-    @Subcommand(label="clear", permission="staff", parentLabel="timer")
+    @Subcommand(label = "clear", permission = "staff", parentLabel = "timer")
     public void clear(Player player, Player target) {
         controller.getTimers().stream()
                 .filter(timer -> timer.isOnCooldown(target))
@@ -59,5 +59,4 @@ public class TimerCommand {
 
         player.sendMessage(ChatColor.GOLD + "Cancelled all timers for " + ChatColor.WHITE + target.getName());
     }
-
 }

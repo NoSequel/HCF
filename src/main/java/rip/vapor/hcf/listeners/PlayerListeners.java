@@ -23,8 +23,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListeners implements Listener, Controllable<PlayerDataController> {
 
     private final PlayerDataController controller = this.getController();
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
 
     @EventHandler(priority = EventPriority.LOWEST)

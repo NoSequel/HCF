@@ -42,6 +42,11 @@ public class Claim {
         this(cuboid, ClaimPriority.NORMAL);
     }
 
+    /**
+     * Constructor for loading a {@link Claim} object from a {@link JsonObject}
+     *
+     * @param object the json object to load it from
+     */
     public Claim(JsonObject object) {
         System.out.println(object.toString());
 
@@ -50,6 +55,11 @@ public class Claim {
 
     }
 
+    /**
+     * Method for serializing a {@link Claim} object to a {@link JsonObject}
+     *
+     * @return the serialized json object
+     */
     public JsonObject toJson() {
         return new JsonBuilder()
                 .addProperty("cuboid", this.getCuboid().toJson().toString())
@@ -62,7 +72,7 @@ public class Claim {
      * @return the team
      */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().findController(TeamController.class).getTeams().stream()
+        return Vapor.getInstance().getHandler().find(TeamController.class).getTeams().stream()
                 .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim().equals(this))
                 .findFirst().orElse(null);
     }

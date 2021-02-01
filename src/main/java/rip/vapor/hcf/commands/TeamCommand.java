@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 public class TeamCommand implements Controllable<TeamController> {
 
     private final TeamController controller = this.getController();
-    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().findController(PlayerDataController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
     @Command(label = "faction", aliases = {"f", "team", "t"})
     @Subcommand(label = "help", parentLabel = "faction")

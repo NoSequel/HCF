@@ -28,7 +28,7 @@ import java.util.logging.Level;
 public class Team implements Controllable<TeamController>, Loadable<TeamData> {
 
     private final TeamController teamController = this.getController();
-    private final DatabaseController databaseController = Vapor.getInstance().getHandler().findController(DatabaseController.class);
+    private final DatabaseController databaseController = Vapor.getInstance().getHandler().find(DatabaseController.class);
 
     private GeneralData generalData;
     private UUID uniqueId;

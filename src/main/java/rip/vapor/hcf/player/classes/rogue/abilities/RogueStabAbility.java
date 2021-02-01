@@ -15,7 +15,7 @@ import rip.vapor.hcf.timers.impl.RogueStabTimer;
 
 public class RogueStabAbility extends Ability {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
     private final RogueStabTimer rogueStabTimer = timerController.findTimer(RogueStabTimer.class);
 
     @EventHandler
@@ -46,7 +46,7 @@ public class RogueStabAbility extends Ability {
      * @return the state of the archer class
      */
     private boolean equippedRouge(Player player) {
-        final ClassController classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+        final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
         final RogueClass rogueClass = classController.findClass(RogueClass.class);
 
         return rogueClass.getEquipped().contains(player);

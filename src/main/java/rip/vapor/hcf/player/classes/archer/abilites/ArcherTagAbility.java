@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class ArcherTagAbility extends Ability {
 
-    private ClassController classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+    private ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
 
     @EventHandler
     public void onArcher(EntityDamageByEntityEvent event) {
@@ -21,7 +21,7 @@ public class ArcherTagAbility extends Ability {
             final Player damaged = (Player) event.getEntity();
 
             if (this.classController == null) {
-                this.classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+                this.classController = Vapor.getInstance().getHandler().find(ClassController.class);
             }
 
             final ArcherClass archerClass = classController.findClass(ArcherClass.class);

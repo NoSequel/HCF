@@ -19,7 +19,7 @@ import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 
 public abstract class TickableBardEffectAbility extends TickableAbility {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
     private ClassController classController;
 
     /**
@@ -60,9 +60,7 @@ public abstract class TickableBardEffectAbility extends TickableAbility {
                     final PlayerTeamData data = team.findData(PlayerTeamData.class);
 
                     data.getOnlineMembers().stream()
-                            .filter(target -> !target.equals(player))
-                            .filter(target -> target.getLocation().distance(player.getLocation()) < 15)
-                            .filter(target -> !target.hasPotionEffect(this.getHoldEffect().getType()))
+                            .filter(target -> !target.equals(player) && target.getLocation().distance(player.getLocation()) < 15 && !target.hasPotionEffect(this.getHoldEffect().getType()))
                             .forEach(target -> target.addPotionEffect(this.getHoldEffect()));
                 }
             }
@@ -73,7 +71,7 @@ public abstract class TickableBardEffectAbility extends TickableAbility {
     public void onInteract(PlayerInteractEvent event) {
         if (this.getClickEffect() != null) {
             if (this.classController == null) {
-                this.classController = Vapor.getInstance().getHandler().findController(ClassController.class);
+                this.classController = Vapor.getInstance().getHandler().find(ClassController.class);
             }
 
             final Player player = event.getPlayer();

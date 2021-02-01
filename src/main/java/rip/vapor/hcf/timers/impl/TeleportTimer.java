@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class TeleportTimer extends Timer {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 
     public TeleportTimer() {
         super("Home", ChatColor.BLUE + "Home", true, 10000);

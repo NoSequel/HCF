@@ -1,0 +1,5 @@
+kitmap:
+  kitmap_enabled: true
+enchant_limiter:
+  sharpness: 1
+  protection: 1

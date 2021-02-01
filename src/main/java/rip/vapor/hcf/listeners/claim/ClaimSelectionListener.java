@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class ClaimSelectionListener implements Listener, Controllable<PlayerDataController> {
 
     private final PlayerDataController controller = this.getController();
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
@@ -65,29 +65,30 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                             return;
                         }
 
+
+                        final Team team = claimSelection.getTeam();
+                        final ClaimTeamData oldClaimData = team.findData(ClaimTeamData.class);
+
+                        claimSelection.apply();
+                        playerData.getData().remove(data);
+
+                        if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
+                            final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+                            final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
+
+                            playerTeamData.broadcast(ChatColor.GRAY + "Your team now has a claim of " + claimTeamData.getClaim().getCuboid().getChunks() + " chunks.");
+                        }
+
+                        if (oldClaimData != null) {
+                            final Claim oldClaim = oldClaimData.getClaim();
+                            final Claim newClaim = team.findData(ClaimTeamData.class).getClaim();
+
+                            newClaim.setPriority(oldClaim.getPriority());
+                        }
+
+                        player.sendMessage(ChatColor.YELLOW + "You have claimed for " + team.getDisplayName(player));
                     }
 
-                    final Team team = claimSelection.getTeam();
-                    final ClaimTeamData oldClaimData = team.findData(ClaimTeamData.class);
-
-                    claimSelection.apply();
-                    playerData.getData().remove(data);
-
-                    if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
-                        final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
-                        final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
-
-                        playerTeamData.broadcast(ChatColor.GRAY + "Your team now has a claim of " + claimTeamData.getClaim().getCuboid().getChunks() + " chunks.");
-                    }
-
-                    if(oldClaimData != null) {
-                        final Claim oldClaim = oldClaimData.getClaim();
-                        final Claim newClaim = team.findData(ClaimTeamData.class).getClaim();
-
-                        newClaim.setPriority(oldClaim.getPriority());
-                    }
-
-                    player.sendMessage(ChatColor.YELLOW + "You have claimed for " + team.getDisplayName(player));
                 }
                 break;
             }

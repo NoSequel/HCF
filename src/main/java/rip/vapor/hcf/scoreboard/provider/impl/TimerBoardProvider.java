@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class TimerBoardProvider implements BoardProvider {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
     @Override
     public List<String> getStrings(Player player) {

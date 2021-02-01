@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EnderpearlTimer extends Timer {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().findController(TimerController.class);
+    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 
     public EnderpearlTimer() {
         super("Enderpearl", ChatColor.YELLOW + ChatColor.BOLD.toString() + "Enderpearl", true, 16000L);

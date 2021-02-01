@@ -12,11 +12,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class DamageListeners implements Listener {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().findController(TeamController.class);
+    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-
         if (!event.getDamager().equals(event.getEntity()) && event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             Player damager = null;
