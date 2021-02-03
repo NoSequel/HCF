@@ -1,5 +1,6 @@
 package rip.vapor.hcf.listeners;
 
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.controller.Controllable;
@@ -80,5 +81,14 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataControl
 
             playerTeamData.broadcast(ChatColor.RED + "Member Offline: " + ChatColor.WHITE + player.getName());
         }
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        final Player player = event.getPlayer();
+
+        this.timerController.getTimers().stream()
+                .filter(timer -> timer.isOnCooldown(player))
+                .forEach(timer -> timer.cancel(player));
     }
 }

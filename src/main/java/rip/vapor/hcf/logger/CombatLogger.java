@@ -68,7 +68,7 @@ public class CombatLogger implements Controllable<CombatLoggerController> {
         this.villager.setCustomName(ChatColor.YELLOW + name);
         this.villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6000000, 9999));
 
-        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> this.villager.setHealth(0), 20*15);
+        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), this::destruct, 20 * 15);
     }
 
     /**
@@ -84,6 +84,6 @@ public class CombatLogger implements Controllable<CombatLoggerController> {
      * Destruct the {@link CombatLogger} object
      */
     public void destruct() {
-        this.villager.setHealth(0);
+        this.villager.remove();
     }
 }

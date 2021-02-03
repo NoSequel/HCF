@@ -1,5 +1,6 @@
 package rip.vapor.hcf.timers.impl;
 
+import org.bukkit.GameMode;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.timers.Timer;
 import rip.vapor.hcf.timers.TimerController;
@@ -25,7 +26,7 @@ public class EnderpearlTimer extends Timer {
         final ItemStack item = event.getItem() == null ? player.getItemInHand() : event.getItem();
         final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class);
 
-        if (item != null && player.getItemInHand().getType().equals(Material.ENDER_PEARL) && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+        if (!player.getGameMode().equals(GameMode.CREATIVE) && item != null && player.getItemInHand().getType().equals(Material.ENDER_PEARL) && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             if (this.isOnCooldown(player)) {
                 player.sendMessage(ChatColor.RED + "You are currently still on an enderpearl cooldown.");
                 event.setCancelled(true);

@@ -29,11 +29,12 @@ import rip.vapor.hcf.util.database.handler.data.MongoDataHandler;
 import rip.vapor.hcf.util.database.options.impl.MongoDatabaseOption;
 import rip.vapor.hcf.util.database.type.mongo.MongoDataType;
 import io.github.thatkawaiisam.assemble.Assemble;
-import io.github.thatkawaiisam.assemble.AssembleStyle;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import rip.vapor.tablist.TablistManager;
+import rip.vapor.tablist.provider.TablistProvider;
 
 import java.util.logging.Level;
 
@@ -102,6 +103,7 @@ public class Vapor extends JavaPlugin {
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);
+        new TablistManager(this, new TablistProvider(), 250L);
     }
 
     @Override

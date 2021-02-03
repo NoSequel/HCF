@@ -1,12 +1,12 @@
 package rip.vapor.hcf.listeners.combatwall;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.listeners.combatwall.block.CombatWallBlockList;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
@@ -21,18 +21,16 @@ public class CombatWallListener implements Listener {
 
     private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
     private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
-    private final Map<Player, List<Location>> visualizedBlocks = new HashMap<>();
+    private final Set<CombatWallBlockList> visualizedBlocks = new HashSet<>();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
         final CombatWallType combatWallType = this.getWallType(player);
 
-        if (this.visualizedBlocks.containsKey(player)) {
-            this.attemptRemoveVisualization(player);
-        }
+        this.findVisualizedBlockList(player).attemptRemove();
 
-        if (!combatWallType.equals(CombatWallType.NONE)) {
+        if (!combatWallType.equals(CombatWallType.NONE) && !this.teamController.findTeam(event.getTo()).equals(this.teamController.findTeam(event.getFrom()))) {
             final CombatWallData data = this.getWallLocation(player, combatWallType);
 
             if (this.isTeamApplicable(combatWallType, this.teamController.findTeam(event.getTo()))) {
@@ -120,41 +118,26 @@ public class CombatWallListener implements Listener {
                     wallLocation.clone().subtract(1, 0, 0)
             };
 
-            for (Location location : locations) {
-                if (this.teamController.findTeam(location.clone()).equals(wallTeam)) {
-                    if (!this.visualizedBlocks.containsKey(player)) {
-                        this.visualizedBlocks.put(player, new ArrayList<>());
-                    }
-
-                    this.visualizedBlocks.get(player).add(location);
-
-                    if (location.getBlock().getType().equals(Material.AIR)) {
-                        player.sendBlockChange(location, Material.GLASS, (byte) 14);
-                    }
-                }
-            }
+            Arrays.stream(locations)
+                    .filter(location -> this.teamController.findTeam(location.clone()).equals(wallTeam))
+                    .forEach(location -> this.findVisualizedBlockList(player).add(location));
         }
     }
 
     /**
-     * Attempt to remove visualized blocks for a {@link Player}
+     * Get a {@link CombatWallBlockList} from a {@link Player}
      *
-     * @param player the player
+     * @param player the player to get it for
+     * @return the list
      */
-    private void attemptRemoveVisualization(Player player) {
-        if (!this.visualizedBlocks.containsKey(player)) {
-            return;
-        }
+    private CombatWallBlockList findVisualizedBlockList(Player player) {
+        return this.visualizedBlocks.stream()
+                .filter(block -> block.getPlayer().equals(player))
+                .findFirst().orElseGet(() -> {
+                    final CombatWallBlockList list = new CombatWallBlockList(player);
+                    this.visualizedBlocks.add(list);
 
-        for (List<Location> value : this.visualizedBlocks.values()) {
-            value.removeIf(location -> {
-                if (location.distanceSquared(player.getLocation()) > 16) {
-                    player.sendBlockChange(location, Material.AIR, (byte) 0);
-                    return true;
-                }
-
-                return false;
-            });
-        }
+                    return list;
+                });
     }
 }

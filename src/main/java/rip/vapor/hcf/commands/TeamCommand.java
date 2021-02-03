@@ -47,10 +47,7 @@ public class TeamCommand implements Controllable<TeamController> {
                 .forEach(System.out::println);
 
         player.sendMessage(new String[]{
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                ChatColor.BLUE + ChatColor.BOLD.toString() + "General Faction Help",
-                ChatColor.YELLOW + ChatColor.ITALIC.toString() + "General command for helping with faction commands",
-                "",
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                 ChatColor.BLUE + "General Commands: ",
                 ChatColor.YELLOW + "/team help" + ChatColor.GRAY + " - Shows you this page",
                 ChatColor.YELLOW + "/team create <name> [acronym]" + ChatColor.GRAY + " - Create a new team",
@@ -67,7 +64,7 @@ public class TeamCommand implements Controllable<TeamController> {
                 ChatColor.YELLOW + "/team promote <player>" + ChatColor.GRAY + " - Promote a player to a higher role",
                 ChatColor.YELLOW + "/team demote <player>" + ChatColor.GRAY + " - Demote a player to a lower role",
                 ChatColor.YELLOW + "/team leader <player>" + ChatColor.GRAY + " - Transfer leadership to someone else",
-                ChatColor.YELLOW + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
         });
     }
 
@@ -165,10 +162,8 @@ public class TeamCommand implements Controllable<TeamController> {
             final String coLeaders = data.getCoLeaders().stream().map(Bukkit::getOfflinePlayer).filter(Objects::nonNull).map(target -> (target.getPlayer() == null ? ChatColor.GRAY.toString() : ChatColor.GREEN.toString()) + target.getName() + (target.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + target.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")).collect(Collectors.joining(ChatColor.YELLOW + ", "));
 
             final List<String> messages = new ArrayList<>(Arrays.asList(
-                    ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
+                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                     ChatColor.BLUE + team.getGeneralData().getName() + ChatColor.GRAY + "[" + data.getOnlineMembers().size() + "/" + data.getAllMembers().size() + "]",
-                    "",
-
                     ChatColor.YELLOW + "Leader: " + (leader.getPlayer() == null ? ChatColor.GRAY : ChatColor.GREEN) + leader.getName() + (leader.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + player.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")
             ));
 
@@ -186,9 +181,8 @@ public class TeamCommand implements Controllable<TeamController> {
                     ChatColor.YELLOW + "Balance: " + ChatColor.RED + "$" + data.getBalance(),
                     ChatColor.YELLOW + "DTR: " + dtrData.formatDtr() + ChatColor.GRAY + " (" + NumberUtil.round(dtrData.getMaxDtr(), 1) + ")",
                     ChatColor.YELLOW + "Claim: " + ChatColor.RED + (claimTeamData != null ? claimTeamData.getClaim().getCuboid().getChunks() : "0") + " chunks" + ChatColor.YELLOW + ", " + "Home: " + ChatColor.RED + (claimTeamData == null ? "Not Set" : claimTeamData.getHomeAsString()),
-                    "",
-                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "Founded on " + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
-                    ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
+                    ChatColor.YELLOW + "Founded on: " + ChatColor.RED + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
+                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
             ));
 
             messages.forEach(player::sendMessage);
@@ -199,26 +193,21 @@ public class TeamCommand implements Controllable<TeamController> {
                 player.sendMessage(new String[]{
                         ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                         ChatColor.BLUE + team.getFormattedName() + ChatColor.YELLOW + "(" + (claim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
-                        "",
                         ChatColor.YELLOW + "Claim: " + ChatColor.RED + claim.getCuboid().toXYZ(),
                 });
             } else {
                 player.sendMessage(new String[]{
                         ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                         ChatColor.BLUE + team.getFormattedName() + ChatColor.YELLOW + "(" + ChatColor.RED + "Deathban" + ChatColor.YELLOW + ")",
-                        ""
                 });
             }
 
             player.sendMessage(new String[]{
                     ChatColor.YELLOW + "Color: " + team.getGeneralData().getColor() + team.getGeneralData().getColor().name(),
                     ChatColor.YELLOW + "Type: " + ChatColor.WHITE + team.getGeneralData().getType().name(),
-                    "",
-                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "Founded on " + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
-                    ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
+                    ChatColor.YELLOW + "Founded on: " + ChatColor.WHITE + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
+                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
             });
-
-
         }
     }
 

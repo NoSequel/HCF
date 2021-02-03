@@ -67,7 +67,7 @@ public class EquipListener implements Listener {
     public void onInventory(InventoryClickEvent event) {
         final Player player = (Player) event.getWhoClicked();
 
-        if (Arrays.stream(this.armor).anyMatch(type -> type.equals(event.getCurrentItem().getType()))) {
+        if (event.getCurrentItem() != null && Arrays.stream(this.armor).anyMatch(type -> type.equals(event.getCurrentItem().getType()))) {
             this.attemptEquip(player);
         }
     }

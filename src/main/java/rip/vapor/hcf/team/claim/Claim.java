@@ -15,7 +15,6 @@ import lombok.Setter;
 @Setter
 public class Claim {
 
-
     private final Cuboid cuboid;
 
     private ClaimPriority priority;
@@ -53,6 +52,9 @@ public class Claim {
         this.cuboid = new Cuboid(JsonUtils.getParser().parse(object.get("cuboid").getAsString()).getAsJsonObject());
         this.priority = ClaimPriority.valueOf(object.get("priority").getAsString());
 
+        if (object.has("deathban")) {
+            this.deathban = object.get("deathban").getAsBoolean();
+        }
     }
 
     /**
@@ -63,6 +65,7 @@ public class Claim {
     public JsonObject toJson() {
         return new JsonBuilder()
                 .addProperty("cuboid", this.getCuboid().toJson().toString())
+                .addProperty("deathban", this.isDeathban())
                 .addProperty("priority", this.priority.name()).get();
     }
 

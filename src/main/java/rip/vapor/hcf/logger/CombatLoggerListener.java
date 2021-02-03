@@ -62,7 +62,8 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() != null && this.getController().getLoggers().stream().anyMatch(logger -> logger.getVillager().equals(event.getRightClicked()))) {
+        if (event.getRightClicked() != null && this.getController().getLoggers().stream()
+                .anyMatch(logger -> logger.getVillager().equals(event.getRightClicked()))) {
             event.setCancelled(true);
         }
     }

@@ -1,5 +1,6 @@
 package rip.vapor.hcf.listeners.claim;
 
+import org.bukkit.Material;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.controller.Controllable;
 import rip.vapor.hcf.player.PlayerData;
@@ -29,7 +30,7 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
         final Player player = event.getPlayer();
         final PlayerData playerData = controller.findPlayerData(player.getUniqueId());
 
-        if (playerData != null && playerData.hasData(ClaimSelectionData.class)) {
+        if (playerData != null && playerData.hasData(ClaimSelectionData.class) && (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR))) {
             final ClaimSelectionData data = playerData.findData(ClaimSelectionData.class);
             final ClaimSelection claimSelection = data.getClaimSelection();
             final Action action = event.getAction();

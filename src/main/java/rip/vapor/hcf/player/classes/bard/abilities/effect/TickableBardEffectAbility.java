@@ -78,7 +78,7 @@ public abstract class TickableBardEffectAbility extends TickableAbility {
             final ItemStack itemStack = player.getItemInHand() == null ? event.getItem() : player.getItemInHand();
             final BardClass bard = classController.findClass(BardClass.class);
 
-            if (itemStack != null && itemStack.getType().equals(this.getItemType()) && !event.getAction().equals(Action.PHYSICAL)) {
+            if (bard.getEquipped().contains(player) && itemStack != null && itemStack.getType().equals(this.getItemType()) && !event.getAction().equals(Action.PHYSICAL)) {
                 if (bard.getClassData().containsKey(player)) {
                     final BardClassData bardData = bard.getClassData().get(player);
 

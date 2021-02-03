@@ -21,10 +21,12 @@ public class EnchantmentLimiterListener implements Listener {
         final Map<Enchantment, Integer> enchantments = event.getEnchantsToAdd();
 
         enchantments.forEach(((enchantment, level) -> {
-            final int maxLevel = VaporConstants.ENCHANTMENT_LIMITS.get(enchantment);
+            if(VaporConstants.ENCHANTMENT_LIMITS.containsKey(enchantment)) {
+                final int maxLevel = VaporConstants.ENCHANTMENT_LIMITS.get(enchantment);
 
-            if (VaporConstants.ENCHANTMENT_LIMITS.containsKey(enchantment) && level > maxLevel) {
-                enchantments.put(enchantment, maxLevel);
+                if (level > maxLevel){
+                    enchantments.put(enchantment, maxLevel);
+                }
             }
         }));
     }
@@ -41,11 +43,13 @@ public class EnchantmentLimiterListener implements Listener {
                 event.setCancelled(true);
 
                 result.getEnchantments().forEach(((enchantment, level) -> {
-                    final int maxLevel = VaporConstants.ENCHANTMENT_LIMITS.get(enchantment);
+                    if(VaporConstants.ENCHANTMENT_LIMITS.containsKey(enchantment)) {
+                        final int maxLevel = VaporConstants.ENCHANTMENT_LIMITS.get(enchantment);
 
-                    if (VaporConstants.ENCHANTMENT_LIMITS.containsKey(enchantment) && level > maxLevel) {
-                        result.removeEnchantment(enchantment);
-                        result.addEnchantment(enchantment, maxLevel);
+                        if (level > maxLevel) {
+                            result.removeEnchantment(enchantment);
+                            result.addEnchantment(enchantment, maxLevel);
+                        }
                     }
                 }));
 

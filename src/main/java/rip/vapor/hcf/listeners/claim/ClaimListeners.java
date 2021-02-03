@@ -1,5 +1,6 @@
 package rip.vapor.hcf.listeners.claim;
 
+import org.bukkit.Material;
 import rip.vapor.hcf.controller.Controllable;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
@@ -14,6 +15,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+
+import java.util.Arrays;
 
 public class ClaimListeners implements Listener, Controllable<TeamController> {
 
@@ -63,7 +66,7 @@ public class ClaimListeners implements Listener, Controllable<TeamController> {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if(event.getClickedBlock() != null) {
+        if (event.getClickedBlock() != null && (event.getItem() == null || Arrays.stream(DISALLOWED_BLOCKS).anyMatch(item -> item.equals(event.getItem().getType())))) {
             final Player player = event.getPlayer();
             final Location blockLocation = event.getClickedBlock().getLocation();
             final Team team = controller.findTeam(blockLocation);
@@ -73,4 +76,16 @@ public class ClaimListeners implements Listener, Controllable<TeamController> {
             }
         }
     }
+
+    private final Material[] DISALLOWED_BLOCKS = new Material[]{
+            Material.LEVER,
+            Material.STONE_BUTTON,
+            Material.WOOD_BUTTON,
+            Material.GOLD_PLATE,
+            Material.IRON_PLATE,
+            Material.STONE_PLATE,
+            Material.FENCE_GATE,
+            Material.WOOD_DOOR,
+            Material.IRON_DOOR,
+    };
 }

@@ -32,22 +32,18 @@ public class SystemTeamCommand implements Controllable<TeamController> {
     @Subcommand(label = "help", parentLabel = "systemteam")
     public void help(Player player) {
         player.sendMessage(new String[]{
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                ChatColor.BLUE + ChatColor.BOLD.toString() + "System Team Help",
-                ChatColor.YELLOW + "Command for helping with system teams",
-                "",
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                 ChatColor.BLUE + "General Commands:",
-                ChatColor.YELLOW + "* /systemteam create <name>" + ChatColor.GRAY + " - Create a new system team",
-                ChatColor.YELLOW + "* /systemteam delete <name>" + ChatColor.GRAY + " - Delete a new system team",
+                ChatColor.YELLOW + "/systemteam create <name>" + ChatColor.GRAY + " - Create a new system team",
+                ChatColor.YELLOW + "/systemteam delete <name>" + ChatColor.GRAY + " - Delete a new system team",
                 "",
                 ChatColor.BLUE + "Setup Commands:",
-                ChatColor.YELLOW + "* /systemteam type <name> <type>" + ChatColor.GRAY + " - Set the type of a system team",
-                ChatColor.YELLOW + "* /systemteam deathban <name>" + ChatColor.GRAY + " - Toggle a team's deathban status",
-                ChatColor.YELLOW + "* /systemteam color <name> <color>" + ChatColor.GRAY + " - Set the color of a team",
-                ChatColor.YELLOW + "* /systemteam claimfor <name>" + ChatColor.GRAY + " - Claim for a system team",
-                ChatColor.YELLOW + "* /systemteam priority <name> <priority>" + ChatColor.GRAY + " - Set the claim priority of a system team",
-
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
+                ChatColor.YELLOW + "/systemteam type <name> <type>" + ChatColor.GRAY + " - Set the type of a system team",
+                ChatColor.YELLOW + "/systemteam deathban <name>" + ChatColor.GRAY + " - Toggle a team's deathban status",
+                ChatColor.YELLOW + "/systemteam color <name> <color>" + ChatColor.GRAY + " - Set the color of a team",
+                ChatColor.YELLOW + "/systemteam claimfor <name>" + ChatColor.GRAY + " - Claim for a system team",
+                ChatColor.YELLOW + "/systemteam priority <name> <priority>" + ChatColor.GRAY + " - Set the claim priority of a system team",
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
         });
     }
 
@@ -121,8 +117,8 @@ public class SystemTeamCommand implements Controllable<TeamController> {
         player.sendMessage(new String[]{
                 "",
                 ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + team.getFormattedName() + ",",
-                ChatColor.GRAY + "* Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
-                ChatColor.GRAY + "* Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
+                ChatColor.GRAY + "Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
+                ChatColor.GRAY + "Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
                 ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
                 ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
                 ""
