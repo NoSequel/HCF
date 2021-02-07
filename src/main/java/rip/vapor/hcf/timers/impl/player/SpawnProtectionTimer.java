@@ -5,7 +5,7 @@ import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataController;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
-import rip.vapor.hcf.timers.PlayerTimer;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

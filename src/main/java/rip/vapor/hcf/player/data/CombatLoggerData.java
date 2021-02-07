@@ -3,14 +3,14 @@ package rip.vapor.hcf.player.data;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
-import rip.vapor.hcf.data.impl.SaveableData;
+import rip.vapor.hcf.data.impl.SavableData;
 import rip.vapor.hcf.util.JsonBuilder;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-public class CombatLoggerData implements SaveableData {
+public class CombatLoggerData implements SavableData {
 
     private boolean killed;
     private UUID killerUuid;

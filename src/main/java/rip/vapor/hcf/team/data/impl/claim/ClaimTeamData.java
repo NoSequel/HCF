@@ -2,7 +2,7 @@ package rip.vapor.hcf.team.data.impl.claim;
 
 import com.google.gson.JsonObject;
 import rip.vapor.hcf.team.claim.Claim;
-import rip.vapor.hcf.team.data.impl.SaveableTeamData;
+import rip.vapor.hcf.team.data.impl.SavableTeamData;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.StringUtils;
 import lombok.Getter;
@@ -11,19 +11,32 @@ import org.bukkit.Location;
 
 @Getter
 @Setter
-public class ClaimTeamData extends SaveableTeamData {
+public class ClaimTeamData extends SavableTeamData {
 
     private final Claim claim;
     private Location home;
 
+    /**
+     * Empty constructor
+     */
     public ClaimTeamData() {
         this.claim = null;
     }
 
+    /**
+     * Constructor to make a new {@link ClaimTeamData} object with a provided {@link Claim} object
+     *
+     * @param claim the provided claim object
+     */
     public ClaimTeamData(Claim claim) {
         this.claim = claim;
     }
 
+    /**
+     * Constructor to load a {@link ClaimTeamData} from a {@link JsonObject}
+     *
+     * @param object the json object to load it from
+     */
     public ClaimTeamData(JsonObject object) {
         this.claim = new Claim(object);
 

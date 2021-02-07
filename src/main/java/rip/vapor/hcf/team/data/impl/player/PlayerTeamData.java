@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
-import rip.vapor.hcf.team.data.impl.SaveableTeamData;
+import rip.vapor.hcf.team.data.impl.SavableTeamData;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.JsonUtils;
 import rip.vapor.hcf.util.StringUtils;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class PlayerTeamData extends SaveableTeamData {
+public class PlayerTeamData extends SavableTeamData {
 
     private UUID leader;
 
@@ -30,6 +30,9 @@ public class PlayerTeamData extends SaveableTeamData {
 
     private final int balance = 0;
 
+    /**
+     * Empty constructor
+     */
     public PlayerTeamData() {
     }
 
@@ -188,20 +191,6 @@ public class PlayerTeamData extends SaveableTeamData {
         this.getOnlineMembers().forEach(player -> player.sendMessage(StringUtils.translate(message)));
     }
 
-    @Override
-    public String getSavePath() {
-        return "player_data";
-    }
-
-    @Override
-    public JsonObject toJson() {
-        return new JsonBuilder()
-                .addProperty("members", StringUtils.fromSet(members))
-                .addProperty("captains", StringUtils.fromSet(captains))
-                .addProperty("coLeaders", StringUtils.fromSet(coLeaders))
-                .addProperty("leader", leader.toString())
-                .get();
-    }
 
     /**
      * Check whether a player is in the team
@@ -233,5 +222,20 @@ public class PlayerTeamData extends SaveableTeamData {
         return Vapor.getInstance().getHandler().find(TeamController.class).getTeams().stream()
                 .filter($team -> $team.getData().contains(this))
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public String getSavePath() {
+        return "player_data";
+    }
+
+    @Override
+    public JsonObject toJson() {
+        return new JsonBuilder()
+                .addProperty("members", StringUtils.fromSet(members))
+                .addProperty("captains", StringUtils.fromSet(captains))
+                .addProperty("coLeaders", StringUtils.fromSet(coLeaders))
+                .addProperty("leader", leader.toString())
+                .get();
     }
 }

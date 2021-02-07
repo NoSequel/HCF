@@ -107,6 +107,7 @@ public class Team implements Controllable<TeamController>, Loadable<TeamData> {
         this(uuid, name, type);
 
         this.addData(new KothTeamData(koth));
+        this.addData(new ClaimTeamData(koth.getClaim()));
     }
 
     /**

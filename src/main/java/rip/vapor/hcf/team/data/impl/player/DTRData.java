@@ -1,7 +1,7 @@
 package rip.vapor.hcf.team.data.impl.player;
 
 import com.google.gson.JsonObject;
-import rip.vapor.hcf.team.data.impl.SaveableTeamData;
+import rip.vapor.hcf.team.data.impl.SavableTeamData;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.NumberUtil;
 import lombok.Getter;
@@ -10,12 +10,15 @@ import org.bukkit.ChatColor;
 
 @Getter
 @Setter
-public class DTRData extends SaveableTeamData {
+public class DTRData extends SavableTeamData {
 
     private double dtr;
     private double maxDtr;
     private long lastRegen;
 
+    /**
+     * Empty constructor
+     */
     public DTRData() {
     }
 
@@ -71,6 +74,11 @@ public class DTRData extends SaveableTeamData {
         return dtrColor + String.valueOf(this.getDtr()) + dtrSymbol;
     }
 
+    /**
+     * Check if the team is raidable
+     *
+     * @return the raidable state
+     */
     public boolean isRaidable() {
         return this.getDtr() <= 0.0D;
     }

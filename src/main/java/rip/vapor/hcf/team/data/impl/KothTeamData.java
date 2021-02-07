@@ -5,9 +5,16 @@ import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.JsonUtils;
 
-public class KothTeamData extends SaveableTeamData{
+public class KothTeamData extends SavableTeamData {
 
     private final Koth koth;
+
+    /**
+     * Empty constructor
+     */
+    public KothTeamData() {
+        this.koth = null;
+    }
 
     /**
      * Constructor to make a new {@link KothTeamData} object from a {@link Koth}

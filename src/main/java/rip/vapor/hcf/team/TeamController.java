@@ -95,6 +95,12 @@ public class TeamController implements Controller, DataController<Team, TeamData
         return this.findTeamByName(name);
     }
 
+    /**
+     * Find a {@link Team} by a {@link String}
+     *
+     * @param name the name of the team
+     * @return the team or null
+     */
     public Team findTeamByName(String name) {
         return this.teams.stream()
                 .filter(team -> team.getGeneralData().getName().equalsIgnoreCase(name))

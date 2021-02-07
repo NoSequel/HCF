@@ -9,13 +9,16 @@ import org.bukkit.ChatColor;
 
 @Getter
 @Setter
-public class GeneralData extends SaveableTeamData {
+public class GeneralData extends SavableTeamData {
 
     private TeamType type;
     private long createTime;
     private String name;
     private ChatColor color;
 
+    /**
+     * Empty constructor
+     */
     public GeneralData() {
     }
 

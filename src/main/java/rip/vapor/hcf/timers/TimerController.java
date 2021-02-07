@@ -4,6 +4,7 @@ import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.controller.Controller;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import rip.vapor.hcf.timers.impl.player.*;
 
 import java.util.ArrayList;

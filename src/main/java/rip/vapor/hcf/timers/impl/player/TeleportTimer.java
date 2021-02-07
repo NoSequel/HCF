@@ -4,7 +4,7 @@ import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
-import rip.vapor.hcf.timers.PlayerTimer;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

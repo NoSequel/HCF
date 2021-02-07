@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.thread.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import rip.vapor.hcf.timers.GlobalTimer;
+import rip.vapor.hcf.timers.impl.GlobalTimer;
 import rip.vapor.hcf.timers.thread.TimerThread;
 
 @Getter

@@ -1,7 +1,7 @@
 package rip.vapor.hcf.team.data.impl.player.invites;
 
 import com.google.gson.JsonObject;
-import rip.vapor.hcf.team.data.impl.SaveableTeamData;
+import rip.vapor.hcf.team.data.impl.SavableTeamData;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.StringUtils;
 import org.bukkit.entity.Player;
@@ -11,14 +11,23 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class InviteTeamData extends SaveableTeamData {
+public class InviteTeamData extends SavableTeamData {
 
-    private List<UUID> invites;
+    private final List<UUID> invites;
 
+    /**
+     * Constructor to make a new {@link InviteTeamData} object
+     *
+     */
     public InviteTeamData() {
         this.invites = new ArrayList<>();
     }
 
+    /**
+     * Constructor to load a {@link InviteTeamData} from a {@link JsonObject}
+     *
+     * @param object the json object to load it from
+     */
     public InviteTeamData(JsonObject object) {
         this.invites = StringUtils.listFromString(object.get("invites").getAsString()).stream()
                 .map(UUID::fromString)

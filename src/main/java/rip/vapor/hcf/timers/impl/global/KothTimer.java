@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.impl.global;
 
 import org.bukkit.ChatColor;
 import rip.vapor.hcf.koth.Koth;
-import rip.vapor.hcf.timers.GlobalTimer;
+import rip.vapor.hcf.timers.impl.GlobalTimer;
 
 public class KothTimer extends GlobalTimer {
 

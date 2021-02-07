@@ -7,7 +7,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import rip.vapor.hcf.data.Data;
 import rip.vapor.hcf.data.DataController;
 import rip.vapor.hcf.data.Loadable;
-import rip.vapor.hcf.data.impl.SaveableData;
+import rip.vapor.hcf.data.impl.SavableData;
 import rip.vapor.hcf.util.JsonUtils;
 import rip.vapor.hcf.util.database.type.DataType;
 import org.bson.Document;
@@ -35,21 +35,21 @@ public class MongoDataType implements DataType<Document, MongoCollection<Documen
                 loadable.setData(new ArrayList<>());
             }
 
-            final SaveableData data = controller.getRegisteredData().stream()
-                    .filter($data -> $data instanceof SaveableData)
-                    .filter($data -> ((SaveableData) $data).getSavePath().equals(key))
+            final SavableData data = controller.getRegisteredData().stream()
+                    .filter($data -> $data instanceof SavableData)
+                    .filter($data -> ((SavableData) $data).getSavePath().equals(key))
                     .map(clazz -> {
                         Data $data = null;
 
                         try {
-                            $data = ((SaveableData) clazz).getClass().getConstructor(JsonObject.class).newInstance(JsonUtils.getParser().parse((String) string).getAsJsonObject());
+                            $data = ((SavableData) clazz).getClass().getConstructor(JsonObject.class).newInstance(JsonUtils.getParser().parse((String) string).getAsJsonObject());
                         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                             e.printStackTrace();
                         }
 
                         return $data;
                     })
-                    .map(SaveableData.class::cast)
+                    .map(SavableData.class::cast)
                     .filter(Objects::nonNull)
                     .findFirst().orElse(null);
 
@@ -61,8 +61,8 @@ public class MongoDataType implements DataType<Document, MongoCollection<Documen
     @Override
     public void save(MongoCollection<Document> collection, Document document, Loadable<?> loadable) {
         loadable.getData().stream()
-                .filter(data -> data instanceof SaveableData)
-                .map(SaveableData.class::cast)
+                .filter(data -> data instanceof SavableData)
+                .map(SavableData.class::cast)
                 .forEach(saveableData -> document.put(saveableData.getSavePath(), saveableData.toJson().toString()));
 
         document.put("uuid", loadable.getUniqueId().toString());

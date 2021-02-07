@@ -1,11 +1,13 @@
 package rip.vapor.hcf.team.enums;
 
+import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+@RequiredArgsConstructor
 public enum TeamType {
 
     PLAYER_TEAM(false) {
@@ -52,11 +54,7 @@ public enum TeamType {
         }
     };
 
-    public boolean canInteract;
-
-    TeamType(boolean interactable) {
-        this.canInteract = interactable;
-    }
+    public final boolean canInteract;
 
     /**
      * Format the team name by the type

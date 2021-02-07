@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.impl.player;
 
 import org.bukkit.GameMode;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.PlayerTimer;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import rip.vapor.hcf.timers.TimerController;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

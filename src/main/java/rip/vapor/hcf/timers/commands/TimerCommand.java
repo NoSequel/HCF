@@ -1,7 +1,7 @@
 package rip.vapor.hcf.timers.commands;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.PlayerTimer;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import rip.vapor.hcf.timers.TimerController;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;

@@ -1,6 +1,7 @@
-package rip.vapor.hcf.timers;
+package rip.vapor.hcf.timers.impl;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.timers.Timer;
 import rip.vapor.hcf.timers.thread.impl.PlayerTimerThread;
 import lombok.Getter;
 import org.bukkit.entity.Player;

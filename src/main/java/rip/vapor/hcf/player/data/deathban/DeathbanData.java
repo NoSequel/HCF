@@ -1,7 +1,7 @@
 package rip.vapor.hcf.player.data.deathban;
 
 import com.google.gson.JsonObject;
-import rip.vapor.hcf.data.impl.SaveableData;
+import rip.vapor.hcf.data.impl.SavableData;
 import rip.vapor.hcf.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 @Getter
 @Setter
-public abstract class DeathbanData implements SaveableData {
+public abstract class DeathbanData implements SavableData {
 
     private final long expiration;
 

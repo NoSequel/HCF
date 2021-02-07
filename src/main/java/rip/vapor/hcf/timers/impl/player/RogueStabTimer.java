@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.impl.player;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.timers.PlayerTimer;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 
 public class RogueStabTimer extends PlayerTimer {
 

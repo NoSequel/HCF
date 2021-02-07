@@ -17,12 +17,12 @@ public class PvPCommand implements Controllable<TimerController> {
     @Command(label = "pvp")
     public void main(Player player) {
         player.sendMessage(new String[]{
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 56),
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                 ChatColor.GOLD + "PvP Help",
                 "",
                 ChatColor.GRAY + "* /pvp enable",
                 ChatColor.GRAY + "* /pvp suicide",
-                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 56)
+                ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
         });
     }
 
