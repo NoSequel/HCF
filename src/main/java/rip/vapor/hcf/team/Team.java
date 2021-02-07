@@ -108,9 +108,9 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
         this.generalData = new GeneralData(name, type, ChatColor.AQUA);
 
         this.setupData();
-        this.addData(new KothTeamData(koth));
-
         this.teamModule.getTeams().add(this);
+
+        this.addData(new KothTeamData(koth));
     }
 
     /**

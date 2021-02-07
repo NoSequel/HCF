@@ -2,6 +2,7 @@ package rip.vapor.hcf.timers.impl.global;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.timers.TimerModule;
@@ -33,7 +34,11 @@ public class KothTimer extends GlobalTimer implements Controllable<TimerModule> 
     @Override
     public void handleEnd() {
         if (koth.getCappingUuid() != null) {
-            Bukkit.broadcastMessage(ChatColor.YELLOW + "yay capped by " + Bukkit.getPlayer(koth.getCappingUuid()).getName());
+            final Player player = Bukkit.getPlayer(koth.getCappingUuid());
+
+            Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] " + ChatColor.WHITE + player.getName() + ChatColor.YELLOW + " has successfully captured the " + koth.getKothTeam().getDisplayName(player));
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Rewards:");
+            Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "- " + ChatColor.AQUA + "AIR");
         }
 
         koth.setRunning(false);

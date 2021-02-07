@@ -2,6 +2,7 @@ package rip.vapor.hcf.team;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.data.DataController;
+import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.ClaimPriority;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -143,6 +145,19 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
         }
 
         return this.findTeam("Wilderness");
+    }
+
+    /**
+     * Find all active {@link Koth}s
+     *
+     * @return the active koths
+     */
+    public List<Koth> findActiveKoths() {
+        return this.teams.stream()
+                .filter(team -> team.getGeneralData().getType().equals(TeamType.KOTH_TEAM) && team.hasData(KothTeamData.class))
+                .map(team -> team.findData(KothTeamData.class).getKoth())
+                .filter(Koth::isRunning)
+                .collect(Collectors.toList());
     }
 
     /**

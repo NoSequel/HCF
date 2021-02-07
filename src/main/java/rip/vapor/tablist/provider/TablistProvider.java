@@ -1,14 +1,17 @@
 package rip.vapor.tablist.provider;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
+import rip.vapor.hcf.util.StringUtils;
 import rip.vapor.tablist.entry.TablistElement;
 import rip.vapor.tablist.entry.TablistElementSupplier;
 
@@ -57,14 +60,30 @@ public class TablistProvider implements TablistElementSupplier {
                     .forEach(target -> element.add(1, index.getAndIncrement(), ChatColor.GRAY + playerTeamData.getRole(target.getUniqueId()).astrix + ChatColor.DARK_GREEN + target.getName()));
         }
 
-        element.add(2, 0, ChatColor.AQUA + "Online Teams");
+        element.add(2, 0, ChatColor.AQUA + "End Portals");
+        element.add(2, 1, ChatColor.WHITE + "1000, 1000");
 
-        final AtomicInteger index = new AtomicInteger(1);
+        element.add(2, 3, ChatColor.AQUA + "Map Kit");
+        element.add(2, 4, ChatColor.WHITE + "Prot 1, Sharp 1");
 
-        teamController.getTeams().stream()
-                .filter(current -> current.hasData(PlayerTeamData.class) && current.findData(PlayerTeamData.class).getOnlineMembers().size() > 0)
-                .sorted(Comparator.comparingInt(current -> current.findData(PlayerTeamData.class).getOnlineMembers().size()))
-                .forEach(current -> element.add(2, index.getAndIncrement(), current.getDisplayName(player) + ChatColor.GRAY + " (" + current.findData(PlayerTeamData.class).getOnlineMembers().size() + ")"));
+        element.add(2, 6, ChatColor.AQUA + "Border");
+        element.add(2, 7, ChatColor.WHITE + "15000");
+
+        element.add(2, 9, ChatColor.AQUA + "Online Players");
+        element.add(2, 10, ChatColor.WHITE.toString() + Bukkit.getOnlinePlayers().size());
+
+        if(!this.teamController.findActiveKoths().isEmpty()) {
+            final Koth koth = this.teamController.findActiveKoths().get(0);
+
+            element.add(2, 12, ChatColor.AQUA + "Current Event");
+            element.add(2, 13, ChatColor.WHITE + koth.getKothTeam().getDisplayName(player));
+            element.add(2, 14, ChatColor.WHITE + (koth.getCapzone() == null ? "None" : koth.getCapzone().getCuboid().getMinXYZ()));
+
+            if (koth.getCappingUuid() != null && Bukkit.getPlayer(koth.getCappingUuid()) != null) {
+                element.add(2, 15, ChatColor.AQUA + "Duration");
+                element.add(2, 16, StringUtils.getFormattedTime(koth.getKothTimer().getThread().getCurrentDuration(), false));
+            }
+        }
 
         return element;
     }

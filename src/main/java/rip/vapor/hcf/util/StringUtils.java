@@ -79,6 +79,16 @@ public class StringUtils {
     }
 
     /**
+     * Format a {@link Location} into a {@link String}
+     *
+     * @param location the location
+     * @return the string
+     */
+    public String formatLocation(Location location) {
+        return location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ();
+    }
+
+    /**
      * Serialize a Location to a String
      *
      * @param location the location

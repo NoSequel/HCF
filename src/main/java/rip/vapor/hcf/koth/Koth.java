@@ -19,16 +19,15 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter
-@RequiredArgsConstructor
 @Setter
 public class Koth {
 
     private final KothTimer kothTimer;
-    private final Team kothTeam;
 
     private final String kothName;
     private final long defaultDuration;
 
+    private Team kothTeam;
     private Claim capzone;
 
     private boolean isRunning;
@@ -58,8 +57,8 @@ public class Koth {
         this.capzone = new Claim(JsonUtils.getParser().parse(object.get("capzone").getAsString()).getAsJsonObject());
 
         this.kothTimer = new KothTimer(this.getKothName(), this);
-        System.out.println(kothName);
-        this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName());
+
+        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()), 2L);
     }
 
     /**
@@ -77,12 +76,12 @@ public class Koth {
             } else if (!this.kothTimer.getThread().isShouldSubtract()) {
                 Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] "
                         + ChatColor.WHITE + Bukkit.getPlayer(this.cappingUuid).getName()
-                        + ChatColor.YELLOW + " is now capping the "
+                        + ChatColor.YELLOW + " is now capturing the "
                         + ChatColor.YELLOW + this.getKothName() + ChatColor.GOLD + " KoTH");
 
                 this.kothTimer.getThread().setShouldSubtract(true);
 
-                Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capping KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
+                Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capturing KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
             }
         } else if (this.kothTimer.getThread().isShouldSubtract() || this.kothTimer.getThread().isActive()) {
             this.kothTimer.getThread().setShouldSubtract(false);

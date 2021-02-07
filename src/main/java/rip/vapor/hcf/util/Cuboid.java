@@ -80,6 +80,24 @@ public class Cuboid {
         return (this.maxX - minX) + (this.maxZ - minZ);
     }
 
+    /**
+     * Get the center of the {@link Cuboid}
+     *
+     * @return the center
+     */
+    public String getMinXYZ() {
+        return String.join(", ", new String[]{
+                "(" + minX,
+                String.valueOf(minY),
+                minZ + ")"
+        });
+    }
+
+    /**
+     * Get the XYZ string of a {@link Cuboid}
+     *
+     * @return the XYZ string
+     */
     public String toXYZ() {
         return String.join(", ", new String[] {
                 "(" + minX,
