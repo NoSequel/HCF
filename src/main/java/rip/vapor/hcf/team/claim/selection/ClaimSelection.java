@@ -35,9 +35,14 @@ public class ClaimSelection {
             throw new IllegalStateException("The second position isn't in the same world as the first one.");
         }
 
-        team.addClaim(new Claim(new Cuboid(location1, location2)));
+        team.addClaim(this.toClaim());
     }
 
+    /**
+     * Method to transform a {@link ClaimSelection} object to  a {@link Claim} object
+     *
+     * @return the claim object
+     */
     public Claim toClaim() {
         return new Claim(new Cuboid(location1, location2));
     }

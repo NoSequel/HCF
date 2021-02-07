@@ -77,7 +77,7 @@ public class Koth {
             } else if (!this.kothTimer.getThread().isShouldSubtract()) {
                 Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] "
                         + ChatColor.WHITE + Bukkit.getPlayer(this.cappingUuid).getName()
-                        + ChatColor.YELLOW + "is now capping the "
+                        + ChatColor.YELLOW + " is now capping the "
                         + ChatColor.YELLOW + this.getKothName() + ChatColor.GOLD + " KoTH");
 
                 this.kothTimer.getThread().setShouldSubtract(true);

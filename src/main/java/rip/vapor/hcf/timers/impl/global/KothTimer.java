@@ -32,6 +32,12 @@ public class KothTimer extends GlobalTimer implements Controllable<TimerModule> 
 
     @Override
     public void handleEnd() {
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "yay capped by " + Bukkit.getPlayer(koth.getCappingUuid()).getName());
+        if (koth.getCappingUuid() != null) {
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "yay capped by " + Bukkit.getPlayer(koth.getCappingUuid()).getName());
+        }
+
+        koth.setRunning(false);
+        koth.setCappingUuid(null);
+        this.getThread().setActive(false);
     }
 }
