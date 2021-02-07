@@ -54,6 +54,8 @@ public class TimerCommand {
     @Subcommand(label = "clear", permission = "staff", parentLabel = "timer")
     public void clear(Player player, Player target) {
         controller.getTimers().stream()
+                .filter(timer -> timer instanceof PlayerTimer)
+                .map(timer -> ((PlayerTimer) timer))
                 .filter(timer -> timer.isOnCooldown(target))
                 .forEach(timer -> timer.cancel(target));
 

@@ -15,11 +15,11 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class CustomCommand extends Command {
+public class CommandExecutable extends Command {
 
     private final CommandData data;
 
-    public CustomCommand(CommandData data) {
+    public CommandExecutable(CommandData data) {
         super(data.getCommand().label());
 
         this.data = data;

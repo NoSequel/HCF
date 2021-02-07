@@ -4,17 +4,26 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.player.PlayerData;
+import rip.vapor.hcf.player.PlayerDataModule;
+import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.team.TeamModule;
+import rip.vapor.hcf.team.claim.selection.ClaimSelection;
 import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.enums.TeamType;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
+import rip.vapor.hcf.util.database.DatabaseModule;
 
 public class KothCommand implements Controllable<TeamModule> {
 
     private final TeamModule teamModule = this.getModule();
+    private final PlayerDataModule playerDataModule = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final DatabaseModule databaseModule = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
     @Command(label = "koth", permission = "hcteams.koth")
     public void execute(Player player) {
@@ -73,5 +82,45 @@ public class KothCommand implements Controllable<TeamModule> {
 
         new Koth(name, 30 * 1000);
         player.sendMessage(ChatColor.YELLOW + "You have created the " + name + " KoTH.");
+    }
+
+    @Subcommand(label = "delete", parentLabel = "koth", permission = "hcteams.koth.manage")
+    public void delete(Player player, Koth koth) {
+        this.teamModule.getTeams().remove(koth.getKothTeam());
+        this.databaseModule.getDataHandler().delete(koth.getKothTeam(), "teams");
+
+        player.sendMessage(ChatColor.YELLOW + "Successfully deleted a koth");
+    }
+
+    @Subcommand(label = "setclaim", parentLabel = "koth", permission = "hcteams.koth.manage")
+    public void setClaim(Player player, Koth koth) {
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
+
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(koth.getKothTeam(), false, true)));
+        player.sendMessage(new String[]{
+                "",
+                ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + koth.getKothTeam().getFormattedName() + ",",
+                ChatColor.GRAY + "Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
+                ChatColor.GRAY + "Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
+                ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
+                ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
+                ""
+        });
+    }
+
+    @Subcommand(label = "setcapzone", parentLabel = "koth", permission = "hcteams.koth.manage")
+    public void setCapZone(Player player, Koth koth) {
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
+
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(koth.getKothTeam(), true, false)));
+        player.sendMessage(new String[]{
+                "",
+                ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + koth.getKothTeam().getFormattedName() + ",",
+                ChatColor.GRAY + "Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
+                ChatColor.GRAY + "Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
+                ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
+                ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
+                ""
+        });
     }
 }

@@ -44,7 +44,7 @@ public class CombatLogger implements Controllable<CombatLoggerModule> {
         this.villager = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
         this.setupVillager(playerName);
 
-        this.getController().getLoggers().add(this);
+        this.getModule().getLoggers().add(this);
     }
 
     /**

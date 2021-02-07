@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class TimerModule implements Module {
 
-    private final List<PlayerTimer> timers = new ArrayList<>();
+    private final List<Timer> timers = new ArrayList<>();
 
     public void enable() {
         this.registerTimer(new EnderpearlTimer());
@@ -42,7 +42,7 @@ public class TimerModule implements Module {
      *
      * @param timer the timer
      */
-    private void registerTimer(PlayerTimer timer) {
+    private void registerTimer(Timer timer) {
         Bukkit.getPluginManager().registerEvents(timer, Vapor.getInstance());
 
         this.timers.add(timer);

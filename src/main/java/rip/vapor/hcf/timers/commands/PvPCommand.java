@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class PvPCommand implements Controllable<TimerModule> {
 
-    private final TimerModule controller = this.getController();
+    private final TimerModule controller = this.getModule();
     private final SpawnProtectionTimer spawnProtectionTimer = this.controller.findTimer(SpawnProtectionTimer.class);
 
     @Command(label = "pvp")

@@ -48,7 +48,8 @@ public class CommandModule implements Module {
                 new IntegerTypeAdapter(),
                 new TeamTypeAdapter(),
                 new PlayerTypeAdapter(),
-                new TimerTypeAdapter()
+                new TimerTypeAdapter(),
+                new KothTypeAdapter()
         ));
     }
 
@@ -72,13 +73,27 @@ public class CommandModule implements Module {
 
         commandMethods.stream()
                 .map(method -> new CommandData(object, method))
-                .forEach(this::registerCommand);
+                .forEach(this::register);
 
         subcommands.stream()
                 .filter(method -> commands.stream().anyMatch(data -> data.isParentOfSubCommand(method.getAnnotation(Subcommand.class))))
                 .forEach(method -> commands.stream()
                         .filter(data -> data.isParentOfSubCommand(method.getAnnotation(Subcommand.class)))
                         .forEach(parent -> parent.getSubcommands().add(new SubcommandData(object, method))));
+    }
+
+    /**
+     * Register a new {@link CommandData} object as a command
+     *
+     * @param data the command data object
+     */
+    private void register(CommandData data) {
+        if(this.getCommandMap() == null) {
+            throw new RuntimeException("commandMap field is null");
+        }
+
+        this.commands.add(data);
+        this.getCommandMap().register("basics", new CommandExecutable(data));
     }
 
     /**

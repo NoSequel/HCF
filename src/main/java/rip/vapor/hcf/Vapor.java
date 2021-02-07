@@ -1,5 +1,6 @@
 package rip.vapor.hcf;
 
+import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
 import rip.vapor.hcf.listeners.EnvironmentListener;
 import rip.vapor.hcf.listeners.combatwall.CombatWallListener;
@@ -84,7 +85,8 @@ public class Vapor extends JavaPlugin {
                 new TeamCommand(),
                 new SystemTeamCommand(),
                 new TimerCommand(),
-                new PvPCommand()
+                new PvPCommand(),
+                new KothCommand()
         );
 
         // register listeners

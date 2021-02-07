@@ -11,6 +11,8 @@ public class TimerTypeAdapter implements TypeAdapter<PlayerTimer>, Controllable<
     @Override
     public PlayerTimer convert(CommandSender sender, String source) {
         return this.getModule().getTimers().stream()
+                .filter(timer -> timer instanceof PlayerTimer)
+                .map(timer -> ((PlayerTimer) timer))
                 .filter(timer -> timer.getName().equalsIgnoreCase(source))
                 .findFirst().orElse(null);
     }

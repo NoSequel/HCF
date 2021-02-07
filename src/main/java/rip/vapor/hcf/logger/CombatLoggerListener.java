@@ -29,7 +29,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
         final Entity entity = event.getEntity();
-        final Optional<CombatLogger> logger = this.getController().getLoggers().stream()
+        final Optional<CombatLogger> logger = this.getModule().getLoggers().stream()
                 .filter(combatLogger -> combatLogger.getVillager().equals(entity))
                 .findFirst();
 
@@ -51,7 +51,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         final Entity entity = event.getEntity();
-        final Optional<CombatLogger> logger = this.getController().getLoggers().stream()
+        final Optional<CombatLogger> logger = this.getModule().getLoggers().stream()
                 .filter(combatLogger -> combatLogger.getVillager().equals(entity))
                 .findFirst();
 
@@ -62,7 +62,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() != null && this.getController().getLoggers().stream()
+        if (event.getRightClicked() != null && this.getModule().getLoggers().stream()
                 .anyMatch(logger -> logger.getVillager().equals(event.getRightClicked()))) {
             event.setCancelled(true);
         }
@@ -84,7 +84,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
         final PlayerData data = playerController.findPlayerData(player.getUniqueId());
         final CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
-        this.getController().getLoggers().stream()
+        this.getModule().getLoggers().stream()
                 .filter(logger -> logger.getPlayerUuid().equals(player.getUniqueId()))
                 .forEach(CombatLogger::destruct);
 

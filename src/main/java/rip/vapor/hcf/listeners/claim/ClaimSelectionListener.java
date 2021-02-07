@@ -10,6 +10,7 @@ import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.selection.ClaimSelection;
+import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.team.enums.TeamType;
@@ -22,7 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ClaimSelectionListener implements Listener, Controllable<PlayerDataModule> {
 
-    private final PlayerDataModule controller = this.getController();
+    private final PlayerDataModule controller = this.getModule();
     private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @EventHandler
@@ -85,6 +86,17 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                             final Claim newClaim = team.findData(ClaimTeamData.class).getClaim();
 
                             newClaim.setPriority(oldClaim.getPriority());
+                        }
+
+                        if (team.getGeneralData().getType().equals(TeamType.KOTH_TEAM) && (claimSelection.isKothClaim()) || claimSelection.isKothCapzone()) {
+                            final KothTeamData kothTeamData = team.findData(KothTeamData.class);
+                            final Claim claim = team.findData(ClaimTeamData.class).getClaim();
+
+                            if (claimSelection.isKothClaim()) {
+                                kothTeamData.getKoth().setClaim(claim);
+                            } else if (claimSelection.isKothCapzone()) {
+                                kothTeamData.getKoth().setCapzone(claim);
+                            }
                         }
 
                         player.sendMessage(ChatColor.YELLOW + "You have claimed for " + team.getDisplayName(player));

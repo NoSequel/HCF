@@ -120,7 +120,7 @@ public class SystemTeamCommand implements Controllable<TeamModule> {
     public void claimfor(Player player, Team team) {
         final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team)));
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false, false)));
         player.sendMessage(new String[]{
                 "",
                 ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + team.getFormattedName() + ",",

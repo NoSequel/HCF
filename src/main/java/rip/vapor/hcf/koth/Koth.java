@@ -50,6 +50,8 @@ public class Koth {
      */
     public void tickCap() {
         if (this.isRunning && this.capzone != null && this.claim != null) {
+            this.getKothTimer().getThread().setActive(true);
+
             if (this.cappingUuid == null || Bukkit.getPlayer(this.cappingUuid) == null) {
                 this.cappingUuid = null;
 
@@ -65,8 +67,9 @@ public class Koth {
 
                 Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capping KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
             }
-        } else if (this.kothTimer.getThread().isShouldSubtract()) {
+        } else if (this.kothTimer.getThread().isShouldSubtract() || this.kothTimer.getThread().isActive()) {
             this.kothTimer.getThread().setShouldSubtract(false);
+            this.kothTimer.getThread().setActive(false);
         }
     }
 

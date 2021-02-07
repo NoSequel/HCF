@@ -29,8 +29,8 @@ import java.util.logging.Level;
 @Setter
 public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
 
-    private final TeamModule teamController = this.getController();
-    private final DatabaseModule databaseController = Vapor.getInstance().getHandler().find(DatabaseModule.class);
+    private final TeamModule teamModule = this.getModule();
+    private final DatabaseModule databaseModule = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
     private GeneralData generalData;
     private UUID uniqueId;
@@ -45,7 +45,7 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
     public Team(UUID uuid) {
         this.uniqueId = uuid == null ? UUID.randomUUID() : uuid;
 
-        this.teamController.getTeams().add(this);
+        this.teamModule.getTeams().add(this);
     }
 
     /**
@@ -162,8 +162,8 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
             playerTeamData.broadcast(ChatColor.RED + "Your current team has been disbanded.");
         }
 
-        teamController.getTeams().remove(this);
-        databaseController.getDataHandler().delete(this, "teams");
+        teamModule.getTeams().remove(this);
+        databaseModule.getDataHandler().delete(this, "teams");
     }
 
     /**

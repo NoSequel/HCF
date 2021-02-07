@@ -12,6 +12,7 @@ import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.timers.TimerModule;
+import rip.vapor.hcf.timers.impl.PlayerTimer;
 import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListeners implements Listener, Controllable<PlayerDataModule> {
 
-    private final PlayerDataModule controller = this.getController();
+    private final PlayerDataModule module = this.getModule();
     private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
     private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
@@ -31,7 +32,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData playerData = controller.findOrElseMake(player.getUniqueId());
+        final PlayerData playerData = module.findOrElseMake(player.getUniqueId());
 
         if (player.isDead()) {
             player.getInventory().clear();
@@ -88,6 +89,8 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
         final Player player = event.getPlayer();
 
         this.timerController.getTimers().stream()
+                .filter(timer -> timer instanceof PlayerTimer)
+                .map(timer -> ((PlayerTimer) timer))
                 .filter(timer -> timer.isOnCooldown(player))
                 .forEach(timer -> timer.cancel(player));
     }

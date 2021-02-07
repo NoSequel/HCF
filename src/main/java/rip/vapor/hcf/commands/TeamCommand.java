@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 public class TeamCommand implements Controllable<TeamModule> {
 
-    private final TeamModule controller = this.getController();
+    private final TeamModule controller = this.getModule();
     private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
     private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
@@ -279,7 +279,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team)));
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false, false)));
         player.sendMessage(new String[]{
                 "",
                 ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for your own faction,",

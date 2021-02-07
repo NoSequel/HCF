@@ -12,6 +12,8 @@ import org.bukkit.Location;
 public class ClaimSelection {
 
     private Location location1, location2;
+
+    private final boolean kothCapzone, kothClaim;
     private final Team team;
 
     /**
@@ -20,8 +22,10 @@ public class ClaimSelection {
      *
      * @param team the team the ClaimSelection is dedicated to
      */
-    public ClaimSelection(Team team) {
+    public ClaimSelection(Team team, boolean kothCapzone, boolean kothClaim) {
         this.team = team;
+        this.kothCapzone = kothCapzone;
+        this.kothClaim = kothClaim;
     }
 
     /**
