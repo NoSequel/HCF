@@ -26,8 +26,9 @@ public class Koth {
 
     private final String kothName;
     private final long defaultDuration;
-    private final Claim capzone;
-    private final Claim claim;
+
+    private Claim capzone;
+    private Claim claim;
 
     private boolean isRunning;
     private UUID cappingUuid;
@@ -48,20 +49,24 @@ public class Koth {
      * Method to handle ticking the cap
      */
     public void tickCap() {
-        if (this.cappingUuid == null || Bukkit.getPlayer(this.cappingUuid) == null) {
-            this.cappingUuid = null;
+        if (this.isRunning && this.capzone != null && this.claim != null) {
+            if (this.cappingUuid == null || Bukkit.getPlayer(this.cappingUuid) == null) {
+                this.cappingUuid = null;
 
+                this.kothTimer.getThread().setShouldSubtract(false);
+                this.kothTimer.getThread().setCurrentDuration(this.getDefaultDuration());
+            } else if (!this.kothTimer.getThread().isShouldSubtract()) {
+                Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] "
+                        + ChatColor.WHITE + Bukkit.getPlayer(this.cappingUuid).getName()
+                        + ChatColor.YELLOW + "is now capping the "
+                        + ChatColor.YELLOW + this.getKothName() + ChatColor.GOLD + " KoTH");
+
+                this.kothTimer.getThread().setShouldSubtract(true);
+
+                Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capping KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
+            }
+        } else if (this.kothTimer.getThread().isShouldSubtract()) {
             this.kothTimer.getThread().setShouldSubtract(false);
-            this.kothTimer.getThread().setCurrentDuration(this.getDefaultDuration());
-        } else if (!this.kothTimer.getThread().isShouldSubtract()) {
-            Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] "
-                    + ChatColor.WHITE + Bukkit.getPlayer(this.cappingUuid).getName()
-                    + ChatColor.YELLOW + "is now capping the "
-                    + ChatColor.YELLOW + this.getKothName() + ChatColor.GOLD + " KoTH");
-
-            this.kothTimer.getThread().setShouldSubtract(true);
-
-            Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capping KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
         }
     }
 

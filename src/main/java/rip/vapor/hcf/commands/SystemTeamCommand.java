@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class SystemTeamCommand implements Controllable<TeamModule> {
 
-    private final TeamModule controller = this.getController();
+    private final TeamModule controller = this.getModule();
     private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
     @Command(label = "systemteam", aliases = {"systeam", "steam"})
@@ -85,6 +85,13 @@ public class SystemTeamCommand implements Controllable<TeamModule> {
         if (Arrays.stream(TeamType.values()).noneMatch($type -> $type.name().equals(type.toUpperCase()))) {
             player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "Type by '" + type + "' not found.");
             player.sendMessage(ChatColor.RED + "Choose between: " + Arrays.stream(TeamType.values()).map(TeamType::name).collect(Collectors.joining(", ")));
+            return;
+        }
+
+        final TeamType teamType = TeamType.valueOf(type.toUpperCase());
+
+        if(teamType.equals(TeamType.KOTH_TEAM)) {
+            player.sendMessage(ChatColor.RED + "You cannot set the type of a team to KOTH, please use /koth.");
             return;
         }
 
