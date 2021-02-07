@@ -5,7 +5,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TablistProvider implements TablistElementSupplier {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @Override
     public TablistElement getEntries(Player player) {

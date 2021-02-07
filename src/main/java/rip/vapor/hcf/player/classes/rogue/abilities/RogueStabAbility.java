@@ -7,15 +7,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.rogue.RogueClass;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.RogueStabTimer;
 
 public class RogueStabAbility extends Ability {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
     private final RogueStabTimer rogueStabTimer = timerController.findTimer(RogueStabTimer.class);
 
     @EventHandler
@@ -51,7 +51,7 @@ public class RogueStabAbility extends Ability {
      * @return the state of the archer class
      */
     private boolean equippedRouge(Player player) {
-        final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
+        final ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
         final RogueClass rogueClass = classController.findClass(RogueClass.class);
 
         return rogueClass.getEquipped().contains(player);

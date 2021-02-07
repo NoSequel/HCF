@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class CombatLoggerController implements Controller {
+public class CombatLoggerModule implements Module {
 
     private final JavaPlugin plugin;
     private final List<CombatLogger> loggers = new ArrayList<>();

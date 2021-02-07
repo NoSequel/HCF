@@ -3,12 +3,12 @@ package rip.vapor.hcf;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
 import rip.vapor.hcf.listeners.EnvironmentListener;
 import rip.vapor.hcf.listeners.combatwall.CombatWallListener;
-import rip.vapor.hcf.logger.CombatLoggerController;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.logger.CombatLoggerModule;
+import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.commands.SystemTeamCommand;
 import rip.vapor.hcf.commands.TeamCommand;
-import rip.vapor.hcf.controller.Controller;
-import rip.vapor.hcf.controller.ControllerHandler;
+import rip.vapor.hcf.module.Module;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.listeners.PlayerListeners;
 import rip.vapor.hcf.listeners.claim.ClaimListeners;
 import rip.vapor.hcf.listeners.claim.ClaimSelectionListener;
@@ -16,15 +16,15 @@ import rip.vapor.hcf.listeners.classes.EquipListener;
 import rip.vapor.hcf.listeners.team.ChatListener;
 import rip.vapor.hcf.listeners.team.DamageListeners;
 import rip.vapor.hcf.listeners.team.DeathListeners;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.scoreboard.BoardProviderHandler;
-import rip.vapor.hcf.util.tasks.TaskController;
-import rip.vapor.hcf.team.TeamController;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.util.tasks.TaskModule;
+import rip.vapor.hcf.team.TeamModule;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.commands.PvPCommand;
 import rip.vapor.hcf.timers.commands.TimerCommand;
-import rip.vapor.hcf.util.command.CommandController;
-import rip.vapor.hcf.util.database.DatabaseController;
+import rip.vapor.hcf.util.command.CommandModule;
+import rip.vapor.hcf.util.database.DatabaseModule;
 import rip.vapor.hcf.util.database.handler.data.MongoDataHandler;
 import rip.vapor.hcf.util.database.options.impl.MongoDatabaseOption;
 import rip.vapor.hcf.util.database.type.mongo.MongoDataType;
@@ -44,7 +44,7 @@ public class Vapor extends JavaPlugin {
     @Getter
     private static Vapor instance;
 
-    private final ControllerHandler handler = new ControllerHandler();
+    private final ModuleHandler handler = new ModuleHandler();
 
     @Override
     public void onEnable() {
@@ -56,7 +56,7 @@ public class Vapor extends JavaPlugin {
         this.debugConfig();
 
         // setup database controller
-        final DatabaseController controller = new DatabaseController(
+        final DatabaseModule databaseModule = new DatabaseModule(
                 new MongoDatabaseOption(
                         "127.0.0.1",
                         "",
@@ -67,19 +67,19 @@ public class Vapor extends JavaPlugin {
                 new MongoDataType()
         );
 
-        controller.setDataHandler(new MongoDataHandler(controller));
+        databaseModule.setDataHandler(new MongoDataHandler(databaseModule));
 
         // register controllers
-        this.handler.register(controller);
-        this.handler.register(new TeamController());
-        this.handler.register(new PlayerDataController());
-        this.handler.register(new TimerController());
-        this.handler.register(new ClassController());
-        this.handler.register(new TaskController());
-        this.handler.register(new CombatLoggerController(this));
+        this.handler.register(databaseModule);
+        this.handler.register(new TeamModule());
+        this.handler.register(new PlayerDataModule());
+        this.handler.register(new TimerModule());
+        this.handler.register(new ClassModule());
+        this.handler.register(new TaskModule());
+        this.handler.register(new CombatLoggerModule(this));
 
         // register commands
-        final CommandController commandController = handler.register(new CommandController("vapor"));
+        final CommandModule commandController = handler.register(new CommandModule("vapor"));
         commandController.registerCommand(
                 new TeamCommand(),
                 new SystemTeamCommand(),
@@ -110,7 +110,7 @@ public class Vapor extends JavaPlugin {
     public void onDisable() {
         Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer("The server is shutting down"));
 
-        handler.getControllers().forEach(Controller::disable);
+        handler.getModules().values().forEach(Module::disable);
     }
 
     /**

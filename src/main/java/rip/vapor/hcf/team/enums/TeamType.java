@@ -3,7 +3,7 @@ package rip.vapor.hcf.team.enums;
 import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -13,7 +13,7 @@ public enum TeamType {
     PLAYER_TEAM(false) {
         @Override
         public String formatName(Team team, Player player) {
-            final Team team1 = (Vapor.getInstance().getHandler().find(TeamController.class).findTeam(player));
+            final Team team1 = (Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(player));
 
             return (team1 != null && team1.equals(team) ? ChatColor.DARK_GREEN : ChatColor.YELLOW) + team.getFormattedName();
         }

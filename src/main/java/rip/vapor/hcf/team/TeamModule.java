@@ -2,7 +2,7 @@ package rip.vapor.hcf.team;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.data.DataController;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.ClaimPriority;
 import rip.vapor.hcf.team.data.TeamData;
@@ -13,7 +13,7 @@ import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.team.data.impl.player.invites.InviteTeamData;
 import rip.vapor.hcf.team.enums.TeamType;
 import rip.vapor.hcf.util.Cuboid;
-import rip.vapor.hcf.util.database.DatabaseController;
+import rip.vapor.hcf.util.database.DatabaseModule;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -26,7 +26,7 @@ import java.util.logging.Level;
 
 @Getter
 @Setter
-public class TeamController implements Controller, DataController<Team, TeamData> {
+public class TeamModule implements Module, DataController<Team, TeamData> {
 
     private final List<Team> teams = new ArrayList<>();
 
@@ -61,14 +61,14 @@ public class TeamController implements Controller, DataController<Team, TeamData
 
     @Override
     public void disable() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
+        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
         teams.forEach(loadable -> controller.getDataHandler().save(loadable, "teams"));
     }
 
     @Override
     public void loadAll() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
+        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
         controller.getDataHandler().loadAll(this, "teams", Team.class);
     }

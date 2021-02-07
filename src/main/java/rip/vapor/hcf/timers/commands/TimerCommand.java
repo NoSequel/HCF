@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.commands;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class TimerCommand {
 
-    private final TimerController controller = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final TimerModule controller = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     @Command(label = "timer", permission = "staff")
     @Subcommand(label = "help", parentLabel = "timer", permission = "staff")

@@ -3,7 +3,7 @@ package rip.vapor.hcf.timers.impl.player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
 import rip.vapor.hcf.timers.impl.PlayerTimer;
 import org.bukkit.ChatColor;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class SpawnProtectionTimer extends PlayerTimer {
 
     private final Map<Player, PlayerData> data = new HashMap<>();
-    private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
     public SpawnProtectionTimer() {
         super("SpawnProt", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);

@@ -2,7 +2,7 @@ package rip.vapor.hcf.player.classes;
 
 import rip.vapor.hcf.player.classes.archer.ArcherClass;
 import rip.vapor.hcf.player.classes.bard.BardClass;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import lombok.Getter;
 import rip.vapor.hcf.player.classes.rogue.RogueClass;
 
@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-public class ClassController implements Controller {
+public class ClassModule implements Module {
 
     private final List<Class<?>> classes = new ArrayList<>();
 
-    public ClassController() {
+    public ClassModule() {
         classes.addAll(Arrays.asList(
                 new BardClass(),
                 new ArcherClass(),

@@ -2,7 +2,7 @@ package rip.vapor.hcf.scoreboard.provider.impl;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class TimerBoardProvider implements BoardProvider {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     @Override
     public List<String> getStrings(Player player) {

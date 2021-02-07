@@ -3,7 +3,7 @@ package rip.vapor.hcf.timers.impl.player;
 import org.bukkit.GameMode;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EnderpearlTimer extends PlayerTimer {
 
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     public EnderpearlTimer() {
         super("Enderpearl", ChatColor.YELLOW + ChatColor.BOLD.toString() + "Enderpearl", true, 16000L);

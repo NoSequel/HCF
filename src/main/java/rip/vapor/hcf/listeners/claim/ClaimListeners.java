@@ -1,9 +1,9 @@
 package rip.vapor.hcf.listeners.claim;
 
 import org.bukkit.Material;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import org.bukkit.ChatColor;
@@ -18,9 +18,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Arrays;
 
-public class ClaimListeners implements Listener, Controllable<TeamController> {
+public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
-    private final TeamController controller = this.getController();
+    private final TeamModule controller = this.getController();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {

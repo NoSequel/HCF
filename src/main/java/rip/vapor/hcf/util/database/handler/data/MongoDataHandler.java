@@ -9,7 +9,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import rip.vapor.hcf.data.DataController;
 import rip.vapor.hcf.data.Loadable;
-import rip.vapor.hcf.util.database.DatabaseController;
+import rip.vapor.hcf.util.database.DatabaseModule;
 import rip.vapor.hcf.util.database.handler.DataHandler;
 import rip.vapor.hcf.util.database.options.impl.MongoDatabaseOption;
 import rip.vapor.hcf.util.database.type.mongo.MongoDataType;
@@ -25,13 +25,13 @@ import java.util.UUID;
 @Setter
 public class MongoDataHandler implements DataHandler {
 
-    private final DatabaseController controller;
+    private final DatabaseModule controller;
     private final MongoDatabase database;
 
     /**
      * Constructor for setting up the MongoDataHandler
      */
-    public MongoDataHandler(DatabaseController controller) {
+    public MongoDataHandler(DatabaseModule controller) {
         this.controller = controller;
 
         final MongoDatabaseOption option = (MongoDatabaseOption) this.controller.getOption();

@@ -1,12 +1,12 @@
 package rip.vapor.hcf.commands;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.ClaimPriority;
 import rip.vapor.hcf.team.claim.selection.ClaimSelection;
@@ -23,10 +23,10 @@ import org.bukkit.event.block.Action;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class SystemTeamCommand implements Controllable<TeamController> {
+public class SystemTeamCommand implements Controllable<TeamModule> {
 
-    private final TeamController controller = this.getController();
-    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final TeamModule controller = this.getController();
+    private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
     @Command(label = "systemteam", aliases = {"systeam", "steam"})
     @Subcommand(label = "help", parentLabel = "systemteam")

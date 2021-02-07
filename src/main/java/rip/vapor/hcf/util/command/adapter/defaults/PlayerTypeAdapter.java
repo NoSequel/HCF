@@ -15,13 +15,9 @@ public class PlayerTypeAdapter implements TypeAdapter<Player> {
             return (Player) sender;
         }
 
-        Player player = Bukkit.getPlayer(source);
-
-        if (player == null) {
-            player = Bukkit.getPlayer(UUID.fromString(source));
-        }
-
-        return player;
+        return Bukkit.getPlayer(source) == null
+                ? Bukkit.getPlayer(UUID.fromString(source))
+                : Bukkit.getPlayer(source);
     }
 
     @Override

@@ -3,7 +3,7 @@ package rip.vapor.hcf.util.tasks.impl;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.util.tasks.Task;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class DTRTask extends Task {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     public DTRTask() {
         super(0);

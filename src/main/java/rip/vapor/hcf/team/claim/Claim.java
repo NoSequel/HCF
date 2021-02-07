@@ -3,7 +3,7 @@ package rip.vapor.hcf.team.claim;
 import com.google.gson.JsonObject;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.util.Cuboid;
 import rip.vapor.hcf.util.JsonBuilder;
@@ -75,7 +75,7 @@ public class Claim {
      * @return the team
      */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().find(TeamController.class).getTeams().stream()
+        return Vapor.getInstance().getHandler().find(TeamModule.class).getTeams().stream()
                 .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim().equals(this))
                 .findFirst().orElse(null);
     }

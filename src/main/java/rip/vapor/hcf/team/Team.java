@@ -1,7 +1,7 @@
 package rip.vapor.hcf.team;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.data.Loadable;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.team.claim.Claim;
@@ -13,7 +13,7 @@ import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.team.data.impl.player.invites.InviteTeamData;
 import rip.vapor.hcf.team.enums.TeamType;
-import rip.vapor.hcf.util.database.DatabaseController;
+import rip.vapor.hcf.util.database.DatabaseModule;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -27,10 +27,10 @@ import java.util.logging.Level;
 
 @Getter
 @Setter
-public class Team implements Controllable<TeamController>, Loadable<TeamData> {
+public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
 
-    private final TeamController teamController = this.getController();
-    private final DatabaseController databaseController = Vapor.getInstance().getHandler().find(DatabaseController.class);
+    private final TeamModule teamController = this.getController();
+    private final DatabaseModule databaseController = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
     private GeneralData generalData;
     private UUID uniqueId;

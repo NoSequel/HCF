@@ -18,7 +18,7 @@ public class PlayerData implements Loadable<Data> {
     private UUID uniqueId;
     private List<Data> data = new ArrayList<>();
 
-    private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);
+    private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
     /**
      * Constructor for creating a new Profile

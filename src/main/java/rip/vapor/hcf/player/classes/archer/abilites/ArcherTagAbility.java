@@ -1,7 +1,7 @@
 package rip.vapor.hcf.player.classes.archer.abilites;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.archer.ArcherClass;
 import org.bukkit.ChatColor;
@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class ArcherTagAbility extends Ability {
 
-    private ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
+    private ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
 
     @EventHandler
     public void onArcher(EntityDamageByEntityEvent event) {
@@ -21,7 +21,7 @@ public class ArcherTagAbility extends Ability {
             final Player damaged = (Player) event.getEntity();
 
             if (this.classController == null) {
-                this.classController = Vapor.getInstance().getHandler().find(ClassController.class);
+                this.classController = Vapor.getInstance().getHandler().find(ClassModule.class);
             }
 
             final ArcherClass archerClass = classController.findClass(ArcherClass.class);

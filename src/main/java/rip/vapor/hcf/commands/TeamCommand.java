@@ -2,12 +2,12 @@ package rip.vapor.hcf.commands;
 
 import com.google.common.collect.ImmutableMap;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.selection.ClaimSelection;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
@@ -16,7 +16,7 @@ import rip.vapor.hcf.team.data.impl.player.PlayerRole;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.team.data.impl.player.invites.InviteTeamData;
 import rip.vapor.hcf.team.enums.TeamType;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.CombatTimer;
 import rip.vapor.hcf.timers.impl.player.EnderpearlTimer;
 import rip.vapor.hcf.timers.impl.player.TeleportTimer;
@@ -33,11 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TeamCommand implements Controllable<TeamController> {
+public class TeamCommand implements Controllable<TeamModule> {
 
-    private final TeamController controller = this.getController();
-    private final PlayerDataController playerDataController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final TeamModule controller = this.getController();
+    private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     @Command(label = "faction", aliases = {"f", "team", "t"})
     @Subcommand(label = "help", parentLabel = "faction")

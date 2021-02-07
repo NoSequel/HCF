@@ -3,7 +3,7 @@ package rip.vapor.hcf.listeners.team;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
 import rip.vapor.hcf.player.data.deathban.impl.PlayerDeathbanData;
 
@@ -11,7 +11,7 @@ import rip.vapor.hcf.player.data.deathban.impl.natural.NaturalDeathbanData;
 import rip.vapor.hcf.player.data.deathban.impl.natural.NaturalDeathbanType;
 
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.util.NumberUtil;
@@ -23,8 +23,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DeathListeners implements Listener {
 
-    private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {

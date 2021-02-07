@@ -1,7 +1,7 @@
 package rip.vapor.hcf.player;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.data.Data;
 import rip.vapor.hcf.data.DataController;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
@@ -9,7 +9,7 @@ import rip.vapor.hcf.player.data.CombatLoggerData;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
 import rip.vapor.hcf.player.data.deathban.impl.PlayerDeathbanData;
 import rip.vapor.hcf.player.data.deathban.impl.natural.NaturalDeathbanData;
-import rip.vapor.hcf.util.database.DatabaseController;
+import rip.vapor.hcf.util.database.DatabaseModule;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class PlayerDataController implements Controller, DataController<PlayerData, Data> {
+public class PlayerDataModule implements Module, DataController<PlayerData, Data> {
 
     private final List<PlayerData> playerData = new ArrayList<>();
     private final List<? extends Data> registeredData = new ArrayList<>(Arrays.asList(
@@ -56,14 +56,14 @@ public class PlayerDataController implements Controller, DataController<PlayerDa
 
     @Override
     public void disable() {
-        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
+        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
         playerData.forEach(loadable -> controller.getDataHandler().save(loadable, "profiles"));
     }
 
     @Override
     public void load(PlayerData loadable) {
-        final DatabaseController controller = Vapor.getInstance().getHandler().find(DatabaseController.class);
+        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
         controller.getDataHandler().load(this, loadable, "profiles");
     }

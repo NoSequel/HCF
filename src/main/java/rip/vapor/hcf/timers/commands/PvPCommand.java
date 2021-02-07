@@ -1,7 +1,7 @@
 package rip.vapor.hcf.timers.commands;
 
-import rip.vapor.hcf.controller.Controllable;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
@@ -9,9 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class PvPCommand implements Controllable<TimerController> {
+public class PvPCommand implements Controllable<TimerModule> {
 
-    private final TimerController controller = this.getController();
+    private final TimerModule controller = this.getController();
     private final SpawnProtectionTimer spawnProtectionTimer = this.controller.findTimer(SpawnProtectionTimer.class);
 
     @Command(label = "pvp")

@@ -3,7 +3,7 @@ package rip.vapor.hcf.listeners.team;
 import org.bukkit.event.EventPriority;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncPlayerChatEvent event) {

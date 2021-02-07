@@ -3,15 +3,15 @@ package rip.vapor.hcf.listeners;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,11 +21,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerListeners implements Listener, Controllable<PlayerDataController> {
+public class PlayerListeners implements Listener, Controllable<PlayerDataModule> {
 
-    private final PlayerDataController controller = this.getController();
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final PlayerDataModule controller = this.getController();
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
 
     @EventHandler(priority = EventPriority.LOWEST)

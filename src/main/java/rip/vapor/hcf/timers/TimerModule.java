@@ -1,7 +1,7 @@
 package rip.vapor.hcf.timers;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import rip.vapor.hcf.timers.impl.PlayerTimer;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class TimerController implements Controller {
+public class TimerModule implements Module {
 
     private final List<PlayerTimer> timers = new ArrayList<>();
 

@@ -77,7 +77,7 @@ public class CustomCommand extends Command {
                     sender.sendMessage(ChatColor.RED + "Usage: /" + label + " " + Arrays.stream(parameters).map(parameter1 -> "<" + parameter1.getName() + ">").collect(Collectors.joining(" ")));
                     return true;
                 } else if (param != null && !param.value().isEmpty() && i >= args.length) {
-                    final TypeAdapter<?> typeAdapter = CommandController.getInstance().findConverter(parameter.getType());
+                    final TypeAdapter<?> typeAdapter = CommandModule.getInstance().findConverter(parameter.getType());
 
                     if (typeAdapter != null) {
                         try {
@@ -90,7 +90,7 @@ public class CustomCommand extends Command {
                     }
 
                 } else {
-                    final TypeAdapter<?> typeAdapter = CommandController.getInstance().findConverter(parameter.getType());
+                    final TypeAdapter<?> typeAdapter = CommandModule.getInstance().findConverter(parameter.getType());
 
                     if (typeAdapter == null) {
                         objects[i] = args[i];

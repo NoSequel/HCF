@@ -9,18 +9,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.player.classes.ability.TickableAbility;
 import rip.vapor.hcf.player.classes.bard.BardClass;
 import rip.vapor.hcf.player.classes.bard.BardClassData;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 
 public abstract class TickableBardEffectAbility extends TickableAbility {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
-    private ClassController classController;
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private ClassModule classController;
 
     /**
      * Get the type of item required to be held
@@ -71,7 +71,7 @@ public abstract class TickableBardEffectAbility extends TickableAbility {
     public void onInteract(PlayerInteractEvent event) {
         if (this.getClickEffect() != null) {
             if (this.classController == null) {
-                this.classController = Vapor.getInstance().getHandler().find(ClassController.class);
+                this.classController = Vapor.getInstance().getHandler().find(ClassModule.class);
             }
 
             final Player player = event.getPlayer();

@@ -1,6 +1,6 @@
-package rip.vapor.hcf.controller;
+package rip.vapor.hcf.module;
 
-public interface Controller {
+public interface Module {
 
     default void enable() {}
     default void disable() {}

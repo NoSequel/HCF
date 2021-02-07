@@ -2,12 +2,12 @@ package rip.vapor.hcf.listeners.claim;
 
 import org.bukkit.Material;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.selection.ClaimSelection;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
@@ -20,10 +20,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class ClaimSelectionListener implements Listener, Controllable<PlayerDataController> {
+public class ClaimSelectionListener implements Listener, Controllable<PlayerDataModule> {
 
-    private final PlayerDataController controller = this.getController();
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final PlayerDataModule controller = this.getController();
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {

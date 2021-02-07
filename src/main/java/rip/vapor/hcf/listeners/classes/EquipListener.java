@@ -1,7 +1,7 @@
 package rip.vapor.hcf.listeners.classes;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.player.classes.ClassModule;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class EquipListener implements Listener {
 
-    private final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
+    private final ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
     private final Material[] armor = new Material[]{
             // BOOTS
             Material.IRON_BOOTS,

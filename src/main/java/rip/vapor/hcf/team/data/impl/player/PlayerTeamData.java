@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.SavableTeamData;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.JsonUtils;
@@ -219,7 +219,7 @@ public class PlayerTeamData extends SavableTeamData {
      * @return the team
      */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().find(TeamController.class).getTeams().stream()
+        return Vapor.getInstance().getHandler().find(TeamModule.class).getTeams().stream()
                 .filter($team -> $team.getData().contains(this))
                 .findFirst().orElse(null);
     }

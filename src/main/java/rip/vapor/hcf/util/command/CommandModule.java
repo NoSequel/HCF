@@ -1,6 +1,6 @@
 package rip.vapor.hcf.util.command;
 
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
@@ -13,6 +13,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.SimplePluginManager;
 import rip.vapor.hcf.util.command.adapter.defaults.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -21,10 +22,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class CommandController implements Controller {
+public class CommandModule implements Module {
 
     @Getter
-    private static CommandController instance;
+    private static CommandModule instance;
 
     private final String fallbackPrefix;
 
@@ -36,7 +37,7 @@ public class CommandController implements Controller {
      *
      * @param fallbackPrefix the fallback prefix
      */
-    public CommandController(String fallbackPrefix) {
+    public CommandModule(String fallbackPrefix) {
         instance = this;
 
         this.fallbackPrefix = fallbackPrefix;
@@ -57,35 +58,43 @@ public class CommandController implements Controller {
      * @param objects the commands
      */
     public void registerCommand(Object... objects) {
-        Arrays.stream(objects).forEach(object -> {
-            final List<Method> parentCommandMethods = Arrays.stream(object.getClass().getMethods())
-                    .filter(command -> command.getAnnotation(Command.class) != null)
-                    .collect(Collectors.toList());
-
-            final List<Method> subCommands = Arrays.stream(object.getClass().getMethods())
-                    .filter(command -> command.getAnnotation(Subcommand.class) != null && !parentCommandMethods.contains(command))
-                    .collect(Collectors.toList());
-
-
-            parentCommandMethods.forEach(command -> {
-                final CommandData commandData = new CommandData(object, command);
-
-                this.commands.add(commandData);
-                this.getCommandMap().register(fallbackPrefix, new CustomCommand(commandData));
-            });
-
-            subCommands.stream()
-                    .filter(command -> commands.stream().anyMatch(commandData -> commandData.isParentOfSubCommand(command.getAnnotation(Subcommand.class))))
-                    .forEach(command -> {
-                        final CommandData parentCommand = commands.stream()
-                                .filter(data -> data.isParentOfSubCommand(command.getAnnotation(Subcommand.class)))
-                                .findFirst().orElse(null);
-
-                        assert parentCommand != null;
-                        parentCommand.getSubcommands().add(new SubcommandData(object, command));
-                    });
-        });
+        Arrays.stream(objects).forEach(this::registerCommand);
     }
+
+    /**
+     * Method to register a {@link Object} as a command
+     *
+     * @param object the object
+     */
+    public void registerCommand(Object object) {
+        final List<Method> commandMethods = this.getMethods(Command.class, object);
+        final List<Method> subcommands = this.getMethods(Subcommand.class, object);
+
+        commandMethods.stream()
+                .map(method -> new CommandData(object, method))
+                .forEach(this::registerCommand);
+
+        subcommands.stream()
+                .filter(method -> commands.stream().anyMatch(data -> data.isParentOfSubCommand(method.getAnnotation(Subcommand.class))))
+                .forEach(method -> commands.stream()
+                        .filter(data -> data.isParentOfSubCommand(method.getAnnotation(Subcommand.class)))
+                        .forEach(parent -> parent.getSubcommands().add(new SubcommandData(object, method))));
+    }
+
+    /**
+     * Get all methods annotated with a {@link Annotation} in an object
+     *
+     * @param annotation the annotation which the method must be annotated with
+     * @param object     the object with the methods
+     * @param <T>        the type of the annontation
+     * @return the list of methods
+     */
+    private <T extends Annotation> List<Method> getMethods(Class<T> annotation, Object object) {
+        return Arrays.stream(object.getClass().getMethods())
+                .filter(method -> method.getAnnotation(annotation) != null)
+                .collect(Collectors.toList());
+    }
+
 
     /**
      * Find a converter by a class type

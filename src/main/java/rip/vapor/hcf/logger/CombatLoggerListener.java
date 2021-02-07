@@ -12,19 +12,19 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
-import rip.vapor.hcf.player.PlayerDataController;
+import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.CombatLoggerData;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.CombatTimer;
 
 import java.util.Optional;
 
-public class CombatLoggerListener implements Listener, Controllable<CombatLoggerController> {
+public class CombatLoggerListener implements Listener, Controllable<CombatLoggerModule> {
 
-    private final PlayerDataController playerController = Vapor.getInstance().getHandler().find(PlayerDataController.class);
-    private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
+    private final PlayerDataModule playerController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {

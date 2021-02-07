@@ -1,7 +1,7 @@
 package rip.vapor.hcf.util.tasks;
 
 import rip.vapor.hcf.player.classes.bard.task.BardClassTask;
-import rip.vapor.hcf.controller.Controller;
+import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.util.tasks.impl.DTRTask;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TaskController implements Controller {
+public class TaskModule implements Module {
 
     private final List<Task> tasks = new ArrayList<>();
 

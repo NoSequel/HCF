@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.controller.Controllable;
+import rip.vapor.hcf.module.Controllable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter
-public class CombatLogger implements Controllable<CombatLoggerController> {
+public class CombatLogger implements Controllable<CombatLoggerModule> {
 
     private final UUID playerUuid;
     private final ItemStack[] drops;

@@ -11,15 +11,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.player.classes.ClassController;
+import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.archer.ArcherClass;
-import rip.vapor.hcf.timers.TimerController;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.player.ArcherSpeedTimer;
 
 public class SpeedItemAbility extends Ability {
 
-    private final ArcherSpeedTimer timer = Vapor.getInstance().getHandler().find(TimerController.class).findTimer(ArcherSpeedTimer.class);
+    private final ArcherSpeedTimer timer = Vapor.getInstance().getHandler().find(TimerModule.class).findTimer(ArcherSpeedTimer.class);
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -64,7 +64,7 @@ public class SpeedItemAbility extends Ability {
      * @return the state of the archer class
      */
     private boolean equippedArcher(Player player) {
-        final ClassController classController = Vapor.getInstance().getHandler().find(ClassController.class);
+        final ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
         final ArcherClass archerClass = classController.findClass(ArcherClass.class);
 
         return archerClass.getEquipped().contains(player);

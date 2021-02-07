@@ -16,13 +16,9 @@ public class OfflinePlayerTypeAdapter implements TypeAdapter<OfflinePlayer> {
             return (Player) sender;
         }
 
-        OfflinePlayer player = Bukkit.getOfflinePlayer(source);
-
-        if (player == null) {
-            player = Bukkit.getOfflinePlayer(UUID.fromString(source));
-        }
-
-        return player;
+        return Bukkit.getOfflinePlayer(source) == null
+                ? Bukkit.getOfflinePlayer(UUID.fromString(source))
+                : Bukkit.getOfflinePlayer(source);
     }
 
     @Override

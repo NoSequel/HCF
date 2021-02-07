@@ -1,7 +1,7 @@
 package rip.vapor.hcf.listeners.team;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.team.TeamController;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.enums.TeamType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class DamageListeners implements Listener {
 
-    private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
+    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
