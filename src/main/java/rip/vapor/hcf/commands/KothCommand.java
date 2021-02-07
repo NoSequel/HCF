@@ -28,7 +28,7 @@ public class KothCommand implements Controllable<TeamModule> {
     @Command(label = "koth", permission = "hcteams.koth")
     public void execute(Player player) {
         player.sendMessage(new String[]{
-                ChatColor.GOLD + StringUtils.repeat("-", 52),
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                 ChatColor.BLUE + "Activity Commands",
                 ChatColor.YELLOW + "/koth start <koth>" + ChatColor.GRAY + " - Start a koth",
                 ChatColor.YELLOW + "/koth end <koth>" + ChatColor.GRAY + " - End a koth",
@@ -39,8 +39,7 @@ public class KothCommand implements Controllable<TeamModule> {
                 ChatColor.YELLOW + "/koth delete <name>" + ChatColor.GRAY + " - Delete an existing new koth",
                 ChatColor.YELLOW + "/koth setcapzone <name>" + ChatColor.GRAY + " - Set the capzone of an existing koth",
                 ChatColor.YELLOW + "/koth setclaim <name>" + ChatColor.GRAY + " - Set the claim of an existing koth",
-
-                ChatColor.GOLD + StringUtils.repeat("-", 52),
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
         });
     }
 
@@ -48,6 +47,7 @@ public class KothCommand implements Controllable<TeamModule> {
     public void start(Player player, Koth koth) {
         if (!koth.isRunning()) {
             koth.setRunning(true);
+            koth.tickCap();
             Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] " + ChatColor.DARK_PURPLE + koth.getKothName() + ChatColor.YELLOW + " is now contestable.");
         } else {
             player.sendMessage(ChatColor.RED + "That KoTH is already running.");
@@ -61,6 +61,7 @@ public class KothCommand implements Controllable<TeamModule> {
         } else {
             koth.setRunning(false);
             koth.setCappingUuid(null);
+            koth.tickCap();
 
             Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] " + ChatColor.DARK_PURPLE + koth.getKothName() + ChatColor.YELLOW + " is no longer contestable.");
         }

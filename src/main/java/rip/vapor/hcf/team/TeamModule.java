@@ -7,6 +7,7 @@ import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.claim.ClaimPriority;
 import rip.vapor.hcf.team.data.TeamData;
 import rip.vapor.hcf.team.data.impl.GeneralData;
+import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
@@ -35,7 +36,8 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
             new ClaimTeamData(),
             new DTRData(),
             new InviteTeamData(),
-            new GeneralData()
+            new GeneralData(),
+            new KothTeamData()
     ));
 
     @Override
@@ -103,7 +105,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      */
     public Team findTeamByName(String name) {
         return this.teams.stream()
-                .filter(team -> team.getGeneralData().getName().equalsIgnoreCase(name))
+                .filter(team -> team.getGeneralData() != null && team.getGeneralData().getName() != null && team.getGeneralData().getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);
     }
 
@@ -130,7 +132,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      */
     public Team findTeam(Location location) {
         final Optional<Claim> claim = this.teams.stream()
-                .filter(team -> team.findData(ClaimTeamData.class) != null)
+                .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim() != null)
                 .map(team -> team.findData(ClaimTeamData.class).getClaim())
                 .sorted(Comparator.comparing(claim1 -> ((Claim) claim1).getPriority().priority).reversed())
                 .filter($claim -> $claim.getCuboid().isLocationInCuboid(location))

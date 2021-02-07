@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
+import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.enums.TeamType;
 import rip.vapor.hcf.timers.impl.global.KothTimer;
@@ -21,8 +23,8 @@ import java.util.logging.Level;
 @Setter
 public class Koth {
 
-    private final KothTimer kothTimer = new KothTimer(this.getKothName(), this);
-    private final Team kothTeam = new Team(UUID.randomUUID(), this.getKothName(), TeamType.KOTH_TEAM, this);
+    private final KothTimer kothTimer;
+    private final Team kothTeam;
 
     private final String kothName;
     private final long defaultDuration;
@@ -34,6 +36,19 @@ public class Koth {
     private UUID cappingUuid;
 
     /**
+     * Constructor to make a new {@link Koth} object
+     *
+     * @param kothName        the name of hte koth
+     * @param defaultDuration the duration of the koth
+     */
+    public Koth(String kothName, long defaultDuration) {
+        this.kothName = kothName;
+        this.defaultDuration = defaultDuration;
+        this.kothTimer = new KothTimer(this.getKothName(), this);
+        this.kothTeam = new Team(UUID.randomUUID(), this.getKothName(), TeamType.KOTH_TEAM, this);
+    }
+
+    /**
      * Constructor to load a {@link Koth} object from a {@link JsonObject}
      *
      * @param object the object to load it from
@@ -43,6 +58,11 @@ public class Koth {
         this.defaultDuration = object.get("defaultDuration").getAsLong();
         this.capzone = new Claim(JsonUtils.getParser().parse(object.get("capzone").getAsString()).getAsJsonObject());
         this.claim = new Claim(JsonUtils.getParser().parse(object.get("claim").getAsString()).getAsJsonObject());
+
+        this.kothTimer = new KothTimer(this.getKothName(), this);
+        this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()) == null
+                ? new Team(UUID.randomUUID(), this.getKothName(), TeamType.KOTH_TEAM, this)
+                : Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName());
     }
 
     /**

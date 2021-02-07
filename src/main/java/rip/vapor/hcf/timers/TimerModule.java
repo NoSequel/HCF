@@ -43,7 +43,7 @@ public class TimerModule implements Module {
      *
      * @param timer the timer
      */
-    private void registerTimer(Timer timer) {
+    public void registerTimer(Timer timer) {
         Bukkit.getPluginManager().registerEvents(timer, Vapor.getInstance());
 
         this.timers.add(timer);

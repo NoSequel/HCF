@@ -3,9 +3,11 @@ package rip.vapor.hcf.timers.impl.global;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import rip.vapor.hcf.koth.Koth;
+import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.timers.TimerModule;
 import rip.vapor.hcf.timers.impl.GlobalTimer;
 
-public class KothTimer extends GlobalTimer {
+public class KothTimer extends GlobalTimer implements Controllable<TimerModule> {
 
     private final Koth koth;
 
@@ -18,6 +20,7 @@ public class KothTimer extends GlobalTimer {
     public KothTimer(String name, Koth koth) {
         super(name, ChatColor.DARK_PURPLE + koth.getKothName(), false, koth.getDefaultDuration(), false);
         this.koth = koth;
+        this.getModule().registerTimer(this);
     }
 
     @Override

@@ -71,21 +71,27 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                         final Team team = claimSelection.getTeam();
                         final ClaimTeamData oldClaimData = team.findData(ClaimTeamData.class);
 
-                        claimSelection.apply();
                         playerData.getData().remove(data);
 
-                        if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
-                            final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
-                            final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
+                        if(!claimSelection.isKothCapzone()) {
+                            claimSelection.apply();
 
-                            playerTeamData.broadcast(ChatColor.GRAY + "Your team now has a claim of " + claimTeamData.getClaim().getCuboid().getChunks() + " chunks.");
-                        }
+                            if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
+                                final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+                                final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
 
-                        if (oldClaimData != null) {
-                            final Claim oldClaim = oldClaimData.getClaim();
-                            final Claim newClaim = team.findData(ClaimTeamData.class).getClaim();
+                                playerTeamData.broadcast(ChatColor.GRAY + "Your team now has a claim of " + claimTeamData.getClaim().getCuboid().getChunks() + " chunks.");
+                            }
 
-                            newClaim.setPriority(oldClaim.getPriority());
+                            if (oldClaimData != null) {
+                                final Claim oldClaim = oldClaimData.getClaim();
+
+                                if (oldClaim != null) {
+                                    final Claim newClaim = team.findData(ClaimTeamData.class).getClaim();
+
+                                    newClaim.setPriority(oldClaim.getPriority());
+                                }
+                            }
                         }
 
                         if (team.getGeneralData().getType().equals(TeamType.KOTH_TEAM) && (claimSelection.isKothClaim()) || claimSelection.isKothCapzone()) {

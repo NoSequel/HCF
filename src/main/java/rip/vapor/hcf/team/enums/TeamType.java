@@ -36,7 +36,7 @@ public enum TeamType {
     KOTH_TEAM(false) {
         @Override
         public String formatName(Team team, Player player) {
-            return (team.getGeneralData().getColor() == null ? ChatColor.AQUA : team.getGeneralData().getColor()) + team.getFormattedName() + ChatColor.GOLD + " KOTH";
+            return (team.getGeneralData().getColor() == null ? ChatColor.AQUA : team.getGeneralData().getColor()) + team.getFormattedName() + ChatColor.DARK_PURPLE + " KOTH";
         }
     },
 
