@@ -2,7 +2,6 @@ package rip.vapor.hcf.timers;
 
 import lombok.Getter;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.thread.TimerThread;
 import rip.vapor.hcf.timers.thread.impl.GlobalTimerThread;
 
 @Getter
@@ -14,7 +13,7 @@ public abstract class GlobalTimer implements Timer {
     private final long defaultDuration;
     private final boolean trailing;
 
-    private final TimerThread<GlobalTimer> thread;
+    private final GlobalTimerThread thread;
 
     /**
      * Constructor for creating a new timer

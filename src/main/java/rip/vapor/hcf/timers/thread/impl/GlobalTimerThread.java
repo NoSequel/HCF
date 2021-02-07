@@ -1,14 +1,16 @@
 package rip.vapor.hcf.timers.thread.impl;
 
 import lombok.Getter;
+import lombok.Setter;
 import rip.vapor.hcf.timers.GlobalTimer;
 import rip.vapor.hcf.timers.thread.TimerThread;
 
 @Getter
+@Setter
 public class GlobalTimerThread extends TimerThread<GlobalTimer> {
 
     private long currentDuration;
-    private final boolean shouldSubtract;
+    private boolean shouldSubtract;
 
     /**
      * Constructor to make a new {@link GlobalTimerThread} object for a {@link GlobalTimer}
