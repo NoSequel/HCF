@@ -15,6 +15,7 @@ public class TimerModule implements Module {
 
     private final List<Timer> timers = new ArrayList<>();
 
+    @Override
     public void enable() {
         this.registerTimer(new EnderpearlTimer());
         this.registerTimer(new CombatTimer());

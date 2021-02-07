@@ -30,6 +30,8 @@ public class ModuleHandler {
     @SuppressWarnings("unchecked")
     public <T extends Module> T register(Module module) {
         this.modules.put(module.getClass(), module);
+        module.enable();
+
         return (T) module;
     }
 
