@@ -279,7 +279,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false, false)));
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)));
         player.sendMessage(new String[]{
                 "",
                 ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for your own faction,",

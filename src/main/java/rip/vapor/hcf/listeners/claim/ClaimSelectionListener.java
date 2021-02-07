@@ -73,7 +73,7 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
 
                         playerData.getData().remove(data);
 
-                        if(!claimSelection.isKothCapzone()) {
+                        if (!claimSelection.isKothCapzone()) {
                             claimSelection.apply();
 
                             if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
@@ -94,15 +94,10 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                             }
                         }
 
-                        if (team.getGeneralData().getType().equals(TeamType.KOTH_TEAM) && (claimSelection.isKothClaim()) || claimSelection.isKothCapzone()) {
+                        if (team.getGeneralData().getType().equals(TeamType.KOTH_TEAM) && claimSelection.isKothCapzone()) {
                             final KothTeamData kothTeamData = team.findData(KothTeamData.class);
-                            final Claim claim = team.findData(ClaimTeamData.class).getClaim();
 
-                            if (claimSelection.isKothClaim()) {
-                                kothTeamData.getKoth().setClaim(claim);
-                            } else if (claimSelection.isKothCapzone()) {
-                                kothTeamData.getKoth().setCapzone(claim);
-                            }
+                            kothTeamData.getKoth().setCapzone(claimSelection.toClaim());
                         }
 
                         player.sendMessage(ChatColor.YELLOW + "You have claimed for " + team.getDisplayName(player));

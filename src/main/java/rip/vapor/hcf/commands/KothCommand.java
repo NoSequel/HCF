@@ -93,27 +93,11 @@ public class KothCommand implements Controllable<TeamModule> {
         player.sendMessage(ChatColor.YELLOW + "Successfully deleted a koth");
     }
 
-    @Subcommand(label = "setclaim", parentLabel = "koth", permission = "hcteams.koth.manage")
-    public void setClaim(Player player, Koth koth) {
-        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
-
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(koth.getKothTeam(), false, true)));
-        player.sendMessage(new String[]{
-                "",
-                ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + koth.getKothTeam().getFormattedName() + ",",
-                ChatColor.GRAY + "Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
-                ChatColor.GRAY + "Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
-                ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
-                ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
-                ""
-        });
-    }
-
     @Subcommand(label = "setcapzone", parentLabel = "koth", permission = "hcteams.koth.manage")
     public void setCapZone(Player player, Koth koth) {
         final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(koth.getKothTeam(), true, false)));
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(koth.getKothTeam(), true)));
         player.sendMessage(new String[]{
                 "",
                 ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + koth.getKothTeam().getFormattedName() + ",",

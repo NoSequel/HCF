@@ -13,7 +13,7 @@ public class ClaimSelection {
 
     private Location location1, location2;
 
-    private final boolean kothCapzone, kothClaim;
+    private final boolean kothCapzone;
     private final Team team;
 
     /**
@@ -22,10 +22,9 @@ public class ClaimSelection {
      *
      * @param team the team the ClaimSelection is dedicated to
      */
-    public ClaimSelection(Team team, boolean kothCapzone, boolean kothClaim) {
+    public ClaimSelection(Team team, boolean kothCapzone) {
         this.team = team;
         this.kothCapzone = kothCapzone;
-        this.kothClaim = kothClaim;
     }
 
     /**
@@ -37,5 +36,9 @@ public class ClaimSelection {
         }
 
         team.addClaim(new Claim(new Cuboid(location1, location2)));
+    }
+
+    public Claim toClaim() {
+        return new Claim(new Cuboid(location1, location2));
     }
 }

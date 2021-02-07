@@ -104,10 +104,13 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
      * @param koth the provided koth to make the {@link KothTeamData} object with
      */
     public Team(UUID uuid, String name, TeamType type, Koth koth) {
-        this(uuid, name, type);
+        this.uniqueId = uuid;
+        this.generalData = new GeneralData(name, type, ChatColor.AQUA);
 
+        this.setupData();
         this.addData(new KothTeamData(koth));
-        this.addData(new ClaimTeamData(koth.getClaim()));
+
+        this.teamModule.getTeams().add(this);
     }
 
     /**

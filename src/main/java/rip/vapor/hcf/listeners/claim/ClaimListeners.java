@@ -1,6 +1,7 @@
 package rip.vapor.hcf.listeners.claim;
 
 import org.bukkit.Material;
+import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -41,22 +42,28 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
                     ChatColor.YELLOW + "Entering: " + teamTo.getDisplayName(player) + ChatColor.YELLOW + "(" + (teamToClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")"
             });
 
-            if (teamTo.hasData(KothTeamData.class) || teamFrom.hasData(KothTeamData.class)) {
-                if (teamTo.hasData(KothTeamData.class) && !teamFrom.hasData(KothTeamData.class)) {
-                    final KothTeamData kothTeamData = teamTo.findData(KothTeamData.class);
+        }
 
-                    if (kothTeamData.getKoth() != null && kothTeamData.getKoth().isRunning() && kothTeamData.getKoth().getCappingUuid() == null) {
-                        kothTeamData.getKoth().setCappingUuid(player.getUniqueId());
-                    }
-                } else if (!teamTo.hasData(KothTeamData.class) && teamFrom.hasData(KothTeamData.class)) {
-                    final KothTeamData kothTeamData = teamFrom.findData(KothTeamData.class);
+        if (teamTo != null && teamTo.hasData(KothTeamData.class)) {
+            final KothTeamData teamToData = teamTo.findData(KothTeamData.class);
 
-                    if (kothTeamData.getKoth() != null && kothTeamData.getKoth().isRunning() && kothTeamData.getKoth().getCappingUuid().equals(player.getUniqueId())) {
-                        kothTeamData.getKoth().setCappingUuid(null);
-                    }
+            if (teamToData != null) {
+                final Koth koth = teamToData.getKoth();
+                final Location location = player.getLocation();
+                final Claim capzone = koth.getCapzone();
+
+                if (koth.isRunning() && koth.getCappingUuid() == null && capzone.getCuboid().isLocationInCuboid(location)) {
+                    koth.setCappingUuid(player.getUniqueId());
                 }
             }
         }
+
+        this.controller.getTeams().stream()
+                .filter(team -> team.hasData(KothTeamData.class))
+                .map(team -> team.findData(KothTeamData.class).getKoth())
+                .filter(koth -> koth.getCappingUuid() != null && koth.getCapzone() != null)
+                .filter(koth -> koth.getCappingUuid().equals(player.getUniqueId()) && !koth.getCapzone().getCuboid().isLocationInCuboid(player.getLocation()))
+                .forEach(koth -> koth.setCappingUuid(null));
     }
 
     @EventHandler

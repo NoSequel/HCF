@@ -30,7 +30,6 @@ public class Koth {
     private final long defaultDuration;
 
     private Claim capzone;
-    private Claim claim;
 
     private boolean isRunning;
     private UUID cappingUuid;
@@ -57,19 +56,17 @@ public class Koth {
         this.kothName = object.get("kothName").getAsString();
         this.defaultDuration = object.get("defaultDuration").getAsLong();
         this.capzone = new Claim(JsonUtils.getParser().parse(object.get("capzone").getAsString()).getAsJsonObject());
-        this.claim = new Claim(JsonUtils.getParser().parse(object.get("claim").getAsString()).getAsJsonObject());
 
         this.kothTimer = new KothTimer(this.getKothName(), this);
-        this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()) == null
-                ? new Team(UUID.randomUUID(), this.getKothName(), TeamType.KOTH_TEAM, this)
-                : Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName());
+        System.out.println(kothName);
+        this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName());
     }
 
     /**
      * Method to handle ticking the cap
      */
     public void tickCap() {
-        if (this.isRunning && this.capzone != null && this.claim != null) {
+        if (this.isRunning && this.capzone != null) {
             this.getKothTimer().getThread().setActive(true);
 
             if (this.cappingUuid == null || Bukkit.getPlayer(this.cappingUuid) == null) {
@@ -103,7 +100,6 @@ public class Koth {
         return new JsonBuilder()
                 .addProperty("kothName", this.kothName)
                 .addProperty("defaultDuration", this.defaultDuration)
-                .addProperty("capzone", this.capzone.toJson().toString())
-                .addProperty("claim", this.claim.toJson().toString()).get();
+                .addProperty("capzone", this.capzone.toJson().toString()).get();
     }
 }

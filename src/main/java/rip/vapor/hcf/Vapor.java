@@ -72,9 +72,9 @@ public class Vapor extends JavaPlugin {
 
         // register controllers
         this.handler.register(databaseModule);
+        this.handler.register(new TimerModule());
         this.handler.register(new TeamModule());
         this.handler.register(new PlayerDataModule());
-        this.handler.register(new TimerModule());
         this.handler.register(new ClassModule());
         this.handler.register(new TaskModule());
         this.handler.register(new CombatLoggerModule(this));
