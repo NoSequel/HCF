@@ -5,6 +5,7 @@ import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
+import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 
 public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
-    private final TeamModule controller = this.getController();
+    private final TeamModule controller = this.getModule();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
@@ -39,6 +40,22 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
                     ChatColor.YELLOW + "Leaving: " + teamFrom.getDisplayName(player) + ChatColor.YELLOW + "(" + (teamFromClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
                     ChatColor.YELLOW + "Entering: " + teamTo.getDisplayName(player) + ChatColor.YELLOW + "(" + (teamToClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")"
             });
+
+            if (teamTo.hasData(KothTeamData.class) || teamFrom.hasData(KothTeamData.class)) {
+                if (teamTo.hasData(KothTeamData.class) && !teamFrom.hasData(KothTeamData.class)) {
+                    final KothTeamData kothTeamData = teamTo.findData(KothTeamData.class);
+
+                    if (kothTeamData.getKoth() != null && kothTeamData.getKoth().isRunning() && kothTeamData.getKoth().getCappingUuid() == null) {
+                        kothTeamData.getKoth().setCappingUuid(player.getUniqueId());
+                    }
+                } else if (!teamTo.hasData(KothTeamData.class) && teamFrom.hasData(KothTeamData.class)) {
+                    final KothTeamData kothTeamData = teamFrom.findData(KothTeamData.class);
+
+                    if (kothTeamData.getKoth() != null && kothTeamData.getKoth().isRunning() && kothTeamData.getKoth().getCappingUuid().equals(player.getUniqueId())) {
+                        kothTeamData.getKoth().setCappingUuid(null);
+                    }
+                }
+            }
         }
     }
 

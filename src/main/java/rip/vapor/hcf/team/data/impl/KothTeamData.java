@@ -1,10 +1,12 @@
 package rip.vapor.hcf.team.data.impl;
 
 import com.google.gson.JsonObject;
+import lombok.Getter;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.JsonUtils;
 
+@Getter
 public class KothTeamData extends SavableTeamData {
 
     private final Koth koth;

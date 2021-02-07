@@ -50,6 +50,9 @@ public class Koth {
     public void tickCap() {
         if (this.cappingUuid == null || Bukkit.getPlayer(this.cappingUuid) == null) {
             this.cappingUuid = null;
+
+            this.kothTimer.getThread().setShouldSubtract(false);
+            this.kothTimer.getThread().setCurrentDuration(this.getDefaultDuration());
         } else if (!this.kothTimer.getThread().isShouldSubtract()) {
             Bukkit.broadcastMessage(ChatColor.GOLD + "[King Of The Hill] "
                     + ChatColor.WHITE + Bukkit.getPlayer(this.cappingUuid).getName()

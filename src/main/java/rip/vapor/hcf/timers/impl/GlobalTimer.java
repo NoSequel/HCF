@@ -35,6 +35,15 @@ public abstract class GlobalTimer implements Timer {
         this.thread.runTaskTimer(Vapor.getInstance(), 2L, 0L);
     }
 
+    /**
+     * Handle the ticking of the {@link GlobalTimerThread}
+     */
     public abstract void handleTick();
+
+    /**
+     * Handle the expiration of the timer
+     */
+    public abstract void handleEnd();
+
 
 }
