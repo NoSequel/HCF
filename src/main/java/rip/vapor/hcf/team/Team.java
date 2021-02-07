@@ -3,9 +3,11 @@ package rip.vapor.hcf.team;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.controller.Controllable;
 import rip.vapor.hcf.data.Loadable;
+import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.data.TeamData;
 import rip.vapor.hcf.team.data.impl.GeneralData;
+import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
@@ -35,6 +37,11 @@ public class Team implements Controllable<TeamController>, Loadable<TeamData> {
 
     private List<TeamData> data = new ArrayList<>();
 
+    /**
+     * Constructor to make a new {@link Team} object with a {@link UUID}
+     *
+     * @param uuid the unique identifier
+     */
     public Team(UUID uuid) {
         this.uniqueId = uuid == null ? UUID.randomUUID() : uuid;
 
@@ -86,6 +93,25 @@ public class Team implements Controllable<TeamController>, Loadable<TeamData> {
         this.addData(new ClaimTeamData(claim));
     }
 
+    /**
+     * Constructor to make a new {@link Team} object with a {@link Koth} object
+     * This constructor automatically adds a {@link KothTeamData} object
+     * using the provided {@link Koth} object in the constructor.
+     *
+     * @param uuid the unique identifier of the team
+     * @param name the name of the team
+     * @param type the type of the team
+     * @param koth the provided koth to make the {@link KothTeamData} object with
+     */
+    public Team(UUID uuid, String name, TeamType type, Koth koth) {
+        this(uuid, name, type);
+
+        this.addData(new KothTeamData(koth));
+    }
+
+    /**
+     * Method to setup the {@link TeamData} fields in the team
+     */
     private void setupData() {
         this.addData(generalData);
 
