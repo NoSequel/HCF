@@ -1,7 +1,7 @@
-package rip.vapor.hcf.timers.impl;
+package rip.vapor.hcf.timers.impl.player;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.Timer;
+import rip.vapor.hcf.timers.PlayerTimer;
 import rip.vapor.hcf.timers.TimerController;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Arrays;
 
-public class CombatTimer extends Timer {
+public class CombatTimer extends PlayerTimer {
 
     private final TimerController timerController = Vapor.getInstance().getHandler().find(TimerController.class);
 

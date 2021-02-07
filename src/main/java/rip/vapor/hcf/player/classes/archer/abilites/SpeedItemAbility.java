@@ -15,7 +15,7 @@ import rip.vapor.hcf.player.classes.ClassController;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.archer.ArcherClass;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.ArcherSpeedTimer;
+import rip.vapor.hcf.timers.impl.player.ArcherSpeedTimer;
 
 public class SpeedItemAbility extends Ability {
 

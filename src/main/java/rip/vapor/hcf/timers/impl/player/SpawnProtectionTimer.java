@@ -1,11 +1,11 @@
-package rip.vapor.hcf.timers.impl;
+package rip.vapor.hcf.timers.impl.player;
 
 import org.bukkit.event.player.PlayerQuitEvent;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataController;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
-import rip.vapor.hcf.timers.Timer;
+import rip.vapor.hcf.timers.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpawnProtectionTimer extends Timer {
+public class SpawnProtectionTimer extends PlayerTimer {
 
     private final Map<Player, PlayerData> data = new HashMap<>();
     private final PlayerDataController controller = Vapor.getInstance().getHandler().find(PlayerDataController.class);

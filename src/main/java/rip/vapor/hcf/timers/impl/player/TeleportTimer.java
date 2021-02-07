@@ -1,10 +1,10 @@
-package rip.vapor.hcf.timers.impl;
+package rip.vapor.hcf.timers.impl.player;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
-import rip.vapor.hcf.timers.Timer;
+import rip.vapor.hcf.timers.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class TeleportTimer extends Timer {
+public class TeleportTimer extends PlayerTimer {
 
     private final TeamController teamController = Vapor.getInstance().getHandler().find(TeamController.class);
 

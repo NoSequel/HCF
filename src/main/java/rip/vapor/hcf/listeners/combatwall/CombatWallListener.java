@@ -12,8 +12,8 @@ import rip.vapor.hcf.team.TeamController;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.CombatTimer;
-import rip.vapor.hcf.timers.impl.SpawnProtectionTimer;
+import rip.vapor.hcf.timers.impl.player.CombatTimer;
+import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 
 import java.util.*;
 

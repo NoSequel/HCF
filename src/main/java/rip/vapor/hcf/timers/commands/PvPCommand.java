@@ -2,7 +2,7 @@ package rip.vapor.hcf.timers.commands;
 
 import rip.vapor.hcf.controller.Controllable;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.SpawnProtectionTimer;
+import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
 import org.apache.commons.lang.StringUtils;

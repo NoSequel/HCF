@@ -1,7 +1,7 @@
 package rip.vapor.hcf.timers.commands;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.Timer;
+import rip.vapor.hcf.timers.PlayerTimer;
 import rip.vapor.hcf.timers.TimerController;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;
@@ -29,7 +29,7 @@ public class TimerCommand {
     }
 
     @Subcommand(label = "start", permission = "staff", parentLabel = "timer")
-    public void start(Player player, Timer timer, Player target, @Parameter(name = "duration", value = "0") String $duration) {
+    public void start(Player player, PlayerTimer timer, Player target, @Parameter(name = "duration", value = "0") String $duration) {
         long duration = Long.parseLong($duration) == 0L ? timer.getDefaultDuration() : Long.parseLong($duration);
 
         timer.start(target, duration);
@@ -41,7 +41,7 @@ public class TimerCommand {
     }
 
     @Subcommand(label = "stop", permission = "staff", parentLabel = "timer")
-    public void stop(Player player, Timer timer, Player target) {
+    public void stop(Player player, PlayerTimer timer, Player target) {
         if (timer.isOnCooldown(target)) {
             timer.cancel(target);
 

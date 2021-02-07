@@ -12,7 +12,7 @@ import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamController;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.SpawnProtectionTimer;
+import rip.vapor.hcf.timers.impl.player.SpawnProtectionTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

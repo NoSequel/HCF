@@ -17,7 +17,7 @@ import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataController;
 import rip.vapor.hcf.player.data.CombatLoggerData;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.CombatTimer;
+import rip.vapor.hcf.timers.impl.player.CombatTimer;
 
 import java.util.Optional;
 

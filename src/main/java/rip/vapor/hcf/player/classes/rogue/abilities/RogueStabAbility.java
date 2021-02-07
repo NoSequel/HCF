@@ -1,6 +1,5 @@
 package rip.vapor.hcf.player.classes.rogue.abilities;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import rip.vapor.hcf.player.classes.ClassController;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.rogue.RogueClass;
 import rip.vapor.hcf.timers.TimerController;
-import rip.vapor.hcf.timers.impl.RogueStabTimer;
+import rip.vapor.hcf.timers.impl.player.RogueStabTimer;
 
 public class RogueStabAbility extends Ability {
 
