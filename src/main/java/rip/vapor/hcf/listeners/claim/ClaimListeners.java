@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
-    private final TeamModule controller = this.getModule();
+    private final TeamModule teamModule = this.getModule();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
@@ -30,8 +30,8 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
         final Location to = event.getTo();
         final Location from = event.getFrom();
-        final Team teamTo = controller.findTeam(to);
-        final Team teamFrom = controller.findTeam(from);
+        final Team teamTo = teamModule.findTeam(to);
+        final Team teamFrom = teamModule.findTeam(from);
 
         if (teamTo != null && teamFrom != null && !teamTo.equals(teamFrom)) {
             final Claim teamToClaim = teamTo.findData(ClaimTeamData.class).getClaim();
@@ -43,34 +43,13 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
             });
 
         }
-
-        if (teamTo != null && teamTo.hasData(KothTeamData.class)) {
-            final KothTeamData teamToData = teamTo.findData(KothTeamData.class);
-
-            if (teamToData != null) {
-                final Koth koth = teamToData.getKoth();
-                final Location location = player.getLocation();
-                final Claim capzone = koth.getCapzone();
-
-                if (koth.isRunning() && koth.getCappingUuid() == null && capzone.getCuboid().isLocationInCuboid(location)) {
-                    koth.setCappingUuid(player.getUniqueId());
-                }
-            }
-        }
-
-        this.controller.getTeams().stream()
-                .filter(team -> team.hasData(KothTeamData.class))
-                .map(team -> team.findData(KothTeamData.class).getKoth())
-                .filter(koth -> koth.getCappingUuid() != null && koth.getCapzone() != null)
-                .filter(koth -> koth.getCappingUuid().equals(player.getUniqueId()) && !koth.getCapzone().getCuboid().isLocationInCuboid(player.getLocation()))
-                .forEach(koth -> koth.setCappingUuid(null));
     }
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final Location blockLocation = event.getBlock().getLocation();
-        final Team team = controller.findTeam(blockLocation);
+        final Team team = teamModule.findTeam(blockLocation);
 
         if (team != null && !team.canInteract(player)) {
             event.setCancelled(true);
@@ -81,7 +60,7 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
     public void onBreak(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final Location blockLocation = event.getBlock().getLocation();
-        final Team team = controller.findTeam(blockLocation);
+        final Team team = teamModule.findTeam(blockLocation);
 
         if (team != null && !team.canInteract(player)) {
             event.setCancelled(true);
@@ -93,7 +72,7 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
         if (event.getClickedBlock() != null && (event.getItem() == null || Arrays.stream(DISALLOWED_BLOCKS).anyMatch(item -> item.equals(event.getItem().getType())))) {
             final Player player = event.getPlayer();
             final Location blockLocation = event.getClickedBlock().getLocation();
-            final Team team = controller.findTeam(blockLocation);
+            final Team team = teamModule.findTeam(blockLocation);
 
             if (team != null && !team.canInteract(player)) {
                 event.setCancelled(true);

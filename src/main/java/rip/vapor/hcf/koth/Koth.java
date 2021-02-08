@@ -2,10 +2,11 @@ package rip.vapor.hcf.koth;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -82,6 +83,13 @@ public class Koth {
                 this.kothTimer.getThread().setShouldSubtract(true);
 
                 Bukkit.getLogger().log(Level.INFO, this.cappingUuid + " starting capturing KoTH " + this.kothName + " (" + this.capzone.getCuboid().toXYZ() + ")");
+            } else {
+                final Player player = Bukkit.getPlayer(this.cappingUuid);
+                final Location location = player.getLocation();
+
+                if (!this.getCapzone().getCuboid().isLocationInCuboid(location)) {
+                    this.setCappingUuid(null);
+                }
             }
         } else if (this.kothTimer.getThread().isShouldSubtract() || this.kothTimer.getThread().isActive()) {
             this.kothTimer.getThread().setShouldSubtract(false);

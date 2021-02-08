@@ -1,6 +1,7 @@
 package rip.vapor.hcf;
 
 import rip.vapor.hcf.commands.KothCommand;
+import rip.vapor.hcf.koth.KothListener;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
 import rip.vapor.hcf.listeners.EnvironmentListener;
 import rip.vapor.hcf.listeners.combatwall.CombatWallListener;
@@ -102,6 +103,7 @@ public class Vapor extends JavaPlugin {
         pluginManager.registerEvents(new EnvironmentListener(), this);
         pluginManager.registerEvents(new CombatWallListener(), this);
         pluginManager.registerEvents(new EnchantmentLimiterListener(), this);
+        pluginManager.registerEvents(new KothListener(), this);
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);

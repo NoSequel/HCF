@@ -47,16 +47,11 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                 }
                 break;
 
-                case RIGHT_CLICK_AIR: {
-                    if (player.isSneaking()) {
+                case LEFT_CLICK_AIR: {
+                    if (!player.isSneaking()) {
                         playerData.getData().remove(data);
                         player.sendMessage(ChatColor.GRAY + "You have cancelled your claiming task.");
-                    }
-                }
-                break;
-
-                case LEFT_CLICK_AIR: {
-                    if (player.isSneaking()) {
+                    } else {
                         if (claimSelection.getLocation1() == null || claimSelection.getLocation2() == null) {
                             player.sendMessage(ChatColor.GRAY + "One or more positions hasn't been set.");
                             return;

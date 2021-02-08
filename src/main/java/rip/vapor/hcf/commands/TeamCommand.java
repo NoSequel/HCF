@@ -1,6 +1,5 @@
 package rip.vapor.hcf.commands;
 
-import com.google.common.collect.ImmutableMap;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
@@ -27,7 +26,6 @@ import rip.vapor.hcf.util.command.annotation.Subcommand;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -152,63 +150,61 @@ public class TeamCommand implements Controllable<TeamModule> {
         final Date currentDate = new Date(team.getGeneralData().getCreateTime());
         final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
 
+        player.sendMessage(ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52));
+
         if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
             final PlayerTeamData data = team.findData(PlayerTeamData.class);
-
-            final OfflinePlayer leader = Bukkit.getOfflinePlayer(data.getLeader());
-
-            final String captains = data.getCaptains().stream().map(Bukkit::getOfflinePlayer).filter(Objects::nonNull).map(target -> (target.getPlayer() == null ? ChatColor.GRAY.toString() : ChatColor.GREEN.toString()) + target.getName() + (target.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + target.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")).collect(Collectors.joining(ChatColor.YELLOW + ", "));
-            final String members = data.getMembers().stream().map(Bukkit::getOfflinePlayer).filter(Objects::nonNull).map(target -> (target.getPlayer() == null ? ChatColor.GRAY.toString() : ChatColor.GREEN.toString()) + target.getName() + (target.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + target.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")).collect(Collectors.joining(ChatColor.YELLOW + ", "));
-            final String coLeaders = data.getCoLeaders().stream().map(Bukkit::getOfflinePlayer).filter(Objects::nonNull).map(target -> (target.getPlayer() == null ? ChatColor.GRAY.toString() : ChatColor.GREEN.toString()) + target.getName() + (target.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + target.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")).collect(Collectors.joining(ChatColor.YELLOW + ", "));
-
-            final List<String> messages = new ArrayList<>(Arrays.asList(
-                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                    ChatColor.BLUE + team.getGeneralData().getName() + ChatColor.GRAY + "[" + data.getOnlineMembers().size() + "/" + data.getAllMembers().size() + "]",
-                    ChatColor.YELLOW + "Leader: " + (leader.getPlayer() == null ? ChatColor.GRAY : ChatColor.GREEN) + leader.getName() + (leader.getPlayer() == null ? "" : ChatColor.YELLOW + "[" + ChatColor.GREEN + player.getPlayer().getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]")
-            ));
-
-            ImmutableMap.of(
-                    ChatColor.YELLOW + "Co Leaders: ", coLeaders,
-                    ChatColor.YELLOW + "Captains: ", captains,
-                    ChatColor.YELLOW + "Members: ", members
-            ).entrySet().stream()
-                    .filter(entry -> !entry.getValue().isEmpty())
-                    .forEach(entry -> messages.add(entry.getKey() + entry.getValue()));
-
             final DTRData dtrData = team.findData(DTRData.class);
 
-            messages.addAll(Arrays.asList(
+            final String members = data.getMembers().stream().map(this::formatPlayer).collect(Collectors.joining(ChatColor.YELLOW + ", "));
+            final String captains = data.getCaptains().stream().map(this::formatPlayer).collect(Collectors.joining(ChatColor.YELLOW + ", "));
+            final String coLeaders = data.getCoLeaders().stream().map(this::formatPlayer).collect(Collectors.joining(ChatColor.YELLOW + ", "));
+
+            player.sendMessage(new String[]{
+                    ChatColor.BLUE + team.getGeneralData().getName() + ChatColor.GRAY + "[" + data.getOnlineMembers().size() + "/" + data.getAllMembers().size() + "]",
+                    ChatColor.YELLOW + "Leader: " + this.formatPlayer(data.getLeader())
+            });
+
+            if (!coLeaders.isEmpty()) {
+                player.sendMessage(ChatColor.YELLOW + "Co Leaders: " + coLeaders);
+            }
+
+            if (!captains.isEmpty()) {
+                player.sendMessage(ChatColor.YELLOW + "Captains: " + captains);
+            }
+
+            if (!members.isEmpty()) {
+                player.sendMessage(ChatColor.YELLOW + "Members: " + members);
+            }
+
+
+            player.sendMessage(new String[]{
                     ChatColor.YELLOW + "Balance: " + ChatColor.RED + "$" + data.getBalance(),
                     ChatColor.YELLOW + "DTR: " + dtrData.formatDtr() + ChatColor.GRAY + " (" + NumberUtil.round(dtrData.getMaxDtr(), 1) + ")",
                     ChatColor.YELLOW + "Claim: " + ChatColor.RED + (claimTeamData != null ? claimTeamData.getClaim().getCuboid().getChunks() : "0") + " chunks" + ChatColor.YELLOW + ", " + "Home: " + ChatColor.RED + (claimTeamData == null ? "Not Set" : claimTeamData.getHomeAsString()),
                     ChatColor.YELLOW + "Founded on: " + ChatColor.RED + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
-                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
-            ));
+            });
 
-            messages.forEach(player::sendMessage);
         } else {
             if (claimTeamData != null) {
                 final Claim claim = claimTeamData.getClaim();
 
                 player.sendMessage(new String[]{
-                        ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
                         ChatColor.BLUE + team.getFormattedName() + ChatColor.YELLOW + "(" + (claim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
                         ChatColor.YELLOW + "Claim: " + ChatColor.RED + claim.getCuboid().toXYZ(),
                 });
             } else {
-                player.sendMessage(new String[]{
-                        ChatColor.GRAY + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                        ChatColor.BLUE + team.getFormattedName() + ChatColor.YELLOW + "(" + ChatColor.RED + "Deathban" + ChatColor.YELLOW + ")",
-                });
+                player.sendMessage(ChatColor.BLUE + team.getFormattedName() + ChatColor.YELLOW + "(" + ChatColor.RED + "Deathban" + ChatColor.YELLOW + ")");
             }
 
             player.sendMessage(new String[]{
                     ChatColor.YELLOW + "Color: " + team.getGeneralData().getColor() + team.getGeneralData().getColor().name(),
                     ChatColor.YELLOW + "Type: " + ChatColor.WHITE + team.getGeneralData().getType().name(),
                     ChatColor.YELLOW + "Founded on: " + ChatColor.WHITE + new SimpleDateFormat("MM/dd/yyyy").format(currentDate) + " at " + new SimpleDateFormat("hh:mm:ss").format(currentDate),
-                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
             });
         }
+
+        player.sendMessage(ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52));
     }
 
     @Subcommand(label = "sethome", parentLabel = "faction")
@@ -279,17 +275,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)));
-        player.sendMessage(new String[]{
-                "",
-                ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for your own faction,",
-                ChatColor.GRAY + "* Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
-                ChatColor.GRAY + "* Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
-                ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
-                ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
-                ""
-        });
-
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)).startClaim(player));
         if (team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getHome() != null) {
             player.sendMessage(ChatColor.RED + "Note: " + ChatColor.YELLOW + "Your team's HQ will be removed if you make a new claim.");
         }
@@ -490,5 +476,20 @@ public class TeamCommand implements Controllable<TeamModule> {
         }
 
         return true;
+    }
+
+    /**
+     * Format a {@link UUID} to a fully formatted string to display in /f show
+     *
+     * @param uuid the unique identifier of the player
+     * @return the formatted string
+     */
+    private String formatPlayer(UUID uuid) {
+        final Player player = Bukkit.getPlayer(uuid);
+        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
+        return player == null
+                ? ChatColor.GRAY + offlinePlayer.getName()
+                : ChatColor.GREEN + player.getName() + ChatColor.YELLOW + "[" + ChatColor.GREEN + player.getStatistic(Statistic.PLAYER_KILLS) + ChatColor.YELLOW + "]";
     }
 }

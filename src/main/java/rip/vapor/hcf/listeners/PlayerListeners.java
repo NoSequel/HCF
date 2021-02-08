@@ -25,8 +25,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListeners implements Listener, Controllable<PlayerDataModule> {
 
     private final PlayerDataModule module = this.getModule();
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
-    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final TeamModule teamModule = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TimerModule timerModule = Vapor.getInstance().getHandler().find(TimerModule.class);
 
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -44,7 +44,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
 
             if (deathbanData.getExpiration() - System.currentTimeMillis() <= 0) {
                 playerData.removeData(deathbanData);
-                timerController.findTimer(SpawnProtectionTimer.class).start(player);
+                timerModule.findTimer(SpawnProtectionTimer.class).start(player);
 
                 return;
             }
@@ -54,16 +54,16 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
 
         if (player.isOnline()) { // check if the player is online & hasn't been kicked yet.
             if (!player.hasPlayedBefore()) {
-                timerController.findTimer(SpawnProtectionTimer.class).start(player);
+                timerModule.findTimer(SpawnProtectionTimer.class).start(player);
             }
 
             if (playerData.hasData(SpawnProtectionData.class)) {
                 final SpawnProtectionData data = playerData.findData(SpawnProtectionData.class);
-                timerController.findTimer(SpawnProtectionTimer.class).start(player, data.getDurationLeft());
+                timerModule.findTimer(SpawnProtectionTimer.class).start(player, data.getDurationLeft());
             }
 
-            if (teamController.findTeam(player) != null) {
-                final Team team = teamController.findTeam(player);
+            if (teamModule.findTeam(player) != null) {
+                final Team team = teamModule.findTeam(player);
                 final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
 
                 playerTeamData.broadcast(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
@@ -76,8 +76,8 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
         final Player player = event.getPlayer();
         event.setQuitMessage(null);
 
-        if (teamController.findTeam(player) != null) {
-            final Team team = teamController.findTeam(player);
+        if (teamModule.findTeam(player) != null) {
+            final Team team = teamModule.findTeam(player);
             final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
 
             playerTeamData.broadcast(ChatColor.RED + "Member Offline: " + ChatColor.WHITE + player.getName());
@@ -88,7 +88,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
     public void onRespawn(PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
 
-        this.timerController.getTimers().stream()
+        this.timerModule.getTimers().stream()
                 .filter(timer -> timer instanceof PlayerTimer)
                 .map(timer -> ((PlayerTimer) timer))
                 .filter(timer -> timer.isOnCooldown(player))

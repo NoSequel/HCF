@@ -28,10 +28,10 @@ public class PlayerTimerThread extends TimerThread<PlayerTimer> {
     public void run() {
         synchronized (durations) {
             durations.forEach((player, $duration) -> {
-                // check whether the timer of the player should be cancelled or not.
                 final Player player1 = Bukkit.getPlayer(player);
 
                 if (player1 != null) {
+                    // check whether the timer of the player should be cancelled or not.
                     if (cancelled.contains(player)) {
                         durations.remove(player);
                         cancelled.remove(player);

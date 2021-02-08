@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -120,16 +119,7 @@ public class SystemTeamCommand implements Controllable<TeamModule> {
     public void claimfor(Player player, Team team) {
         final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)));
-        player.sendMessage(new String[]{
-                "",
-                ChatColor.GREEN + ChatColor.BOLD.toString() + "You are currently claiming for " + team.getFormattedName() + ",",
-                ChatColor.GRAY + "Click " + Action.RIGHT_CLICK_BLOCK.name() + " for the first position",
-                ChatColor.GRAY + "Click " + Action.LEFT_CLICK_BLOCK.name() + " for the second position",
-                ChatColor.YELLOW + "To finish your claiming, sneak while you press " + Action.LEFT_CLICK_AIR.name(),
-                ChatColor.YELLOW + "To cancel claiming, sneak while you press " + Action.RIGHT_CLICK_AIR.name(),
-                ""
-        });
+        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)).startClaim(player));
     }
 
     @Subcommand(label = "priority", parentLabel = "systemteam", permission = "admin")

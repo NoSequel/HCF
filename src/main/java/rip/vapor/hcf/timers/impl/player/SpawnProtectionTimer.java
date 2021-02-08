@@ -19,7 +19,6 @@ import java.util.Map;
 public class SpawnProtectionTimer extends PlayerTimer {
 
     private final Map<Player, PlayerData> data = new HashMap<>();
-    private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
     public SpawnProtectionTimer() {
         super("SpawnProt", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);
@@ -91,6 +90,6 @@ public class SpawnProtectionTimer extends PlayerTimer {
         return data.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(player))
                 .map(Map.Entry::getValue)
-                .findFirst().orElseGet(() -> controller.findPlayerData(player.getUniqueId()));
+                .findFirst().orElseGet(() -> Vapor.getInstance().getHandler().find(PlayerDataModule.class).findPlayerData(player.getUniqueId()));
     }
 }
