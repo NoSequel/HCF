@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -68,7 +69,7 @@ public class TablistProvider implements TablistElementSupplier {
         element.add(2, 4, ChatColor.WHITE + "Prot 1, Sharp 1");
 
         element.add(2, 6, ChatColor.AQUA + "Border");
-        element.add(2, 7, ChatColor.WHITE + "15000");
+        element.add(2, 7, ChatColor.WHITE + String.valueOf(VaporConstants.BORDER_SIZE));
 
         element.add(2, 9, ChatColor.AQUA + "Online Players");
         element.add(2, 10, ChatColor.WHITE.toString() + Bukkit.getOnlinePlayers().size());

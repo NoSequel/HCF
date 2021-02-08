@@ -1,5 +1,6 @@
 package rip.vapor.hcf.data;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,9 +40,7 @@ public interface Loadable<T extends Data> {
      *
      * @param data the data object
      */
-    default void removeData(T data) {
-        this.getData().remove(data);
-    }
+    default void removeData(T data) { this.getData().add(data); }
 
     /**
      * Add a data object to the Loadable
@@ -69,10 +68,20 @@ public interface Loadable<T extends Data> {
      * @return the data object | or null
      */
     default <K extends T> K findData(Class<K> clazz) {
-        return clazz.cast(this.getData().stream()
-                .filter(Objects::nonNull)
-                .filter(data -> data.getClass().equals(clazz) || (clazz.getSuperclass() != null && data.getClass().getSuperclass() != null && (clazz.getSuperclass().equals(data.getClass()) || data.getClass().getSuperclass().equals(clazz))))
-                .findFirst().orElse(null));
+        final K cachedData = clazz.cast(this.getCachedData().get(clazz));
+
+        if (cachedData == null) {
+            final K foundData = clazz.cast(this.getData().stream()
+                    .filter(Objects::nonNull)
+                    .filter(data -> data.getClass().equals(clazz) || (clazz.getSuperclass() != null && data.getClass().getSuperclass() != null && (clazz.getSuperclass().equals(data.getClass()) || data.getClass().getSuperclass().equals(clazz))))
+                    .findFirst().orElse(null));
+
+            this.getCachedData().put(clazz, foundData);
+
+            return foundData;
+        }
+
+        return cachedData;
     }
 
     /**
@@ -83,6 +92,15 @@ public interface Loadable<T extends Data> {
      */
     default boolean hasData(Class<? extends T> clazz) {
         return this.findData(clazz) != null;
+    }
+
+    /**
+     * Get the cached data of a Loadable object
+     *
+     * @return the cached data
+     */
+    default HashMap<Class<? extends T>, T> getCachedData() {
+        return new HashMap<>();
     }
 
 }

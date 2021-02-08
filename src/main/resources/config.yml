@@ -1,3 +1,5 @@
+map:
+  border_size: 1500
 kitmap:
   kitmap_enabled: true
 enchant_limiter:

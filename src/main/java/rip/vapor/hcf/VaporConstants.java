@@ -13,6 +13,7 @@ public class VaporConstants {
     private final FileConfiguration config = Vapor.getInstance().getConfig();
 
     public boolean KITMAP_ENABLED = config.getBoolean("kitmap.kitmap_enabled");
+    public Integer BORDER_SIZE = config.getInt("map.border_size");
 
     // enchantment limiting
     public Map<Enchantment, Integer> ENCHANTMENT_LIMITS = ImmutableMap.of(
