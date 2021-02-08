@@ -68,7 +68,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "create", parentLabel = "faction")
     public void create(Player player, @Parameter(name = "teamName") String teamName) {
-        if (controller.findTeam(teamName) != null) {
+        if (controller.findTeam(teamName).isPresent()) {
             player.sendMessage(ChatColor.RED + "That team already exists!");
             return;
         }
@@ -82,7 +82,7 @@ public class TeamCommand implements Controllable<TeamModule> {
         } else if (!StringUtils.isAlphanumeric(teamName)) {
             player.sendMessage(ChatColor.RED + "Your team name has to be alphanumeric.");
             return;
-        } else if (controller.findTeam(player) != null) {
+        } else if (controller.findTeam(player).isPresent()) {
             player.sendMessage(ChatColor.RED + "You are already in a team!");
             return;
         }
@@ -101,16 +101,23 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = controller.findTeam(player);
 
-        Bukkit.broadcastMessage(ChatColor.YELLOW + "Team " + ChatColor.BLUE + team.getGeneralData().getName() + ChatColor.YELLOW + " has been " + ChatColor.RED + "disbanded" + ChatColor.YELLOW + " by " + ChatColor.WHITE + player.getName());
+        if (team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
 
-        if (data != null) {
-            data.broadcast(ChatColor.GRAY + "The team you were previously in has been disbanded.");
+            Bukkit.broadcastMessage(ChatColor.YELLOW + "Team " +
+                    ChatColor.BLUE + team.get().getGeneralData().getName() +
+                    ChatColor.YELLOW + " has been " +
+                    ChatColor.RED + "disbanded" +
+                    ChatColor.YELLOW + " by " + ChatColor.WHITE + player.getName());
+
+            if (data != null) {
+                data.broadcast(ChatColor.GRAY + "The team you were previously in has been disbanded.");
+            }
+
+            team.get().disband();
         }
-
-        team.disband();
     }
 
     @Subcommand(label = "rename", parentLabel = "faction")
@@ -119,25 +126,28 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = controller.findTeam(player);
 
-        if (name.length() > 16) {
-            player.sendMessage(ChatColor.RED + "Maximum team name length is 16 characters!");
-            return;
-        } else if (name.length() < 3) {
-            player.sendMessage(ChatColor.RED + "Minimum team name length is 3 characters!");
-            return;
-        } else if (!StringUtils.isAlphanumeric(name)) {
-            player.sendMessage(ChatColor.RED + "Your team name has to be alphanumeric.");
-            return;
-        } else if (controller.findTeam(name) != null) {
-            player.sendMessage(ChatColor.RED + "That name is already taken.");
-            return;
+        if(team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
+
+            if (name.length() > 16) {
+                player.sendMessage(ChatColor.RED + "Maximum team name length is 16 characters!");
+                return;
+            } else if (name.length() < 3) {
+                player.sendMessage(ChatColor.RED + "Minimum team name length is 3 characters!");
+                return;
+            } else if (!StringUtils.isAlphanumeric(name)) {
+                player.sendMessage(ChatColor.RED + "Your team name has to be alphanumeric.");
+                return;
+            } else if (controller.findTeam(name).isPresent()) {
+                player.sendMessage(ChatColor.RED + "That name is already taken.");
+                return;
+            }
+
+            team.get().getGeneralData().setName(name);
+            data.broadcast(ChatColor.GRAY + "Your team's has been renamed to " + ChatColor.WHITE + name);
         }
-
-        team.getGeneralData().setName(name);
-        data.broadcast(ChatColor.GRAY + "Your team's has been renamed to " + ChatColor.WHITE + name);
     }
 
     @Subcommand(label = "show", aliases = {"info", "who", "i"}, parentLabel = "faction")
@@ -213,33 +223,36 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = controller.findTeam(player);
-        final ClaimTeamData data = team.findData(ClaimTeamData.class);
+        final Optional<Team> team = controller.findTeam(player);
 
-        if (data == null) {
-            player.sendMessage(ChatColor.RED + "Your team doesn't have a claim yet.");
-            return;
-        } else if (!data.getClaim().getCuboid().isLocationInCuboid(player.getLocation())) {
-            player.sendMessage(ChatColor.RED + "You can only set the team's home in your own claim.");
-            return;
-        }
+        if (team.isPresent()) {
+            final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
 
-        final Location location = player.getLocation();
-        final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+            if (data == null) {
+                player.sendMessage(ChatColor.RED + "Your team doesn't have a claim yet.");
+                return;
+            } else if (!data.getClaim().getCuboid().isLocationInCuboid(player.getLocation())) {
+                player.sendMessage(ChatColor.RED + "You can only set the team's home in your own claim.");
+                return;
+            }
 
-        data.setHome(location);
+            final Location location = player.getLocation();
+            final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
 
-        if (playerTeamData != null) {
-            playerTeamData.broadcast(ChatColor.GRAY + "The team's HQ has been set at (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")");
+            data.setHome(location);
+
+            if (playerTeamData != null) {
+                playerTeamData.broadcast(ChatColor.YELLOW + "The team's HQ has been set at (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")");
+            }
         }
     }
 
     @Subcommand(label = "home", parentLabel = "faction")
     public void home(Player player) {
-        final Team team = controller.findTeam(player);
+        final Optional<Team> team = controller.findTeam(player);
 
-        if (team != null && team.findData(ClaimTeamData.class) != null) {
-            final ClaimTeamData data = team.findData(ClaimTeamData.class);
+        if (team.isPresent() && team.get().findData(ClaimTeamData.class) != null) {
+            final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
 
             if (data.getHome() == null) {
                 player.sendMessage(ChatColor.RED + "Your team doesn't have a home set, set it with /team sethome.");
@@ -268,16 +281,18 @@ public class TeamCommand implements Controllable<TeamModule> {
         }
 
         final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
-        final Team team = this.controller.findTeam(player);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (playerData.hasData(ClaimSelectionData.class)) {
-            player.sendMessage(ChatColor.RED + "You are already claiming.");
-            return;
-        }
+        if (team.isPresent()) {
+            if (playerData.hasData(ClaimSelectionData.class)) {
+                player.sendMessage(ChatColor.RED + "You are already claiming.");
+                return;
+            }
 
-        playerData.addData(new ClaimSelectionData(new ClaimSelection(team, false)).startClaim(player));
-        if (team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getHome() != null) {
-            player.sendMessage(ChatColor.RED + "Note: " + ChatColor.YELLOW + "Your team's HQ will be removed if you make a new claim.");
+            playerData.addData(new ClaimSelectionData(new ClaimSelection(team.get(), false)).startClaim(player));
+            if (team.get().hasData(ClaimTeamData.class) && team.get().findData(ClaimTeamData.class).getHome() != null) {
+                player.sendMessage(ChatColor.RED + "Note: " + ChatColor.YELLOW + "Your team's HQ will be removed if you make a new claim.");
+            }
         }
     }
 
@@ -287,23 +302,26 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = this.controller.findTeam(player);
-        final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (playerTeamData != null && !playerTeamData.contains(target)) {
-            final InviteTeamData inviteTeamData = team.findData(InviteTeamData.class);
+        if(team.isPresent()) {
+            final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
 
-            if (inviteTeamData.hasInvite(target)) {
-                player.sendMessage(ChatColor.RED + "That player has already been invited to that team.");
-                return;
+            if (playerTeamData != null && !playerTeamData.contains(target)) {
+                final InviteTeamData inviteTeamData = team.get().findData(InviteTeamData.class);
+
+                if (inviteTeamData.hasInvite(target)) {
+                    player.sendMessage(ChatColor.RED + "That player has already been invited to that team.");
+                    return;
+                }
+
+                inviteTeamData.invite(target);
+                player.sendMessage(ChatColor.GRAY + "You have invited " + target.getName() + " to your team.");
+                target.sendMessage(new String[]{
+                        ChatColor.GRAY + "You have been invited to join " + ChatColor.WHITE + team.get().getGeneralData().getName(),
+                        ChatColor.GRAY + "Type /team accept " + team.get().getGeneralData().getName() + " to accept the invite."
+                });
             }
-
-            inviteTeamData.invite(target);
-            player.sendMessage(ChatColor.GRAY + "You have invited " + target.getName() + " to your team.");
-            target.sendMessage(new String[]{
-                    ChatColor.GRAY + "You have been invited to join " + ChatColor.WHITE + team.getGeneralData().getName(),
-                    ChatColor.GRAY + "Type /team accept " + team.getGeneralData().getName() + " to accept the invite."
-            });
         }
     }
 
@@ -334,25 +352,28 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = this.controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (data == null) {
-            player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
-            return;
-        } else if (!data.contains(target)) {
-            player.sendMessage(ChatColor.RED + "That player is not in your team.");
-            return;
-        } else if (player.equals(target)) {
-            player.sendMessage(ChatColor.RED + "You can't promote yourself.");
-            return;
-        } else if (data.getRole(target.getUniqueId()).priority >= PlayerRole.CO_LEADER.priority) {
-            player.sendMessage(ChatColor.GRAY + "To transfer leadership, use /team leader <player>");
-            return;
+        if (team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
+
+            if (data == null) {
+                player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
+                return;
+            } else if (!data.contains(target)) {
+                player.sendMessage(ChatColor.RED + "That player is not in your team.");
+                return;
+            } else if (player.equals(target)) {
+                player.sendMessage(ChatColor.RED + "You can't promote yourself.");
+                return;
+            } else if (data.getRole(target.getUniqueId()).priority >= PlayerRole.CO_LEADER.priority) {
+                player.sendMessage(ChatColor.GRAY + "To transfer leadership, use /team leader <player>");
+                return;
+            }
+
+            data.promotePlayer(target.getUniqueId());
+            data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been promoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
         }
-
-        data.promotePlayer(target.getUniqueId());
-        data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been promoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
     }
 
     @Subcommand(label = "demote", parentLabel = "faction")
@@ -361,26 +382,29 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = this.controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (data == null) {
-            player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
-            return;
-        } else if (!data.contains(target)) {
-            player.sendMessage(ChatColor.RED + "That player is not in your team.");
-            return;
-        } else if (player.equals(target)) {
-            player.sendMessage(ChatColor.RED + "You can't demote yourself.");
-            return;
-        } else if (data.getRole(target.getUniqueId()).equals(PlayerRole.MEMBER)) {
-            player.sendMessage(ChatColor.GRAY + "To kick a player, use /team kick <player>");
-            return;
+        if (team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
+
+            if (data == null) {
+                player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
+                return;
+            } else if (!data.contains(target)) {
+                player.sendMessage(ChatColor.RED + "That player is not in your team.");
+                return;
+            } else if (player.equals(target)) {
+                player.sendMessage(ChatColor.RED + "You can't demote yourself.");
+                return;
+            } else if (data.getRole(target.getUniqueId()).equals(PlayerRole.MEMBER)) {
+                player.sendMessage(ChatColor.GRAY + "To kick a player, use /team kick <player>");
+                return;
+            }
+
+
+            data.demotePlayer(target.getUniqueId());
+            data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been demoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
         }
-
-
-        data.demotePlayer(target.getUniqueId());
-        data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been demoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
     }
 
     @Subcommand(label = "leader", parentLabel = "faction")
@@ -389,23 +413,26 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = this.controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (data == null) {
-            player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
-            return;
-        } else if (!data.contains(target)) {
-            player.sendMessage(ChatColor.RED + "That player is not in your team.");
-            return;
-        } else if (player.equals(target)) {
-            player.sendMessage(ChatColor.RED + "You can't transfer ownership to yourself.");
-            return;
+        if(team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
+
+            if (data == null) {
+                player.sendMessage(ChatColor.RED + "That command is not executable in this team.");
+                return;
+            } else if (!data.contains(target)) {
+                player.sendMessage(ChatColor.RED + "That player is not in your team.");
+                return;
+            } else if (player.equals(target)) {
+                player.sendMessage(ChatColor.RED + "You can't transfer ownership to yourself.");
+                return;
+            }
+
+            data.setLeader(target.getUniqueId());
+            data.getCoLeaders().add(player.getUniqueId());
+            data.broadcast(ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has transferred the team's ownership to " + ChatColor.WHITE + target.getName());
         }
-
-        data.setLeader(target.getUniqueId());
-        data.getCoLeaders().add(player.getUniqueId());
-        data.broadcast(ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has transferred the team's ownership to " + ChatColor.WHITE + target.getName());
     }
 
     @Subcommand(label = "kick", parentLabel = "faction")
@@ -414,34 +441,37 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Team team = this.controller.findTeam(player);
-        final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (target == null) {
-            player.sendMessage(ChatColor.RED + "That player does not exist.");
-            return;
-        }
+        if (team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
 
-        if (data != null) {
-            if (!data.contains(target.getUniqueId())) {
-                player.sendMessage(ChatColor.RED + "That player is not in your team.");
-                return;
-            } else if (data.getRole(target.getUniqueId()).priority > data.getRole(player.getUniqueId()).priority) {
-                player.sendMessage(ChatColor.RED + "That player has a higher role than you.");
+            if (target == null) {
+                player.sendMessage(ChatColor.RED + "That player does not exist.");
                 return;
             }
 
-            data.kick(target.getUniqueId());
-            data.broadcast(ChatColor.DARK_GREEN + target.getName() + ChatColor.YELLOW + " has been kicked from the team.");
+            if (data != null) {
+                if (!data.contains(target.getUniqueId())) {
+                    player.sendMessage(ChatColor.RED + "That player is not in your team.");
+                    return;
+                } else if (data.getRole(target.getUniqueId()).priority > data.getRole(player.getUniqueId()).priority) {
+                    player.sendMessage(ChatColor.RED + "That player has a higher role than you.");
+                    return;
+                }
+
+                data.kick(target.getUniqueId());
+                data.broadcast(ChatColor.DARK_GREEN + target.getName() + ChatColor.YELLOW + " has been kicked from the team.");
+            }
         }
     }
 
     @Subcommand(label = "leave", parentLabel = "faction")
     public void leave(Player player) {
-        final Team team = this.controller.findTeam(player);
+        final Optional<Team> team = this.controller.findTeam(player);
 
-        if (team != null) {
-            final PlayerTeamData data = team.findData(PlayerTeamData.class);
+        if (team.isPresent()) {
+            final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
 
             if (data.getRole(player.getUniqueId()).equals(PlayerRole.LEADER)) {
                 player.sendMessage(ChatColor.RED + ChatColor.BOLD.toString() + "You cannot leave your own team...");
@@ -463,14 +493,14 @@ public class TeamCommand implements Controllable<TeamModule> {
      * @return whether it should proceed
      */
     private boolean shouldProceed(Player player, PlayerRole requiredRole) {
-        final Team team = controller.findTeam(player);
+        final Optional<Team> team = controller.findTeam(player);
 
-        if (team == null) {
+        if (!team.isPresent()) {
             player.sendMessage(ChatColor.RED + "You are not in a team!");
             return false;
         }
 
-        if (requiredRole.isHigher(controller.findTeam(player).findData(PlayerTeamData.class).getRole(player.getUniqueId()))) {
+        if (requiredRole.isHigher(team.get().findData(PlayerTeamData.class).getRole(player.getUniqueId()))) {
             player.sendMessage(ChatColor.RED + "No permission.");
             return false;
         }

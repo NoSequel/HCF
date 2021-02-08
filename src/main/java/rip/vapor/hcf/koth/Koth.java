@@ -59,7 +59,7 @@ public class Koth {
 
         this.kothTimer = new KothTimer(this.getKothName(), this);
 
-        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> this.kothTeam = Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()), 2L);
+        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()).ifPresent(team -> this.kothTeam = team), 2L);
     }
 
     /**

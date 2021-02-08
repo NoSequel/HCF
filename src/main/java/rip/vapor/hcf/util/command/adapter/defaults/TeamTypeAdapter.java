@@ -17,12 +17,14 @@ public class TeamTypeAdapter implements TypeAdapter<Team>, Controllable<TeamModu
         if (source.equalsIgnoreCase("@SELF")) {
             final Player player = (Player) sender;
 
-            return module.findTeam(player);
+            return module.findTeam(player).orElse(null);
         }
 
         final Player player = Bukkit.getPlayer(source);
 
-        return player != null && module.findTeam(player) != null ? module.findTeam(player) : module.findTeam(source);
+        return player != null && module.findTeam(player).isPresent()
+                ? module.findTeam(player).orElse(null)
+                : module.findTeam(source).orElse(null);
     }
 
     @Override

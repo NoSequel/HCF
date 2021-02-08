@@ -7,15 +7,17 @@ import rip.vapor.hcf.team.TeamModule;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public enum TeamType {
 
     PLAYER_TEAM(false) {
         @Override
         public String formatName(Team team, Player player) {
-            final Team team1 = (Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(player));
+            final Optional<Team> target = (Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(player));
 
-            return (team1 != null && team1.equals(team) ? ChatColor.DARK_GREEN : ChatColor.YELLOW) + team.getFormattedName();
+            return (target.isPresent() && target.get().equals(team) ? ChatColor.DARK_GREEN : ChatColor.YELLOW) + team.getFormattedName();
         }
     },
 

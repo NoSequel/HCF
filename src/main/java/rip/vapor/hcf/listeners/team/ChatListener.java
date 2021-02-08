@@ -10,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Optional;
+
 public class ChatListener implements Listener {
 
     private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
@@ -20,9 +22,9 @@ public class ChatListener implements Listener {
             event.setCancelled(true);
 
             final Player player = event.getPlayer();
-            final Team team = teamController.findTeam(player);
+            final Optional<Team> team = teamController.findTeam(player);
 
-            event.getRecipients().forEach(recipient -> recipient.sendMessage(this.getTeamString(team, recipient) + event.getFormat()));
+            event.getRecipients().forEach(recipient -> recipient.sendMessage(this.getTeamString(team.orElse(null), recipient) + event.getFormat()));
         }
     }
 

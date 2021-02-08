@@ -48,7 +48,7 @@ public class SystemTeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "create", parentLabel = "systemteam", permission = "admin")
     public void create(Player player, String name) {
-        if (controller.findTeam(name) != null) {
+        if (controller.findTeam(name).isPresent()) {
             player.sendMessage(ChatColor.RED + "That team already exists!");
             return;
         } else if (name.length() > 16) {

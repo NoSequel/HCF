@@ -22,6 +22,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Optional;
+
 public class PlayerListeners implements Listener, Controllable<PlayerDataModule> {
 
     private final PlayerDataModule module = this.getModule();
@@ -53,6 +55,8 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
         }
 
         if (player.isOnline()) { // check if the player is online & hasn't been kicked yet.
+            final Optional<Team> team = this.teamModule.findTeam(player);
+
             if (!player.hasPlayedBefore()) {
                 timerModule.findTimer(SpawnProtectionTimer.class).start(player);
             }
@@ -62,26 +66,22 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
                 timerModule.findTimer(SpawnProtectionTimer.class).start(player, data.getDurationLeft());
             }
 
-            if (teamModule.findTeam(player) != null) {
-                final Team team = teamModule.findTeam(player);
-                final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
-
-                playerTeamData.broadcast(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
+            if (team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
+                team.get().findData(PlayerTeamData.class)
+                        .broadcast(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
             }
         }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
         event.setQuitMessage(null);
 
-        if (teamModule.findTeam(player) != null) {
-            final Team team = teamModule.findTeam(player);
-            final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+        final Player player = event.getPlayer();
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
-            playerTeamData.broadcast(ChatColor.RED + "Member Offline: " + ChatColor.WHITE + player.getName());
-        }
+        team.ifPresent(value -> value.findData(PlayerTeamData.class)
+                .broadcast(ChatColor.RED + "Member Offline: " + ChatColor.WHITE + player.getName()));
     }
 
     @EventHandler

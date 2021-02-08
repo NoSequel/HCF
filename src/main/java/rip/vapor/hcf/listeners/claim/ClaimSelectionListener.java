@@ -21,6 +21,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.Optional;
+
 public class ClaimSelectionListener implements Listener, Controllable<PlayerDataModule> {
 
     private final PlayerDataModule controller = this.getModule();
@@ -57,7 +59,10 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                             return;
                         }
 
-                        if ((!teamController.findTeam(claimSelection.getLocation1()).getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) || !teamController.findTeam(claimSelection.getLocation1()).getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM)) && claimSelection.getTeam().getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
+                        final Optional<Team> pos1 = this.teamController.findTeam(claimSelection.getLocation1());
+                        final Optional<Team> pos2 = this.teamController.findTeam(claimSelection.getLocation2());
+
+                        if(pos1.isPresent() && pos2.isPresent() && !pos1.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && !pos2.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && claimSelection.getTeam().getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
                             player.sendMessage(ChatColor.GRAY + "The current selection contains non-wilderness regions.");
                             return;
                         }

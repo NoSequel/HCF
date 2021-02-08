@@ -21,6 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.util.Optional;
+
 public class DeathListeners implements Listener {
 
     private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
@@ -30,16 +32,16 @@ public class DeathListeners implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
         final PlayerData playerData = controller.findPlayerData(player.getUniqueId());
-        final Team team = teamController.findTeam(player);
+        final Optional<Team> team = teamController.findTeam(player);
 
         if (!VaporConstants.KITMAP_ENABLED) {
             final DeathbanData data = player.getKiller() == null
                     ? new NaturalDeathbanData(NaturalDeathbanType.UNDEFINED, 30000)
                     : new PlayerDeathbanData(player.getKiller().getUniqueId(), 30000);
 
-            if (teamController.findTeam(player) != null) {
-                final PlayerTeamData teamData = team.findData(PlayerTeamData.class);
-                final DTRData dtrData = team.findData(DTRData.class);
+            if (team.isPresent()) {
+                final PlayerTeamData teamData = team.get().findData(PlayerTeamData.class);
+                final DTRData dtrData = team.get().findData(DTRData.class);
 
                 teamData.broadcast(ChatColor.RED + "Member Death: " + ChatColor.WHITE + player.getName() + ChatColor.YELLOW + " (" + dtrData.getDtr() + " -> " + NumberUtil.round(dtrData.getDtr() - 1.0D, 1) + ")");
                 dtrData.setDtr(dtrData.getDtr() - 1.0D);

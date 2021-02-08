@@ -1,12 +1,10 @@
 package rip.vapor.hcf.listeners.claim;
 
 import org.bukkit.Material;
-import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
-import rip.vapor.hcf.team.data.impl.KothTeamData;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
@@ -30,16 +29,16 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
         final Location to = event.getTo();
         final Location from = event.getFrom();
-        final Team teamTo = teamModule.findTeam(to);
-        final Team teamFrom = teamModule.findTeam(from);
+        final Optional<Team> teamTo = teamModule.findTeam(to);
+        final Optional<Team> teamFrom = teamModule.findTeam(from);
 
-        if (teamTo != null && teamFrom != null && !teamTo.equals(teamFrom)) {
-            final Claim teamToClaim = teamTo.findData(ClaimTeamData.class).getClaim();
-            final Claim teamFromClaim = teamFrom.findData(ClaimTeamData.class).getClaim();
+        if (teamTo.isPresent() && teamFrom.isPresent() && !teamTo.get().equals(teamFrom.get())) {
+            final Claim teamToClaim = teamTo.get().findData(ClaimTeamData.class).getClaim();
+            final Claim teamFromClaim = teamFrom.get().findData(ClaimTeamData.class).getClaim();
 
             player.sendMessage(new String[]{
-                    ChatColor.YELLOW + "Leaving: " + teamFrom.getDisplayName(player) + ChatColor.YELLOW + "(" + (teamFromClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
-                    ChatColor.YELLOW + "Entering: " + teamTo.getDisplayName(player) + ChatColor.YELLOW + "(" + (teamToClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")"
+                    ChatColor.YELLOW + "Leaving: " + teamFrom.get().getDisplayName(player) + ChatColor.YELLOW + "(" + (teamFromClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
+                    ChatColor.YELLOW + "Entering: " + teamTo.get().getDisplayName(player) + ChatColor.YELLOW + "(" + (teamToClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")"
             });
 
         }
@@ -49,9 +48,9 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
     public void onBreak(BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final Location blockLocation = event.getBlock().getLocation();
-        final Team team = teamModule.findTeam(blockLocation);
+        final Optional<Team> team = teamModule.findTeam(blockLocation);
 
-        if (team != null && !team.canInteract(player)) {
+        if (team.isPresent() && !team.get().canInteract(player)) {
             event.setCancelled(true);
         }
     }
@@ -60,9 +59,9 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
     public void onBreak(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final Location blockLocation = event.getBlock().getLocation();
-        final Team team = teamModule.findTeam(blockLocation);
+        final Optional<Team> team = teamModule.findTeam(blockLocation);
 
-        if (team != null && !team.canInteract(player)) {
+        if (team.isPresent() && !team.get().canInteract(player)) {
             event.setCancelled(true);
         }
     }
@@ -72,9 +71,9 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
         if (event.getClickedBlock() != null && (event.getItem() == null || Arrays.stream(DISALLOWED_BLOCKS).anyMatch(item -> item.equals(event.getItem().getType())))) {
             final Player player = event.getPlayer();
             final Location blockLocation = event.getClickedBlock().getLocation();
-            final Team team = teamModule.findTeam(blockLocation);
+            final Optional<Team> team = teamModule.findTeam(blockLocation);
 
-            if (team != null && !team.canInteract(player)) {
+            if (team.isPresent() && !team.get().canInteract(player)) {
                 event.setCancelled(true);
             }
         }

@@ -26,16 +26,12 @@ public class DamageListeners implements Listener {
                 damager = (Player) event.getDamager();
             }
 
-            if(teamController.findTeam(player.getLocation()).getGeneralData().getType().equals(TeamType.SAFEZONE_TEAM)) {
+            if (teamController.findTeam(player.getLocation()).orElse(null).getGeneralData().getType().equals(TeamType.SAFEZONE_TEAM)) {
                 event.setCancelled(true);
             }
 
             if (damager != null) {
-                if(teamController.findTeam(damager.getLocation()).getGeneralData().getType().equals(TeamType.SAFEZONE_TEAM)) {
-                    event.setCancelled(true);
-                }
-
-                if (teamController.findTeam(player) != null && teamController.findTeam(damager) != null && teamController.findTeam(damager).equals(teamController.findTeam(player))) {
+                if (teamController.findTeam(player).isPresent() && teamController.findTeam(damager).isPresent() && teamController.findTeam(damager).get().equals(teamController.findTeam(player).get())) {
                     damager.sendMessage(ChatColor.YELLOW + "You cannot hurt " + ChatColor.DARK_GREEN + player.getName() + ChatColor.YELLOW + ".");
                     event.setCancelled(true);
                 }

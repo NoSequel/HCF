@@ -16,6 +16,7 @@ import rip.vapor.tablist.entry.TablistElement;
 import rip.vapor.tablist.entry.TablistElementSupplier;
 
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TablistProvider implements TablistElementSupplier {
@@ -25,23 +26,23 @@ public class TablistProvider implements TablistElementSupplier {
     @Override
     public TablistElement getEntries(Player player) {
         final TablistElement element = new TablistElement();
-        final Team team = teamController.findTeam(player);
-        final int increment = team == null ? 0 : 8;
+        final Optional<Team> team = teamController.findTeam(player);
+        final int increment = team.isPresent() ? 8 : 0;
 
         element.add(0, increment, ChatColor.AQUA + "Player Info");
         element.add(0, 1 + increment, ChatColor.WHITE + "Kills: " + player.getStatistic(Statistic.PLAYER_KILLS));
         element.add(0, 2 + increment, ChatColor.WHITE + "Deaths: " + player.getStatistic(Statistic.DEATHS));
 
         element.add(0, 4 + increment, ChatColor.AQUA + "Location");
-        element.add(0, 5 + increment, teamController.findTeam(player.getLocation()).getDisplayName(player));
+        element.add(0, 5 + increment, teamController.findTeam(player.getLocation()).get().getDisplayName(player));
         element.add(0, 6 + increment, ChatColor.WHITE + "(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockZ() + ") " + ChatColor.GRAY + "[" + getDirection(player) + ']');
 
         element.add(1, 0, ChatColor.AQUA + ChatColor.BOLD.toString() + "Vapor");
 
-        if (team != null) {
+        if (team.isPresent()) {
             final ClaimTeamData claimTeamData = teamController.findData(ClaimTeamData.class);
-            final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
-            final DTRData dtrData = team.findData(DTRData.class);
+            final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
+            final DTRData dtrData = team.get().findData(DTRData.class);
 
             element.add(0, 0, ChatColor.AQUA + "Home");
             element.add(0, 1, ChatColor.WHITE + (claimTeamData == null || claimTeamData.getHome() == null ? "None" : claimTeamData.getHomeAsString()));
@@ -51,7 +52,7 @@ public class TablistProvider implements TablistElementSupplier {
             element.add(0, 5, ChatColor.WHITE + "DTR: " + dtrData.formatDtr());
             element.add(0, 6, ChatColor.WHITE + "Balance: " + ChatColor.GREEN + "$" + playerTeamData.getBalance());
 
-            element.add(1, 2, ChatColor.DARK_GREEN + team.getGeneralData().getName());
+            element.add(1, 2, ChatColor.DARK_GREEN + team.get().getGeneralData().getName());
 
             final AtomicInteger index = new AtomicInteger(3);
 

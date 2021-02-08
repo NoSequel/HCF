@@ -76,7 +76,7 @@ public class KothCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "create", parentLabel = "koth", permission = "hcteams.koth.manage")
     public void create(Player player, String name) {
-        if (this.getModule().findTeam(name) != null) {
+        if (this.getModule().findTeam(name).isPresent()) {
             player.sendMessage(ChatColor.RED + "A team with that name already exists.");
             return;
         }

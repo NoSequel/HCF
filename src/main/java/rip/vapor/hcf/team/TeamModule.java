@@ -65,16 +65,12 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
 
     @Override
     public void disable() {
-        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
-
-        teams.forEach(loadable -> controller.getDataHandler().save(loadable, "teams"));
+        teams.forEach(loadable -> Vapor.getInstance().getHandler().find(DatabaseModule.class).getDataHandler().save(loadable, "teams"));
     }
 
     @Override
     public void loadAll() {
-        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
-
-        controller.getDataHandler().loadAll(this, "teams", Team.class);
+        Vapor.getInstance().getHandler().find(DatabaseModule.class).getDataHandler().loadAll(this, "teams", Team.class);
     }
 
     /**
@@ -83,10 +79,10 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      * @param uuid the uuid
      * @return the found team | or null
      */
-    public Team findTeam(UUID uuid) {
+    public Optional<Team> findTeam(UUID uuid) {
         return this.teams.stream()
                 .filter(team -> team.getUniqueId().equals(uuid))
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     /**
@@ -95,7 +91,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      * @param name the name
      * @return the foun team
      */
-    public Team findTeam(String name) {
+    public Optional<Team> findTeam(String name) {
         return this.findTeamByName(name);
     }
 
@@ -105,10 +101,10 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      * @param name the name of the team
      * @return the team or null
      */
-    public Team findTeamByName(String name) {
+    public Optional<Team> findTeamByName(String name) {
         return this.teams.stream()
                 .filter(team -> team.getGeneralData() != null && team.getGeneralData().getName() != null && team.getGeneralData().getName().equalsIgnoreCase(name))
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     /**
@@ -117,13 +113,11 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      * @param player the player
      * @return the team
      */
-    public Team findTeam(Player player) {
-        final Optional<Team> team = this.teams.stream()
+    public Optional<Team> findTeam(Player player) {
+        return this.teams.stream()
                 .filter($team -> $team.hasData(PlayerTeamData.class))
                 .filter($team -> $team.findData(PlayerTeamData.class).contains(player))
                 .findFirst();
-
-        return team.orElse(null);
     }
 
     /**
@@ -132,7 +126,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
      * @param location the location
      * @return the found team
      */
-    public Team findTeam(Location location) {
+    public Optional<Team> findTeam(Location location) {
         final Optional<Claim> claim = this.teams.stream()
                 .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim() != null)
                 .map(team -> team.findData(ClaimTeamData.class).getClaim())
@@ -141,7 +135,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
                 .findFirst();
 
         if (claim.isPresent() && claim.get().getTeam() != null) {
-            return claim.get().getTeam();
+            return Optional.of(claim.get().getTeam());
         }
 
         return this.findTeam("Wilderness");

@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.util.Optional;
+
 public class TeleportTimer extends PlayerTimer {
 
     private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
@@ -49,10 +51,10 @@ public class TeleportTimer extends PlayerTimer {
 
     @Override
     public void handleEnd(Player player) {
-        final Team team = teamController.findTeam(player);
+        final Optional<Team> team = teamController.findTeam(player);
 
-        if (team != null) {
-            final ClaimTeamData data = team.findData(ClaimTeamData.class);
+        if (team.isPresent()) {
+            final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
 
             if (data != null && data.getHome() != null) {
                 player.teleport(data.getHome());

@@ -19,8 +19,8 @@ import java.util.*;
 
 public class CombatWallListener implements Listener {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
-    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final TeamModule teamModule = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TimerModule timerModule = Vapor.getInstance().getHandler().find(TimerModule.class);
     private final Set<CombatWallBlockList> visualizedBlocks = new HashSet<>();
 
     @EventHandler
@@ -30,10 +30,11 @@ public class CombatWallListener implements Listener {
 
         this.findVisualizedBlockList(player).attemptRemove();
 
-        if (!combatWallType.equals(CombatWallType.NONE) && !this.teamController.findTeam(event.getTo()).equals(this.teamController.findTeam(event.getFrom()))) {
+        if (!combatWallType.equals(CombatWallType.NONE)) {
             final CombatWallData data = this.getWallLocation(player, combatWallType);
+            final Optional<Team> teamOptional = this.teamModule.findTeam(event.getTo());
 
-            if (this.isTeamApplicable(combatWallType, this.teamController.findTeam(event.getTo()))) {
+            if (teamOptional.isPresent() && this.isTeamApplicable(combatWallType, teamOptional.get())) {
                 event.setTo(event.getFrom());
             }
 
@@ -50,8 +51,8 @@ public class CombatWallListener implements Listener {
      * @return the wall type
      */
     private CombatWallType getWallType(Player player) {
-        return this.timerController.findTimer(CombatTimer.class).isOnCooldown(player) ? CombatWallType.SPAWN_TAG
-                : this.timerController.findTimer(SpawnProtectionTimer.class).isOnCooldown(player) ? CombatWallType.INVINCIBILITY
+        return this.timerModule.findTimer(CombatTimer.class).isOnCooldown(player) ? CombatWallType.SPAWN_TAG
+                : this.timerModule.findTimer(SpawnProtectionTimer.class).isOnCooldown(player) ? CombatWallType.INVINCIBILITY
                 : CombatWallType.NONE;
     }
 
@@ -80,14 +81,14 @@ public class CombatWallListener implements Listener {
             final Location originalLocation = player.getLocation();
             Location location;
 
-            if (this.isTeamApplicable(type, teamController.findTeam((location = originalLocation.clone().add(i, 0, 0))))) {
-                return new CombatWallData(teamController.findTeam(location), location);
-            } else if (this.isTeamApplicable(type, teamController.findTeam((location = originalLocation.clone().add(0, 0, i))))) {
-                return new CombatWallData(teamController.findTeam(location), location);
-            } else if (this.isTeamApplicable(type, teamController.findTeam((location = originalLocation.clone().subtract(i, 0, 0))))) {
-                return new CombatWallData(teamController.findTeam(location), location);
-            } else if (this.isTeamApplicable(type, teamController.findTeam((location = originalLocation.clone().subtract(0, 0, i))))) {
-                return new CombatWallData(teamController.findTeam(location), location);
+            if (this.isTeamApplicable(type, teamModule.findTeam((location = originalLocation.clone().add(i, 0, 0))).orElse(null))) {
+                return new CombatWallData(teamModule.findTeam(location).orElse(null), location);
+            } else if (this.isTeamApplicable(type, teamModule.findTeam((location = originalLocation.clone().add(0, 0, i))).orElse(null))) {
+                return new CombatWallData(teamModule.findTeam(location).orElse(null), location);
+            } else if (this.isTeamApplicable(type, teamModule.findTeam((location = originalLocation.clone().subtract(i, 0, 0))).orElse(null))) {
+                return new CombatWallData(teamModule.findTeam(location).orElse(null), location);
+            } else if (this.isTeamApplicable(type, teamModule.findTeam((location = originalLocation.clone().subtract(0, 0, i))).orElse(null))) {
+                return new CombatWallData(teamModule.findTeam(location).orElse(null), location);
             }
         }
 
@@ -119,7 +120,7 @@ public class CombatWallListener implements Listener {
             };
 
             Arrays.stream(locations)
-                    .filter(location -> this.teamController.findTeam(location.clone()).equals(wallTeam))
+                    .filter(location -> this.teamModule.findTeam(location.clone()).orElse(null).equals(wallTeam))
                     .forEach(location -> this.findVisualizedBlockList(player).add(location));
         }
     }

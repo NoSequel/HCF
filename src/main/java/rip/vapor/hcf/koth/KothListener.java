@@ -11,17 +11,19 @@ import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.data.impl.KothTeamData;
 
+import java.util.Optional;
+
 public class KothListener implements Listener, Controllable<TeamModule> {
 
     private final TeamModule teamModule = this.getModule();
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        final Team teamTo = teamModule.findTeam(event.getTo());
+        final Optional<Team> teamTo = teamModule.findTeam(event.getTo());
         final Player player = event.getPlayer();
 
-        if (teamTo != null && teamTo.hasData(KothTeamData.class)) {
-            final KothTeamData teamToData = teamTo.findData(KothTeamData.class);
+        if (teamTo.isPresent() && teamTo.get().hasData(KothTeamData.class)) {
+            final KothTeamData teamToData = teamTo.get().findData(KothTeamData.class);
 
             if (teamToData != null) {
                 final Koth koth = teamToData.getKoth();
