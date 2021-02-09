@@ -52,6 +52,7 @@ public class PlayerTeamData extends SavableTeamData {
      */
     public PlayerTeamData(JsonObject object) {
         this.leader = UUID.fromString(object.get("leader").getAsString());
+        this.balance = object.get("balance").getAsInt();
 
         ImmutableMap.of(
                 "members", this.members,
