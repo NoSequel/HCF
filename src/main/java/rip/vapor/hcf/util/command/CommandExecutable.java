@@ -1,5 +1,6 @@
 package rip.vapor.hcf.util.command;
 
+import org.bukkit.entity.Player;
 import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 import rip.vapor.hcf.util.command.data.CommandData;
 import rip.vapor.hcf.util.command.data.SubcommandData;
@@ -54,9 +55,14 @@ public class CommandExecutable extends Command {
             permission = data.getCommand().permission();
         }
 
-        if (!sender.hasPermission(permission) && !permission.isEmpty()) {
+        if (!permission.isEmpty() && !sender.hasPermission(permission)) {
             sender.sendMessage(ChatColor.RED + "No permission.");
-            return true;
+            return false;
+        }
+
+        if(method.getParameters()[0].getType().equals(Player.class) && !(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "You cannot execute that command as console.");
+            return false;
         }
 
         final Parameter[] parameters = Arrays.copyOfRange(method.getParameters(), 1, method.getParameters().length);
@@ -73,35 +79,31 @@ public class CommandExecutable extends Command {
                 final Parameter parameter = parameters[i];
                 final rip.vapor.hcf.util.command.annotation.Parameter param = parameter.getAnnotation(rip.vapor.hcf.util.command.annotation.Parameter.class);
 
+                String value;
+
                 if (i >= args.length && (param == null || param.value().isEmpty())) {
                     sender.sendMessage(ChatColor.RED + "Usage: /" + label + " " + Arrays.stream(parameters).map(parameter1 -> "<" + parameter1.getName() + ">").collect(Collectors.joining(" ")));
                     return true;
                 } else if (param != null && !param.value().isEmpty() && i >= args.length) {
-                    final TypeAdapter<?> typeAdapter = CommandModule.getInstance().findConverter(parameter.getType());
-
-                    if (typeAdapter != null) {
-                        try {
-                            objects[i] = typeAdapter.convert(sender, param.value());
-                        } catch (Exception exception) {
-                            typeAdapter.handleException(sender, param.value());
-                        }
-                    } else {
-                        objects[i] = param.value();
-                    }
-
+                    value = param.value();
                 } else {
-                    final TypeAdapter<?> typeAdapter = CommandModule.getInstance().findConverter(parameter.getType());
+                    value = args[i];
+                }
 
-                    if (typeAdapter == null) {
-                        objects[i] = args[i];
-                    } else {
+                final TypeAdapter<?> typeAdapter = CommandModule.getInstance().findConverter(parameter.getType());
 
-                        try {
-                            objects[i] = typeAdapter.convert(sender, args[i]);
-                        } catch (Exception exception) {
-                            typeAdapter.handleException(sender, args[i]);
-                            return true;
+                if (typeAdapter == null) {
+                    objects[i] = value;
+                } else {
+                    try {
+                        objects[i] = typeAdapter.convert(sender, value);
+
+                        if (objects[i] == null) {
+                            throw new NullPointerException("Error while converting argument to object");
                         }
+                    } catch (Exception exception) {
+                        typeAdapter.handleException(sender, value);
+                        return true;
                     }
                 }
             }

@@ -10,7 +10,7 @@ import java.util.UUID;
 public class PlayerTypeAdapter implements TypeAdapter<Player> {
 
     @Override
-    public Player convert(CommandSender sender, String source) {
+    public Player convert(CommandSender sender, String source) throws Exception {
         if (source.equalsIgnoreCase("@SELF")) {
             return (Player) sender;
         }

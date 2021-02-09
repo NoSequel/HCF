@@ -6,7 +6,7 @@ import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 public class IntegerTypeAdapter implements TypeAdapter<Integer> {
 
     @Override
-    public Integer convert(CommandSender sender, String source) {
+    public Integer convert(CommandSender sender, String source) throws Exception {
         return Integer.parseInt(source);
     }
 

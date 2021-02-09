@@ -8,7 +8,7 @@ import java.util.UUID;
 public class UUIDTypeAdapter implements TypeAdapter<UUID> {
 
     @Override
-    public UUID convert(CommandSender sender, String source) {
+    public UUID convert(CommandSender sender, String source) throws Exception {
         return UUID.fromString(source);
     }
 

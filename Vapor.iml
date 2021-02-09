@@ -26,5 +26,6 @@
     <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:3.12.4" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.6.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.ThatKawaiiSam:Assemble:master-105d9baddc-1" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.58.Final" level="project" />
   </component>
 </module>

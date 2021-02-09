@@ -28,7 +28,7 @@ public class PlayerTeamData extends SavableTeamData {
     private final Set<UUID> captains = new HashSet<>();
     private final Set<UUID> coLeaders = new HashSet<>();
 
-    private final int balance = 0;
+    private int balance = 0;
 
     /**
      * Empty constructor
@@ -236,6 +236,7 @@ public class PlayerTeamData extends SavableTeamData {
                 .addProperty("captains", StringUtils.fromSet(captains))
                 .addProperty("coLeaders", StringUtils.fromSet(coLeaders))
                 .addProperty("leader", leader.toString())
+                .addProperty("balance", this.balance)
                 .get();
     }
 }

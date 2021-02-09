@@ -40,7 +40,6 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
                     ChatColor.YELLOW + "Leaving: " + teamFrom.get().getDisplayName(player) + ChatColor.YELLOW + "(" + (teamFromClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")",
                     ChatColor.YELLOW + "Entering: " + teamTo.get().getDisplayName(player) + ChatColor.YELLOW + "(" + (teamToClaim.isDeathban() ? ChatColor.RED + "Deathban" : ChatColor.GREEN + "Non-Deathban") + ChatColor.YELLOW + ")"
             });
-
         }
     }
 

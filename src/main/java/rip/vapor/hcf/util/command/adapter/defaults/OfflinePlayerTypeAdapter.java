@@ -11,7 +11,7 @@ import java.util.UUID;
 public class OfflinePlayerTypeAdapter implements TypeAdapter<OfflinePlayer> {
 
     @Override
-    public OfflinePlayer convert(CommandSender sender, String source) {
+    public OfflinePlayer convert(CommandSender sender, String source) throws Exception {
         if (source.equalsIgnoreCase("@SELF")) {
             return (Player) sender;
         }

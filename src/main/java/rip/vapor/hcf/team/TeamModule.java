@@ -1,6 +1,7 @@
 package rip.vapor.hcf.team;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.data.DataController;
 import rip.vapor.hcf.koth.Koth;
 import rip.vapor.hcf.module.Module;
@@ -52,7 +53,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
             Vapor.getInstance().getLogger().log(Level.INFO, "Setting up default teams.");
 
             final Claim spawnClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), 100, 100, 100), new Location(Bukkit.getWorlds().get(0), -100, -100, -100)), ClaimPriority.NORMAL);
-            final Claim warzoneClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), 750, 750, 750), new Location(Bukkit.getWorlds().get(0), -750, -750, -750)), ClaimPriority.NORMAL);
+            final Claim warzoneClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), VaporConstants.WARZONE_RADIUS, VaporConstants.WARZONE_RADIUS, VaporConstants.WARZONE_RADIUS), new Location(Bukkit.getWorlds().get(0), -VaporConstants.WARZONE_RADIUS, -VaporConstants.WARZONE_RADIUS, -VaporConstants.WARZONE_RADIUS)), ClaimPriority.NORMAL);
             final Claim wildernessClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), -1, -1, -1), new Location(Bukkit.getWorlds().get(0), -1, -1, -1)), ClaimPriority.LOW);
 
             spawnClaim.setDeathban(false);

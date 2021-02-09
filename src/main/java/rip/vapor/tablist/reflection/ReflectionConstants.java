@@ -19,14 +19,17 @@ public class ReflectionConstants {
     public static final Reflection.FieldAccessor<Integer> TAB_PACKET_LATENCY = Reflection.getField(TAB_PACKET_CLASS, int.class, 7);
 
     // 1.8 tablist
-    public static final Class<Object> GAME_PROFILE_CLASS = getUntypedClasses(
-            "net.minecraft.util.com.mojang.authlib.GameProfile", "com.mojang.authlib.GameProfile");
-    public static final Reflection.ConstructorInvoker GAME_PROFILE_CONSTRUCTOR = Reflection
-            .getConstructor(GAME_PROFILE_CLASS, UUID.class, String.class);
-    public static final Reflection.FieldAccessor<String> GAME_PROFILE_NAME = Reflection.getField(GAME_PROFILE_CLASS,
-            String.class, 0);
-    public static final Reflection.FieldAccessor<Object> TAB_PACKET_PROFILE = Reflection.getField(TAB_PACKET_CLASS,
-            GAME_PROFILE_CLASS, 0);
+    public static final Class<Object> GAME_PROFILE_CLASS = getUntypedClasses("net.minecraft.util.com.mojang.authlib.GameProfile", "com.mojang.authlib.GameProfile");
+    public static final Reflection.ConstructorInvoker GAME_PROFILE_CONSTRUCTOR = Reflection.getConstructor(GAME_PROFILE_CLASS, UUID.class, String.class);
+    public static final Reflection.FieldAccessor<String> GAME_PROFILE_NAME = Reflection.getField(GAME_PROFILE_CLASS, String.class, 0);
+    public static final Reflection.FieldAccessor<Object> TAB_PACKET_PROFILE = Reflection.getField(TAB_PACKET_CLASS, GAME_PROFILE_CLASS, 0);
+
+    public static final Class<Object> PROPERTY_MAP_CLASS = getUntypedClasses("net.minecraft.util.com.mojang.authlib.properties.PropertyMap", "com.mojang.authlib.properties.PropertyMap");
+    public static final Reflection.MethodInvoker PROPERTY_MAP_GET = Reflection.getMethod(GAME_PROFILE_CLASS, "getProperties");
+    public static final Reflection.MethodInvoker PROPERTY_MAP_PUT = Reflection.getMethod(PROPERTY_MAP_CLASS, "put", Object.class, Object.class);
+
+    public static final Class<Object> PROPERTY_CLASS = getUntypedClasses("net.minecraft.util.com.mojang.authlib.properties.Property", "com.mojang.authlib.properties.Property");
+    public static final Reflection.ConstructorInvoker PROPERTY_CONSTRUCTOR = Reflection.getConstructor(PROPERTY_CLASS, String.class, String.class, String.class);
 
     // misc
     public static final Class<?> CRAFT_PLAYER_CLASS = Reflection.getCraftBukkitClass("entity.CraftPlayer");

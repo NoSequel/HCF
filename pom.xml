@@ -105,6 +105,12 @@
             <artifactId>Assemble</artifactId>
             <version>master-105d9baddc-1</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.58.Final</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,5 +1,8 @@
 package rip.vapor.hcf;
 
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.koth.KothListener;
 import rip.vapor.hcf.listeners.BorderListener;
@@ -42,7 +45,7 @@ import rip.vapor.tablist.provider.TablistProvider;
 import java.util.logging.Level;
 
 @Getter
-public class Vapor extends JavaPlugin {
+public class Vapor extends JavaPlugin implements PluginMessageListener {
 
     @Getter
     private static Vapor instance;
@@ -57,6 +60,11 @@ public class Vapor extends JavaPlugin {
         // save default config
         this.saveDefaultConfig();
         this.debugConfig();
+
+        // register lunar client
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "Lunar-Client", this);
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "Lunar-Client");
+
 
         // setup database controller
         final DatabaseModule databaseModule = new DatabaseModule(
@@ -88,7 +96,8 @@ public class Vapor extends JavaPlugin {
                 new SystemTeamCommand(),
                 new TimerCommand(),
                 new PvPCommand(),
-                new KothCommand()
+                new KothCommand(),
+                new EcoCommand()
         );
 
         // register listeners
@@ -130,5 +139,10 @@ public class Vapor extends JavaPlugin {
         // potion limits
         VaporConstants.ENCHANTMENT_LIMITS
                 .forEach(((enchantment, integer) -> Bukkit.getLogger().log(Level.INFO, "    [ Enchantment Limit " + enchantment.getName() + ": " + integer + " ]")));
+    }
+
+    @Override
+    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+
     }
 }

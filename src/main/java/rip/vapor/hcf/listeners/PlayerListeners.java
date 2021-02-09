@@ -6,6 +6,7 @@ import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
+import rip.vapor.hcf.player.data.BalanceData;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
 import rip.vapor.hcf.team.Team;
@@ -59,6 +60,10 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
 
             if (!player.hasPlayedBefore()) {
                 timerModule.findTimer(SpawnProtectionTimer.class).start(player);
+            }
+
+            if(!playerData.hasData(BalanceData.class)) {
+                playerData.addData(new BalanceData());
             }
 
             if (playerData.hasData(SpawnProtectionData.class)) {

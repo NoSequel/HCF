@@ -1,7 +1,9 @@
 package rip.vapor.hcf.listeners.claim;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
@@ -20,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import rip.vapor.hcf.util.Cuboid;
 
 import java.util.Optional;
 
@@ -41,11 +44,19 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
             switch (action) {
                 case LEFT_CLICK_BLOCK: {
                     claimSelection.setLocation1(event.getClickedBlock().getLocation());
+
+                    if (claimSelection.getLocation1() != null && claimSelection.getLocation2() != null) {
+                        player.sendMessage(ChatColor.YELLOW + "Your current claim is worth " + ChatColor.LIGHT_PURPLE + "$" + new Cuboid(claimSelection.getLocation1(), claimSelection.getLocation2()).getChunks() * VaporConstants.CLAIM_BALANCE_MULTIPLIER);
+                    }
                 }
                 break;
 
                 case RIGHT_CLICK_BLOCK: {
                     claimSelection.setLocation2(event.getClickedBlock().getLocation());
+
+                    if (claimSelection.getLocation1() != null && claimSelection.getLocation2() != null) {
+                        player.sendMessage(ChatColor.YELLOW + "Your current claim is worth " + ChatColor.LIGHT_PURPLE + "$" + new Cuboid(claimSelection.getLocation1(), claimSelection.getLocation2()).getChunks() * VaporConstants.CLAIM_BALANCE_MULTIPLIER);
+                    }
                 }
                 break;
 
@@ -62,26 +73,39 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                         final Optional<Team> pos1 = this.teamController.findTeam(claimSelection.getLocation1());
                         final Optional<Team> pos2 = this.teamController.findTeam(claimSelection.getLocation2());
 
-                        if(pos1.isPresent() && pos2.isPresent() && !pos1.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && !pos2.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && claimSelection.getTeam().getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
+                        if (pos1.isPresent() && pos2.isPresent() && !pos1.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && !pos2.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && claimSelection.getTeam().getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
                             player.sendMessage(ChatColor.GRAY + "The current selection contains non-wilderness regions.");
                             return;
                         }
 
 
                         final Team team = claimSelection.getTeam();
+
+                        if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
+                            final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+                            final Location location1 = claimSelection.getLocation1();
+                            final Location location2 = claimSelection.getLocation2();
+                            final int requiredAmount = (new Cuboid(location1, location2).getChunks() * VaporConstants.CLAIM_BALANCE_MULTIPLIER);
+
+                            if (requiredAmount > playerTeamData.getBalance()) {
+                                player.sendMessage(ChatColor.RED + "You do not have enough balance to make this claim (" +
+                                        ChatColor.GREEN + playerTeamData.getBalance() +
+                                        ChatColor.YELLOW + "/" +
+                                        ChatColor.RED + requiredAmount + ")");
+                                return;
+                            } else {
+                                playerTeamData.setBalance(playerTeamData.getBalance() - requiredAmount);
+                                playerTeamData.broadcast(ChatColor.YELLOW + "");
+                            }
+                        }
+
+
                         final ClaimTeamData oldClaimData = team.findData(ClaimTeamData.class);
 
                         playerData.getData().remove(data);
 
                         if (!claimSelection.isKothCapzone()) {
                             claimSelection.apply();
-
-                            if (team.getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
-                                final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
-                                final ClaimTeamData claimTeamData = team.findData(ClaimTeamData.class);
-
-                                playerTeamData.broadcast(ChatColor.GRAY + "Your team now has a claim of " + claimTeamData.getClaim().getCuboid().getChunks() + " chunks.");
-                            }
 
                             if (oldClaimData != null) {
                                 final Claim oldClaim = oldClaimData.getClaim();

@@ -4,6 +4,7 @@ import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.data.Data;
 import rip.vapor.hcf.data.DataController;
+import rip.vapor.hcf.player.data.BalanceData;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.player.data.CombatLoggerData;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
@@ -26,7 +27,8 @@ public class PlayerDataModule implements Module, DataController<PlayerData, Data
             new PlayerDeathbanData(),
             new NaturalDeathbanData(),
             new SpawnProtectionData(),
-            new CombatLoggerData()
+            new CombatLoggerData(),
+            new BalanceData()
     ));
 
     /**

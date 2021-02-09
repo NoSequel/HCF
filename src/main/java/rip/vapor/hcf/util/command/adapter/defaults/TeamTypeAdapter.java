@@ -13,7 +13,7 @@ public class TeamTypeAdapter implements TypeAdapter<Team>, Controllable<TeamModu
     private final TeamModule module = this.getModule();
 
     @Override
-    public Team convert(CommandSender sender, String source) {
+    public Team convert(CommandSender sender, String source) throws Exception {
         if (source.equalsIgnoreCase("@SELF")) {
             final Player player = (Player) sender;
 

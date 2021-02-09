@@ -5,7 +5,7 @@ import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 
 public class LongTypeAdapter implements TypeAdapter<Long> {
     @Override
-    public Long convert(CommandSender sender, String source) {
+    public Long convert(CommandSender sender, String source) throws Exception {
         return Long.parseLong(source);
     }
 

@@ -1,9 +1,11 @@
 package rip.vapor.hcf.commands;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
+import rip.vapor.hcf.player.data.BalanceData;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -315,6 +317,11 @@ public class TeamCommand implements Controllable<TeamModule> {
                     return;
                 }
 
+                if(playerTeamData.getAllMembers().size() > VaporConstants.FACTION_SIZE) {
+                    player.sendMessage(ChatColor.RED + "That team already has the max amount of members.");
+                    return;
+                }
+
                 inviteTeamData.invite(target);
                 player.sendMessage(ChatColor.GRAY + "You have invited " + target.getName() + " to your team.");
                 target.sendMessage(new String[]{
@@ -338,6 +345,9 @@ public class TeamCommand implements Controllable<TeamModule> {
                 return;
             } else if (playerTeamData.contains(player)) {
                 player.sendMessage(ChatColor.RED + "You are already in that team.");
+                return;
+            } else if(playerTeamData.getAllMembers().size() > VaporConstants.FACTION_SIZE) {
+                player.sendMessage(ChatColor.RED + "That team already has the max amount of members.");
                 return;
             }
 
@@ -482,6 +492,44 @@ public class TeamCommand implements Controllable<TeamModule> {
 
             data.kick(player.getUniqueId());
             data.broadcast(ChatColor.DARK_GREEN + player.getName() + ChatColor.YELLOW + " has left the team.");
+        }
+    }
+
+    @Subcommand(label="deposit", aliases = {"d", "dep"}, parentLabel = "faction")
+    public void deposit(Player player, @Parameter(name = "amount", value="99999") Integer amount) {
+        if (!this.shouldProceed(player, PlayerRole.MEMBER)) {
+            return;
+        }
+
+        final Optional<Team> team = this.controller.findTeam(player);
+        final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
+
+        if (playerData.hasData(BalanceData.class) && team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
+            final BalanceData balanceData = playerData.findData(BalanceData.class);
+            final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
+            final int subtract = Math.min(balanceData.getBalance(), amount);
+
+            balanceData.setBalance(balanceData.getBalance() - subtract);
+            playerTeamData.setBalance(playerTeamData.getBalance() + subtract);
+
+            playerTeamData.broadcast(ChatColor.LIGHT_PURPLE + player.getName() + ChatColor.YELLOW + " has deposited " + ChatColor.LIGHT_PURPLE + subtract + ChatColor.YELLOW + " to the team's balance.");
+        }
+    }
+
+    @Subcommand(label="withdraw", aliases = {"w", "wit"}, parentLabel = "faction")
+    public void withdraw(Player player, @Parameter(name = "amount", value = "999999") Integer amount) {
+        final Optional<Team> team = this.controller.findTeam(player);
+        final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
+
+        if (playerData.hasData(BalanceData.class) && team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
+            final BalanceData balanceData = playerData.findData(BalanceData.class);
+            final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
+            final int subtract = Math.min(playerTeamData.getBalance(), amount);
+
+            balanceData.setBalance(balanceData.getBalance() + subtract);
+            playerTeamData.setBalance(playerTeamData.getBalance() - subtract);
+
+            playerTeamData.broadcast(ChatColor.LIGHT_PURPLE + player.getName() + ChatColor.YELLOW + " has withdrew " + ChatColor.LIGHT_PURPLE + subtract + ChatColor.YELLOW + " to the team's balance.");
         }
     }
 

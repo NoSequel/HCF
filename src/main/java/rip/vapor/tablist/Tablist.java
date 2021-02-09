@@ -1,5 +1,6 @@
 package rip.vapor.tablist;
 
+import com.sun.org.apache.xpath.internal.objects.XObject;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -29,7 +30,7 @@ public class Tablist {
         this.player = player;
         this.version = ClientVersion.getVersion(player);
 
-        for(int i = 0; i < 80; i++) {
+        for (int i = 0; i < 80; i++) {
             Object packet = ReflectionConstants.SCOREBOARD_TEAM_CONSTRUCTOR.invoke();
             ReflectionConstants.SCOREBOARD_TEAM_NAME.set(packet, TAB_NAMES[i]);
             ReflectionConstants.SCOREBOARD_TEAM_PLAYERS.get(packet).add(TAB_NAMES[i]);
@@ -94,7 +95,7 @@ public class Tablist {
      * Update the tablist
      */
     public void update() {
-        if(!this.initiated) {
+        if (!this.initiated) {
             this.addFakePlayers();
         }
 
@@ -235,12 +236,21 @@ public class Tablist {
     static {
         GAME_PROFILES = new Object[80];
         TAB_NAMES = new String[80];
+
         for (int i = 0; i < 80; i++) {
-            int x = i % 4;
-            int y = i / 4;
-            String name = "§0§" + x + (y > 9 ? "§" + String.valueOf(y).toCharArray()[0] + "§" + String.valueOf(y).toCharArray()[1] : "§0§" + String.valueOf(y).toCharArray()[0]);
-            UUID id = UUID.randomUUID();
-            Object profile = ReflectionConstants.GAME_PROFILE_CONSTRUCTOR.invoke(id, name);
+            final int x = i % 4;
+            final int y = i / 4;
+
+            final String name = "§0§" + x + (y > 9 ? "§" + String.valueOf(y).toCharArray()[0] + "§" + String.valueOf(y).toCharArray()[1] : "§0§" + String.valueOf(y).toCharArray()[0]);
+            final UUID id = UUID.randomUUID();
+
+            final Object profile = ReflectionConstants.GAME_PROFILE_CONSTRUCTOR.invoke(id, name);
+
+            ReflectionConstants.PROPERTY_MAP_PUT.invoke(
+                    ReflectionConstants.PROPERTY_MAP_GET.invoke(profile),
+                    "textures",
+                    ReflectionConstants.PROPERTY_CONSTRUCTOR.invoke("textures", BLANK_SKIN[0], BLANK_SKIN[1]));
+
             TAB_NAMES[i] = name;
             GAME_PROFILES[i] = profile;
         }

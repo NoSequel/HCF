@@ -4,6 +4,7 @@ import rip.vapor.hcf.player.classes.bard.task.BardClassTask;
 import rip.vapor.hcf.module.Module;
 import rip.vapor.hcf.util.tasks.impl.DTRTask;
 import org.bukkit.scheduler.BukkitRunnable;
+import rip.vapor.hcf.util.tasks.impl.NametagTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,8 @@ public class TaskModule implements Module {
     public void enable() {
         tasks.addAll(Arrays.asList(
                 new DTRTask(),
-                new BardClassTask()
+                new BardClassTask(),
+                new NametagTask()
         ));
     }
 

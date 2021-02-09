@@ -13,7 +13,16 @@ public class VaporConstants {
     private final FileConfiguration config = Vapor.getInstance().getConfig();
 
     public boolean KITMAP_ENABLED = config.getBoolean("kitmap.kitmap_enabled");
+
     public Integer BORDER_SIZE = config.getInt("map.border_size");
+    public Integer WARZONE_RADIUS = config.getInt("map.warzone_radius");
+
+    public Integer FACTION_SIZE = config.getInt("map.faction.faction_sizes");
+    public Integer ALLIES = config.getInt("map.faction.allies");
+
+    public Integer BALANCE = config.getInt("map.default_balance");
+    public Integer CLAIM_BALANCE_MULTIPLIER = config.getInt("map.claim_balance_multiplier");
+
 
     // enchantment limiting
     public Map<Enchantment, Integer> ENCHANTMENT_LIMITS = ImmutableMap.of(

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 public class TimerTypeAdapter implements TypeAdapter<PlayerTimer>, Controllable<TimerModule> {
 
     @Override
-    public PlayerTimer convert(CommandSender sender, String source) {
+    public PlayerTimer convert(CommandSender sender, String source) throws Exception {
         return this.getModule().getTimers().stream()
                 .filter(timer -> timer instanceof PlayerTimer)
                 .map(timer -> ((PlayerTimer) timer))
