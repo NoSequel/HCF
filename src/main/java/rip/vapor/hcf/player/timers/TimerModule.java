@@ -1,11 +1,11 @@
-package rip.vapor.hcf.timers;
+package rip.vapor.hcf.player.timers;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Module;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.impl.player.*;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.player.*;
 
 import java.util.ArrayList;
 import java.util.List;

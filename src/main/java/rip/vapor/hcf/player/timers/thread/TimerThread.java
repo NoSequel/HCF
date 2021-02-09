@@ -1,9 +1,9 @@
-package rip.vapor.hcf.timers.thread;
+package rip.vapor.hcf.player.timers.thread;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.scheduler.BukkitRunnable;
-import rip.vapor.hcf.timers.Timer;
+import rip.vapor.hcf.player.timers.Timer;
 
 @Getter
 @Setter

@@ -1,8 +1,8 @@
-package rip.vapor.hcf.timers.impl.player;
+package rip.vapor.hcf.player.timers.impl.player;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -3,7 +3,7 @@ package rip.vapor.hcf.team;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.data.Loadable;
-import rip.vapor.hcf.koth.Koth;
+import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.data.TeamData;
 import rip.vapor.hcf.team.data.impl.GeneralData;

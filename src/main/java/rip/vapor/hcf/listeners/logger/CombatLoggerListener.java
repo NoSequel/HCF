@@ -1,4 +1,4 @@
-package rip.vapor.hcf.logger;
+package rip.vapor.hcf.listeners.logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -16,8 +16,8 @@ import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.CombatLoggerData;
-import rip.vapor.hcf.timers.TimerModule;
-import rip.vapor.hcf.timers.impl.player.CombatTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.player.CombatTimer;
 
 import java.util.Optional;
 

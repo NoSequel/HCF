@@ -2,9 +2,9 @@ package rip.vapor.hcf.scoreboard.provider.impl;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
-import rip.vapor.hcf.timers.TimerModule;
-import rip.vapor.hcf.timers.impl.GlobalTimer;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.GlobalTimer;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import rip.vapor.hcf.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

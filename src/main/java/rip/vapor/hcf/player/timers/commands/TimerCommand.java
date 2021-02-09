@@ -1,8 +1,8 @@
-package rip.vapor.hcf.timers.commands;
+package rip.vapor.hcf.player.timers.commands;
 
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;
 import rip.vapor.hcf.util.command.annotation.Subcommand;

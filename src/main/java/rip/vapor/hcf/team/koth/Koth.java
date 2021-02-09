@@ -1,4 +1,4 @@
-package rip.vapor.hcf.koth;
+package rip.vapor.hcf.team.koth;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.enums.TeamType;
-import rip.vapor.hcf.timers.impl.global.KothTimer;
+import rip.vapor.hcf.player.timers.impl.global.KothTimer;
 import rip.vapor.hcf.util.JsonBuilder;
 import rip.vapor.hcf.util.JsonUtils;
 

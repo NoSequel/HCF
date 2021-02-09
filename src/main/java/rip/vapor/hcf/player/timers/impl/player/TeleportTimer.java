@@ -1,10 +1,10 @@
-package rip.vapor.hcf.timers.impl.player;
+package rip.vapor.hcf.player.timers.impl.player;
 
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

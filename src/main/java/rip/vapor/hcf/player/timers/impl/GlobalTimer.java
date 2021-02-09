@@ -1,9 +1,9 @@
-package rip.vapor.hcf.timers.impl;
+package rip.vapor.hcf.player.timers.impl;
 
 import lombok.Getter;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.timers.Timer;
-import rip.vapor.hcf.timers.thread.impl.GlobalTimerThread;
+import rip.vapor.hcf.player.timers.Timer;
+import rip.vapor.hcf.player.timers.thread.impl.GlobalTimerThread;
 
 @Getter
 public abstract class GlobalTimer implements Timer {

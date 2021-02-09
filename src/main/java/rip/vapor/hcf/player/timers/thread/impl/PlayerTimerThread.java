@@ -1,10 +1,10 @@
-package rip.vapor.hcf.timers.thread.impl;
+package rip.vapor.hcf.player.timers.thread.impl;
 
 import org.bukkit.Bukkit;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.timers.thread.TimerThread;
+import rip.vapor.hcf.player.timers.thread.TimerThread;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

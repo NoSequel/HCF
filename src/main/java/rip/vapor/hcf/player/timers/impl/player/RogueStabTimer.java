@@ -1,13 +1,13 @@
-package rip.vapor.hcf.timers.impl.player;
+package rip.vapor.hcf.player.timers.impl.player;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 
-public class ArcherSpeedTimer extends PlayerTimer {
+public class RogueStabTimer extends PlayerTimer {
 
-    public ArcherSpeedTimer() {
-        super("ArcherSpeed", ChatColor.AQUA + "Archer Speed", true, 60*1000);
+    public RogueStabTimer() {
+        super("RogueStab", ChatColor.RED + "Rogue Stab", true, 15000);
     }
 
     @Override

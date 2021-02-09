@@ -1,12 +1,12 @@
-package rip.vapor.hcf.timers.impl.global;
+package rip.vapor.hcf.player.timers.impl.global;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.koth.Koth;
+import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
-import rip.vapor.hcf.timers.TimerModule;
-import rip.vapor.hcf.timers.impl.GlobalTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.GlobalTimer;
 
 public class KothTimer extends GlobalTimer implements Controllable<TimerModule> {
 

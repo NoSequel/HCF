@@ -1,15 +1,13 @@
 package rip.vapor.hcf;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.messaging.PluginMessageListener;
 import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
-import rip.vapor.hcf.koth.KothListener;
+import rip.vapor.hcf.team.koth.KothListener;
 import rip.vapor.hcf.listeners.BorderListener;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
 import rip.vapor.hcf.listeners.EnvironmentListener;
 import rip.vapor.hcf.listeners.combatwall.CombatWallListener;
-import rip.vapor.hcf.logger.CombatLoggerModule;
+import rip.vapor.hcf.listeners.logger.CombatLoggerModule;
 import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.commands.SystemTeamCommand;
 import rip.vapor.hcf.commands.TeamCommand;
@@ -26,9 +24,9 @@ import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.scoreboard.BoardProviderHandler;
 import rip.vapor.hcf.util.tasks.TaskModule;
 import rip.vapor.hcf.team.TeamModule;
-import rip.vapor.hcf.timers.TimerModule;
-import rip.vapor.hcf.timers.commands.PvPCommand;
-import rip.vapor.hcf.timers.commands.TimerCommand;
+import rip.vapor.hcf.player.timers.TimerModule;
+import rip.vapor.hcf.player.timers.commands.PvPCommand;
+import rip.vapor.hcf.player.timers.commands.TimerCommand;
 import rip.vapor.hcf.util.command.CommandModule;
 import rip.vapor.hcf.util.database.DatabaseModule;
 import rip.vapor.hcf.util.database.handler.data.MongoDataHandler;
@@ -45,7 +43,7 @@ import rip.vapor.tablist.provider.TablistProvider;
 import java.util.logging.Level;
 
 @Getter
-public class Vapor extends JavaPlugin implements PluginMessageListener {
+public class Vapor extends JavaPlugin {
 
     @Getter
     private static Vapor instance;
@@ -60,11 +58,6 @@ public class Vapor extends JavaPlugin implements PluginMessageListener {
         // save default config
         this.saveDefaultConfig();
         this.debugConfig();
-
-        // register lunar client
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "Lunar-Client", this);
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "Lunar-Client");
-
 
         // setup database controller
         final DatabaseModule databaseModule = new DatabaseModule(
@@ -118,7 +111,7 @@ public class Vapor extends JavaPlugin implements PluginMessageListener {
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);
-        new TablistManager(this, new TablistProvider(), 250L);
+        new TablistManager(this, new TablistProvider(), 500L);
     }
 
     @Override
@@ -139,10 +132,5 @@ public class Vapor extends JavaPlugin implements PluginMessageListener {
         // potion limits
         VaporConstants.ENCHANTMENT_LIMITS
                 .forEach(((enchantment, integer) -> Bukkit.getLogger().log(Level.INFO, "    [ Enchantment Limit " + enchantment.getName() + ": " + integer + " ]")));
-    }
-
-    @Override
-    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
-
     }
 }

@@ -1,4 +1,4 @@
-package rip.vapor.hcf.logger;
+package rip.vapor.hcf.listeners.logger;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;

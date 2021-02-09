@@ -1,11 +1,11 @@
-package rip.vapor.hcf.timers.impl.player;
+package rip.vapor.hcf.player.timers.impl.player;
 
 import org.bukkit.event.player.PlayerQuitEvent;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

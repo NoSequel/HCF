@@ -1,4 +1,4 @@
-package rip.vapor.hcf.koth;
+package rip.vapor.hcf.team.koth;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

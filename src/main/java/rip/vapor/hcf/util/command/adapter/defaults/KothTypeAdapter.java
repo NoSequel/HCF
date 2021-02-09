@@ -1,7 +1,7 @@
 package rip.vapor.hcf.util.command.adapter.defaults;
 
 import org.bukkit.command.CommandSender;
-import rip.vapor.hcf.koth.Koth;
+import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.KothTeamData;

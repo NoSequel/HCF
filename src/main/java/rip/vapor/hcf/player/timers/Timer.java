@@ -1,8 +1,7 @@
-package rip.vapor.hcf.timers;
+package rip.vapor.hcf.player.timers;
 
 import org.bukkit.event.Listener;
-import rip.vapor.hcf.timers.thread.TimerThread;
-import rip.vapor.hcf.timers.thread.impl.PlayerTimerThread;
+import rip.vapor.hcf.player.timers.thread.TimerThread;
 
 public interface Timer extends Listener {
 

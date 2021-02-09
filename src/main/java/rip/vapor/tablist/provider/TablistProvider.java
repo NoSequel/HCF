@@ -6,7 +6,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.VaporConstants;
-import rip.vapor.hcf.koth.Koth;
+import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;

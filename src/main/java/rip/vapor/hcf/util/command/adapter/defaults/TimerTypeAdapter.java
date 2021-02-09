@@ -1,8 +1,8 @@
 package rip.vapor.hcf.util.command.adapter.defaults;
 
 import rip.vapor.hcf.module.Controllable;
-import rip.vapor.hcf.timers.impl.PlayerTimer;
-import rip.vapor.hcf.timers.TimerModule;
+import rip.vapor.hcf.player.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 import org.bukkit.command.CommandSender;
 
