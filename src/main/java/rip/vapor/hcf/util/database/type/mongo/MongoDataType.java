@@ -12,51 +12,52 @@ import rip.vapor.hcf.util.JsonUtils;
 import rip.vapor.hcf.util.database.type.DataType;
 import org.bson.Document;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MongoDataType implements DataType<Document, MongoCollection<Document>> {
 
     @Override
-    public void load(Document document, DataController<?, ?> controller, Loadable<?> loadable) {
+    public void load(Document document, DataController<?, ?> controller, Class<? extends Loadable<?>> loadableClass) {
+        final List<Data> data = new ArrayList<>();
+        final AtomicReference<UUID> uuid = new AtomicReference<>();
+
         document.forEach((key, string) -> {
-            if (!(string instanceof String)) {
-                return;
-            }
-
             if (key.equals("uuid")) {
-                loadable.setUniqueId(UUID.fromString((String) string));
-                return;
+                uuid.set(UUID.fromString((String) string));
+            } else if (string instanceof String) {
+                data.add(controller.getRegisteredData().stream()
+                        .filter($data -> $data instanceof SavableData && ((SavableData) $data).getSavePath().equals(key))
+                        .map(current -> getSaveableData((SavableData) current, (String) string))
+                        .findFirst().orElse(null));
             }
-
-            if (loadable.getData() == null) {
-                loadable.setData(new ArrayList<>());
-            }
-
-            final SavableData data = controller.getRegisteredData().stream()
-                    .filter($data -> $data instanceof SavableData)
-                    .filter($data -> ((SavableData) $data).getSavePath().equals(key))
-                    .map(clazz -> {
-                        Data $data = null;
-
-                        try {
-                            $data = ((SavableData) clazz).getClass().getConstructor(JsonObject.class).newInstance(JsonUtils.getParser().parse((String) string).getAsJsonObject());
-                        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-
-                        return $data;
-                    })
-                    .map(SavableData.class::cast)
-                    .filter(Objects::nonNull)
-                    .findFirst().orElse(null);
-
-            loadable.addDataNormal(data);
         });
-    }
 
+        Constructor<?> constructor;
+        Loadable<?> loadable = null;
+
+        try {
+            constructor = loadableClass.getConstructor(UUID.class);
+            loadable = (Loadable<?>) constructor.newInstance(uuid.get());
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ignored) {
+            try {
+                constructor = loadableClass.getConstructor(UUID.class, List.class);
+                loadable = (Loadable<?>) constructor.newInstance(uuid.get(), data);
+            } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException exception) {
+                exception.printStackTrace();
+            }
+        } finally {
+            if (loadable != null && (loadable.getData() == null || loadable.getData().isEmpty())) {
+                loadable.setData(new ArrayList<>());
+                data.forEach(loadable::addDataNormal);
+            }
+        }
+    }
 
     @Override
     public void save(MongoCollection<Document> collection, Document document, Loadable<?> loadable) {
@@ -68,5 +69,24 @@ public class MongoDataType implements DataType<Document, MongoCollection<Documen
         document.put("uuid", loadable.getUniqueId().toString());
 
         collection.replaceOne(Filters.eq("uuid", loadable.getUniqueId().toString()), document, new ReplaceOptions().upsert(true));
+    }
+
+    /**
+     * Get a {@link SavableData} object from a {@link String}
+     *
+     * @param data   the data
+     * @param string the string
+     * @return the found data
+     */
+    private SavableData getSaveableData(SavableData data, String string) {
+        try {
+            final Constructor<?> constructor = data.getClass().getConstructor(JsonObject.class);
+
+            return (SavableData) constructor.newInstance(JsonUtils.getParser().parse(string).getAsJsonObject());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 }

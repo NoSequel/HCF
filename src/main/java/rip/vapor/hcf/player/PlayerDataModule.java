@@ -13,10 +13,7 @@ import rip.vapor.hcf.player.data.deathban.impl.natural.NaturalDeathbanData;
 import rip.vapor.hcf.util.database.DatabaseModule;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 public class PlayerDataModule implements Module, DataController<PlayerData, Data> {
@@ -53,7 +50,7 @@ public class PlayerDataModule implements Module, DataController<PlayerData, Data
     public PlayerData findOrElseMake(UUID uuid) {
         return this.playerData.stream()
                 .filter(data -> data.getUniqueId().equals(uuid))
-                .findFirst().orElseGet(() -> new PlayerData(uuid));
+                .findFirst().orElseGet(() -> new PlayerData(uuid, Collections.emptyList()));
     }
 
     @Override
@@ -67,6 +64,6 @@ public class PlayerDataModule implements Module, DataController<PlayerData, Data
     public void load(PlayerData loadable) {
         final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
 
-        controller.getDataHandler().load(this, loadable, "profiles");
+        controller.getDataHandler().load(this, PlayerData.class, loadable.getUniqueId(), "profiles");
     }
 }

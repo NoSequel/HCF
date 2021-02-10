@@ -72,8 +72,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
             }
 
             if (team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
-                team.get().findData(PlayerTeamData.class)
-                        .broadcast(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
+                team.get().findData(PlayerTeamData.class).broadcast(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
             }
         }
     }

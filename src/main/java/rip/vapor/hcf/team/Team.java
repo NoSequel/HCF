@@ -1,6 +1,7 @@
 package rip.vapor.hcf.team;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.data.Data;
 import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.data.Loadable;
 import rip.vapor.hcf.team.koth.Koth;
@@ -36,6 +37,19 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
     private UUID uniqueId;
 
     private List<TeamData> data = new ArrayList<>();
+
+    /**
+     * Constructor to make a new {@link Team} object with predifined data
+     *
+     * @param uuid the unique identifier
+     * @param data the data
+     */
+    public Team(UUID uuid, List<TeamData> data) {
+        this.uniqueId = uuid == null ? UUID.randomUUID() : uuid;
+        this.data = new ArrayList<>(data);
+
+        this.teamModule.getTeams().add(this);
+    }
 
     /**
      * Constructor to make a new {@link Team} object with a {@link UUID}

@@ -16,7 +16,7 @@ import java.util.UUID;
 public class PlayerData implements Loadable<Data> {
 
     private UUID uniqueId;
-    private List<Data> data = new ArrayList<>();
+    private List<Data> data;
 
     private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
 
@@ -26,10 +26,14 @@ public class PlayerData implements Loadable<Data> {
      *
      * @param uniqueId the uuid
      */
-    public PlayerData(UUID uniqueId) {
+    public PlayerData(UUID uniqueId, List<Data> data) {
         this.uniqueId = uniqueId;
+        this.data = new ArrayList<>(data);
 
-        controller.getPlayerData().add(this);
-        controller.load(this);
+        if(this.data.isEmpty()) {
+            controller.load(this);
+        } else {
+            controller.getPlayerData().add(this);
+        }
     }
 }
