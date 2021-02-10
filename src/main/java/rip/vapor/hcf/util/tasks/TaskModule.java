@@ -1,7 +1,10 @@
 package rip.vapor.hcf.util.tasks;
 
+import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.listeners.operations.BlockOperationModifierModule;
 import rip.vapor.hcf.player.classes.bard.task.BardClassTask;
 import rip.vapor.hcf.module.Module;
+import rip.vapor.hcf.util.tasks.impl.BackupTask;
 import rip.vapor.hcf.util.tasks.impl.DTRTask;
 import org.bukkit.scheduler.BukkitRunnable;
 import rip.vapor.hcf.util.tasks.impl.NametagTask;
@@ -19,7 +22,9 @@ public class TaskModule implements Module {
         tasks.addAll(Arrays.asList(
                 new DTRTask(),
                 new BardClassTask(),
-                new NametagTask()
+                new NametagTask(),
+                new BackupTask(),
+                Vapor.getInstance().getHandler().find(BlockOperationModifierModule.class)
         ));
     }
 

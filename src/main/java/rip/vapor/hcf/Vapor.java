@@ -2,6 +2,8 @@ package rip.vapor.hcf;
 
 import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
+import rip.vapor.hcf.listeners.operations.BlockOperationListener;
+import rip.vapor.hcf.listeners.operations.BlockOperationModifierModule;
 import rip.vapor.hcf.team.koth.KothListener;
 import rip.vapor.hcf.listeners.BorderListener;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
@@ -79,6 +81,7 @@ public class Vapor extends JavaPlugin {
         this.handler.register(new TeamModule());
         this.handler.register(new PlayerDataModule());
         this.handler.register(new ClassModule());
+        this.handler.register(new BlockOperationModifierModule());
         this.handler.register(new TaskModule());
         this.handler.register(new CombatLoggerModule(this));
 
@@ -108,6 +111,7 @@ public class Vapor extends JavaPlugin {
         pluginManager.registerEvents(new EnchantmentLimiterListener(), this);
         pluginManager.registerEvents(new KothListener(), this);
         pluginManager.registerEvents(new BorderListener(), this);
+        pluginManager.registerEvents(new BlockOperationListener(), this);
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);
