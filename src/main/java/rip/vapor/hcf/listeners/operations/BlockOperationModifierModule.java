@@ -2,6 +2,7 @@ package rip.vapor.hcf.listeners.operations;
 
 import lombok.Getter;
 import org.bukkit.block.BlockState;
+import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.listeners.operations.impl.BrewingStandBlockOperation;
 import rip.vapor.hcf.listeners.operations.impl.FurnaceBlockOperation;
 import rip.vapor.hcf.module.Module;
@@ -30,7 +31,7 @@ public class BlockOperationModifierModule extends Task implements Module {
 
     @Override
     public void tick() throws Exception {
-        this.modifiers.removeIf(modifier -> modifier.getOperation().editTimeCasted(modifier.getBlockState(), 10));
+        this.modifiers.removeIf(modifier -> modifier.getOperation().editTimeCasted(modifier.getBlockState(), VaporConstants.BLOCK_OPERATION_SPEED));
     }
 
     @Override

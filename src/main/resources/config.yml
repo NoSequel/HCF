@@ -3,6 +3,7 @@ map:
   warzone_radius: 500
   default_balance: 250
   claim_balance_multiplier: 12
+  block_operation_speed: 10
   faction:
     faction_sizes: 4
     allies: 0

@@ -23,6 +23,7 @@ public class VaporConstants {
     public Integer BALANCE = config.getInt("map.default_balance");
     public Integer CLAIM_BALANCE_MULTIPLIER = config.getInt("map.claim_balance_multiplier");
 
+    public Integer BLOCK_OPERATION_SPEED = config.getInt("map.block_operation_speed");
 
     // enchantment limiting
     public Map<Enchantment, Integer> ENCHANTMENT_LIMITS = ImmutableMap.of(
