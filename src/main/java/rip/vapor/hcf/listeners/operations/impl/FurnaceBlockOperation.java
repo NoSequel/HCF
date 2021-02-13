@@ -10,21 +10,17 @@ public class FurnaceBlockOperation implements BlockOperation<Furnace> {
     public boolean editTimeCasted(BlockState state, int duration) {
         return this.editTime(this.cast(state), duration);
     }
+
     @Override
     public boolean editTime(Furnace furnace, int duration) {
-        if (furnace.getInventory().getItem(0) != null) {
-            if (furnace.getCookTime() > 0 || furnace.getBurnTime() > 0) {
-                furnace.setCookTime((short) (furnace.getCookTime() + duration));
-                furnace.setBurnTime((short) (furnace.getBurnTime() + duration));
-            }
-        } else {
-            if (furnace.getInventory().getViewers().isEmpty()) {
-                return true;
-            }
+        final int time = furnace.getInventory().getItem(0) != null && (furnace.getCookTime() > 0 || furnace.getBurnTime() > 0) ? (furnace.getCookTime() + duration) : 0;
 
-            furnace.setCookTime((short) 0);
-            furnace.setBurnTime((short) 0);
+        if (furnace.getInventory().getViewers().isEmpty()) {
+            return true;
         }
+
+        furnace.setCookTime((short) time);
+        furnace.setBurnTime((short) time);
 
         return false;
     }

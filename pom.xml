@@ -107,6 +107,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.NoSequel</groupId>
+            <artifactId>Katakuna</artifactId>
+            <version>df2d672bde</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>4.1.58.Final</version>

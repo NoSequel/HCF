@@ -34,6 +34,7 @@ public class CommandExecutable extends Command {
         }
     }
 
+
     @Override
     @SneakyThrows
     public boolean execute(CommandSender sender, String label, String[] passedParameters) {

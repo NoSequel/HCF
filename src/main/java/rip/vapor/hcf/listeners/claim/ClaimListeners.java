@@ -29,6 +29,7 @@ public class ClaimListeners implements Listener, Controllable<TeamModule> {
 
         final Location to = event.getTo();
         final Location from = event.getFrom();
+
         final Optional<Team> teamTo = teamModule.findTeam(to);
         final Optional<Team> teamFrom = teamModule.findTeam(from);
 

@@ -26,15 +26,15 @@ public class CombatWallListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         final Player player = event.getPlayer();
-        final CombatWallType combatWallType = this.getWallType(player);
+        final CombatWallType type = this.getWallType(player);
 
         this.findVisualizedBlockList(player).attemptRemove();
 
-        if (!combatWallType.equals(CombatWallType.NONE)) {
-            final CombatWallData data = this.getWallLocation(player, combatWallType);
+        if (!type.equals(CombatWallType.NONE)) {
+            final CombatWallData data = this.getWallLocation(player, type);
             final Optional<Team> teamOptional = this.teamModule.findTeam(event.getTo());
 
-            if (teamOptional.isPresent() && this.isTeamApplicable(combatWallType, teamOptional.get())) {
+            if (teamOptional.isPresent() && this.isTeamApplicable(type, teamOptional.get())) {
                 event.setTo(event.getFrom());
             }
 

@@ -5,13 +5,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PlayerRole {
 
-    MEMBER(1, ""),
-    CAPTAIN(2, "*"),
-    CO_LEADER(3, "**"),
-    LEADER(4, "***");
+    MEMBER(1, "", "Member"),
+    CAPTAIN(2, "*", "Captain"),
+    CO_LEADER(3, "**", "Co Leader"),
+    LEADER(4, "***", "Leader");
 
     public final int priority;
     public final String astrix;
+    public final String fancyName;
 
     /**
      * Check if a {@link PlayerRole} is higher than a different role

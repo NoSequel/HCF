@@ -21,6 +21,7 @@ import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.player.timers.impl.player.CombatTimer;
 import rip.vapor.hcf.player.timers.impl.player.EnderpearlTimer;
 import rip.vapor.hcf.player.timers.impl.player.TeleportTimer;
+import rip.vapor.hcf.team.menu.GeneralTeamMenu;
 import rip.vapor.hcf.util.NumberUtil;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;
@@ -42,30 +43,30 @@ public class TeamCommand implements Controllable<TeamModule> {
     @Command(label = "faction", aliases = {"f", "team", "t"})
     @Subcommand(label = "help", parentLabel = "faction")
     public void help(Player player) {
-        controller.getTeams().stream()
-                .map(team -> String.join(", ", new String[]{team.getFormattedName(), team.getData().stream().map(data -> data.getClass().getSimpleName()).collect(Collectors.joining(", "))}))
-                .forEach(System.out::println);
-
-        player.sendMessage(new String[]{
-                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                ChatColor.BLUE + "General Commands: ",
-                ChatColor.YELLOW + "/team help" + ChatColor.GRAY + " - Shows you this page",
-                ChatColor.YELLOW + "/team create <name> [acronym]" + ChatColor.GRAY + " - Create a new team",
-                ChatColor.YELLOW + "/team disband" + ChatColor.GRAY + " - Disband your current team",
-                ChatColor.YELLOW + "/team invite <target>" + ChatColor.GRAY + " - Invite someone to your team",
-                ChatColor.YELLOW + "/team accept <team>" + ChatColor.GRAY + " - Accept an invite",
-                "",
-                ChatColor.BLUE + "Captain Commands: ",
-                ChatColor.YELLOW + "/team rename <newName>" + ChatColor.GRAY + " - Rename your team's name",
-                ChatColor.YELLOW + "/team sethome" + ChatColor.GRAY + " - Set the team's HQ",
-                ChatColor.YELLOW + "/team home" + ChatColor.GRAY + " - Teleport to the team's HQ",
-                "",
-                ChatColor.BLUE + "Leader Commands: ",
-                ChatColor.YELLOW + "/team promote <player>" + ChatColor.GRAY + " - Promote a player to a higher role",
-                ChatColor.YELLOW + "/team demote <player>" + ChatColor.GRAY + " - Demote a player to a lower role",
-                ChatColor.YELLOW + "/team leader <player>" + ChatColor.GRAY + " - Transfer leadership to someone else",
-                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
-        });
+        if(controller.findTeam(player).isPresent()) {
+            new GeneralTeamMenu(player, controller.findTeam(player).get()).updateMenu();
+        } else {
+            player.sendMessage(new String[]{
+                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
+                    ChatColor.BLUE + "General Commands: ",
+                    ChatColor.YELLOW + "/team help" + ChatColor.GRAY + " - Shows you this page",
+                    ChatColor.YELLOW + "/team create <name>" + ChatColor.GRAY + " - Create a new team",
+                    ChatColor.YELLOW + "/team disband" + ChatColor.GRAY + " - Disband your current team",
+                    ChatColor.YELLOW + "/team invite <target>" + ChatColor.GRAY + " - Invite someone to your team",
+                    ChatColor.YELLOW + "/team accept <team>" + ChatColor.GRAY + " - Accept an invite",
+                    "",
+                    ChatColor.BLUE + "Captain Commands: ",
+                    ChatColor.YELLOW + "/team rename <newName>" + ChatColor.GRAY + " - Rename your team's name",
+                    ChatColor.YELLOW + "/team sethome" + ChatColor.GRAY + " - Set the team's HQ",
+                    ChatColor.YELLOW + "/team home" + ChatColor.GRAY + " - Teleport to the team's HQ",
+                    "",
+                    ChatColor.BLUE + "Leader Commands: ",
+                    ChatColor.YELLOW + "/team promote <player>" + ChatColor.GRAY + " - Promote a player to a higher role",
+                    ChatColor.YELLOW + "/team demote <player>" + ChatColor.GRAY + " - Demote a player to a lower role",
+                    ChatColor.YELLOW + "/team leader <player>" + ChatColor.GRAY + " - Transfer leadership to someone else",
+                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
+            });
+        }
     }
 
     @Subcommand(label = "create", parentLabel = "faction")
@@ -90,8 +91,7 @@ public class TeamCommand implements Controllable<TeamModule> {
         }
 
 
-        final Team team = new Team(null, teamName, player.getUniqueId());
-        final PlayerTeamData playerTeamData = team.findData(PlayerTeamData.class);
+        new Team(null, teamName, player.getUniqueId());
 
         player.sendMessage(ChatColor.GREEN + "Success.");
         Bukkit.broadcastMessage(ChatColor.YELLOW + "Team " + ChatColor.BLUE + teamName + ChatColor.YELLOW + " has been " + ChatColor.GREEN + "created " + ChatColor.YELLOW + "by " + ChatColor.WHITE + player.getName());
@@ -115,7 +115,7 @@ public class TeamCommand implements Controllable<TeamModule> {
                     ChatColor.YELLOW + " by " + ChatColor.WHITE + player.getName());
 
             if (data != null) {
-                data.broadcast(ChatColor.GRAY + "The team you were previously in has been disbanded.");
+                data.broadcast(ChatColor.RED + "The team you were previously in has been disbanded.");
             }
 
             team.get().disband();
@@ -148,7 +148,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             }
 
             team.get().getGeneralData().setName(name);
-            data.broadcast(ChatColor.GRAY + "Your team's has been renamed to " + ChatColor.WHITE + name);
+            data.broadcast(ChatColor.YELLOW + "Your team's has been renamed to " + ChatColor.LIGHT_PURPLE + name);
         }
     }
 
@@ -244,7 +244,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             data.setHome(location);
 
             if (playerTeamData != null) {
-                playerTeamData.broadcast(ChatColor.YELLOW + "The team's HQ has been set at (" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")");
+                playerTeamData.broadcast(ChatColor.YELLOW + "The team's HQ has been set at " + ChatColor.LIGHT_PURPLE + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ());
             }
         }
     }
@@ -253,10 +253,10 @@ public class TeamCommand implements Controllable<TeamModule> {
     public void home(Player player) {
         final Optional<Team> team = controller.findTeam(player);
 
-        if (team.isPresent() && team.get().findData(ClaimTeamData.class) != null) {
+        if (team.isPresent()) {
             final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
 
-            if (data.getHome() == null) {
+            if (data == null || data.getHome() == null) {
                 player.sendMessage(ChatColor.RED + "Your team doesn't have a home set, set it with /team sethome.");
                 return;
             }
@@ -325,8 +325,8 @@ public class TeamCommand implements Controllable<TeamModule> {
                 inviteTeamData.invite(target);
                 player.sendMessage(ChatColor.GRAY + "You have invited " + target.getName() + " to your team.");
                 target.sendMessage(new String[]{
-                        ChatColor.GRAY + "You have been invited to join " + ChatColor.WHITE + team.get().getGeneralData().getName(),
-                        ChatColor.GRAY + "Type /team accept " + team.get().getGeneralData().getName() + " to accept the invite."
+                        ChatColor.YELLOW + "You have been invited to join " + ChatColor.LIGHT_PURPLE + team.get().getGeneralData().getName(),
+                        ChatColor.YELLOW + "Type " + ChatColor.LIGHT_PURPLE + "/team accept " + team.get().getGeneralData().getName() + ChatColor.YELLOW + " to accept the invite."
                 });
             }
         }
@@ -346,12 +346,13 @@ public class TeamCommand implements Controllable<TeamModule> {
             } else if (playerTeamData.contains(player)) {
                 player.sendMessage(ChatColor.RED + "You are already in that team.");
                 return;
-            } else if(playerTeamData.getAllMembers().size() > VaporConstants.FACTION_SIZE) {
+            } else if (playerTeamData.getAllMembers().size() > VaporConstants.FACTION_SIZE) {
                 player.sendMessage(ChatColor.RED + "That team already has the max amount of members.");
                 return;
             }
 
             playerTeamData.join(player);
+            inviteTeamData.removeInvite(player);
             playerTeamData.broadcast(ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has joined your team.");
         }
     }
@@ -382,7 +383,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             }
 
             data.promotePlayer(target.getUniqueId());
-            data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been promoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
+            data.broadcast(ChatColor.LIGHT_PURPLE + target.getName() + ChatColor.YELLOW + " has been promoted to " + ChatColor.LIGHT_PURPLE + data.getRole(target.getUniqueId()).name());
         }
     }
 
@@ -413,7 +414,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
 
             data.demotePlayer(target.getUniqueId());
-            data.broadcast(ChatColor.WHITE + target.getName() + ChatColor.GRAY + " has been demoted to " + ChatColor.WHITE + data.getRole(target.getUniqueId()).name());
+            data.broadcast(ChatColor.LIGHT_PURPLE + target.getName() + ChatColor.YELLOW + " has been demoted to " + ChatColor.LIGHT_PURPLE + data.getRole(target.getUniqueId()).name());
         }
     }
 
@@ -441,7 +442,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
             data.setLeader(target.getUniqueId());
             data.getCoLeaders().add(player.getUniqueId());
-            data.broadcast(ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has transferred the team's ownership to " + ChatColor.WHITE + target.getName());
+            data.broadcast(ChatColor.LIGHT_PURPLE + player.getName() + ChatColor.YELLOW + " has transferred the team's ownership to " + ChatColor.LIGHT_PURPLE + target.getName());
         }
     }
 
@@ -490,13 +491,13 @@ public class TeamCommand implements Controllable<TeamModule> {
                 return;
             }
 
-            data.kick(player.getUniqueId());
             data.broadcast(ChatColor.DARK_GREEN + player.getName() + ChatColor.YELLOW + " has left the team.");
+            data.kick(player.getUniqueId());
         }
     }
 
     @Subcommand(label="deposit", aliases = {"d", "dep"}, parentLabel = "faction")
-    public void deposit(Player player, @Parameter(name = "amount", value="99999") Integer amount) {
+    public void deposit(Player player, @Parameter(name = "amount", value="2147483647") Integer amount) {
         if (!this.shouldProceed(player, PlayerRole.MEMBER)) {
             return;
         }

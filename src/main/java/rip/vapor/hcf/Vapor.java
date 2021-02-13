@@ -1,5 +1,6 @@
 package rip.vapor.hcf;
 
+import io.github.nosequel.menus.MenuHandler;
 import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.operations.BlockOperationListener;
@@ -61,6 +62,9 @@ public class Vapor extends JavaPlugin {
         this.saveDefaultConfig();
         this.debugConfig();
 
+        // setup menu api
+        new MenuHandler(this);
+
         // setup database controller
         final DatabaseModule databaseModule = new DatabaseModule(
                 new MongoDatabaseOption(
@@ -115,7 +119,7 @@ public class Vapor extends JavaPlugin {
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);
-        new TablistManager(this, new TablistProvider(), 500L);
+        new TablistManager(this, new TablistProvider(), 750L);
     }
 
     @Override

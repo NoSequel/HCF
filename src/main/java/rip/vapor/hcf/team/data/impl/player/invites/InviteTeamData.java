@@ -53,6 +53,13 @@ public class InviteTeamData extends SavableTeamData {
         return this.invites.contains(player.getUniqueId());
     }
 
+    /**
+     * Remove the invite of a {@link Player}
+     *
+     * @param player the player
+     */
+    public void removeInvite(Player player) { this.invites.remove(player.getUniqueId()); }
+
     @Override
     public String getSavePath() {
         return "invites";

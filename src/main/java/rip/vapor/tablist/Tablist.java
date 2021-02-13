@@ -13,10 +13,13 @@ import rip.vapor.tablist.reflection.ReflectionConstants;
 import java.util.Arrays;
 import java.util.UUID;
 
+// todo: fix skin flickering on the tablist
 @Getter
 public class Tablist {
 
-    public static String[] BLANK_SKIN = {"eyJ0aW1lc3RhbXAiOjE0MTEyNjg3OTI3NjUsInByb2ZpbGVJZCI6IjNmYmVjN2RkMGE1ZjQwYmY5ZDExODg1YTU0NTA3MTEyIiwicHJvZmlsZU5hbWUiOiJsYXN0X3VzZXJuYW1lIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzg0N2I1Mjc5OTg0NjUxNTRhZDZjMjM4YTFlM2MyZGQzZTMyOTY1MzUyZTNhNjRmMzZlMTZhOTQwNWFiOCJ9fX0=", "u8sG8tlbmiekrfAdQjy4nXIcCfNdnUZzXSx9BE1X5K27NiUvE1dDNIeBBSPdZzQG1kHGijuokuHPdNi/KXHZkQM7OJ4aCu5JiUoOY28uz3wZhW4D+KG3dH4ei5ww2KwvjcqVL7LFKfr/ONU5Hvi7MIIty1eKpoGDYpWj3WjnbN4ye5Zo88I2ZEkP1wBw2eDDN4P3YEDYTumQndcbXFPuRRTntoGdZq3N5EBKfDZxlw4L3pgkcSLU5rWkd5UH4ZUOHAP/VaJ04mpFLsFXzzdU4xNZ5fthCwxwVBNLtHRWO26k/qcVBzvEXtKGFJmxfLGCzXScET/OjUBak/JEkkRG2m+kpmBMgFRNtjyZgQ1w08U6HHnLTiAiio3JswPlW5v56pGWRHQT5XWSkfnrXDalxtSmPnB5LmacpIImKgL8V9wLnWvBzI7SHjlyQbbgd+kUOkLlu7+717ySDEJwsFJekfuR6N/rpcYgNZYrxDwe4w57uDPlwNL6cJPfNUHV7WEbIU1pMgxsxaXe8WSvV87qLsR7H06xocl2C0JFfe2jZR4Zh3k9xzEnfCeFKBgGb4lrOWBu1eDWYgtKV67M2Y+B3W5pjuAjwAxn0waODtEn/3jKPbc/sxbPvljUCw65X+ok0UUN1eOwXV5l2EGzn05t3Yhwq19/GxARg63ISGE8CKw="};
+    public static String[] BLANK_SKIN = {
+            "eyJ0aW1lc3RhbXAiOjE0MTEyNjg3OTI3NjUsInByb2ZpbGVJZCI6IjNmYmVjN2RkMGE1ZjQwYmY5ZDExODg1YTU0NTA3MTEyIiwicHJvZmlsZU5hbWUiOiJsYXN0X3VzZXJuYW1lIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzg0N2I1Mjc5OTg0NjUxNTRhZDZjMjM4YTFlM2MyZGQzZTMyOTY1MzUyZTNhNjRmMzZlMTZhOTQwNWFiOCJ9fX0=",
+            "u8sG8tlbmiekrfAdQjy4nXIcCfNdnUZzXSx9BE1X5K27NiUvE1dDNIeBBSPdZzQG1kHGijuokuHPdNi/KXHZkQM7OJ4aCu5JiUoOY28uz3wZhW4D+KG3dH4ei5ww2KwvjcqVL7LFKfr/ONU5Hvi7MIIty1eKpoGDYpWj3WjnbN4ye5Zo88I2ZEkP1wBw2eDDN4P3YEDYTumQndcbXFPuRRTntoGdZq3N5EBKfDZxlw4L3pgkcSLU5rWkd5UH4ZUOHAP/VaJ04mpFLsFXzzdU4xNZ5fthCwxwVBNLtHRWO26k/qcVBzvEXtKGFJmxfLGCzXScET/OjUBak/JEkkRG2m+kpmBMgFRNtjyZgQ1w08U6HHnLTiAiio3JswPlW5v56pGWRHQT5XWSkfnrXDalxtSmPnB5LmacpIImKgL8V9wLnWvBzI7SHjlyQbbgd+kUOkLlu7+717ySDEJwsFJekfuR6N/rpcYgNZYrxDwe4w57uDPlwNL6cJPfNUHV7WEbIU1pMgxsxaXe8WSvV87qLsR7H06xocl2C0JFfe2jZR4Zh3k9xzEnfCeFKBgGb4lrOWBu1eDWYgtKV67M2Y+B3W5pjuAjwAxn0waODtEn/3jKPbc/sxbPvljUCw65X+ok0UUN1eOwXV5l2EGzn05t3Yhwq19/GxARg63ISGE8CKw="};
 
     private Object[] gameProfiles;
     private String[] tabNames;
@@ -37,6 +40,7 @@ public class Tablist {
             sendPacket(player, packet);
         }
 
+        this.addFakePlayers();
         this.update();
     }
 
@@ -78,29 +82,26 @@ public class Tablist {
      * @param name        the name
      */
     public void sendPacket(Player player, boolean useProfiles, int ping, int index, String prefix, String suffix, String name) {
-        Object packet = ReflectionConstants.SCOREBOARD_TEAM_CONSTRUCTOR.invoke();
+        final Object scoreboardPacket = ReflectionConstants.SCOREBOARD_TEAM_CONSTRUCTOR.invoke();
+        final Object tabPacket = ReflectionConstants.TAB_PACKET_CONSTRUCTOR.invoke();
+        final Object profile = this.gameProfiles[index];
 
-        ReflectionConstants.SCOREBOARD_TEAM_NAME.set(packet, this.tabNames[index]);
-        ReflectionConstants.SCOREBOARD_TEAM_ACTION.set(packet, 2);
-        ReflectionConstants.SCOREBOARD_TEAM_PREFIX.set(packet, prefix);
-        ReflectionConstants.SCOREBOARD_TEAM_SUFFIX.set(packet, suffix);
+        ReflectionConstants.SCOREBOARD_TEAM_NAME.set(scoreboardPacket, this.tabNames[index]);
+        ReflectionConstants.SCOREBOARD_TEAM_ACTION.set(scoreboardPacket, 2);
+        ReflectionConstants.SCOREBOARD_TEAM_PREFIX.set(scoreboardPacket, prefix);
+        ReflectionConstants.SCOREBOARD_TEAM_SUFFIX.set(scoreboardPacket, suffix);
 
-        this.sendPacket(player, packet);
-
-
-        packet = ReflectionConstants.TAB_PACKET_CONSTRUCTOR.invoke();
-        Object profile = this.gameProfiles[index];
-
-        ReflectionConstants.TAB_PACKET_ACTION.set(packet, 0);
-        ReflectionConstants.TAB_PACKET_LATENCY.set(packet, ping);
+        ReflectionConstants.TAB_PACKET_ACTION.set(tabPacket, 0);
+        ReflectionConstants.TAB_PACKET_LATENCY.set(tabPacket, ping);
 
         if (useProfiles) {
-            ReflectionConstants.TAB_PACKET_PROFILE.set(packet, profile);
+            ReflectionConstants.TAB_PACKET_PROFILE.set(tabPacket, profile);
         } else {
-            ReflectionConstants.TAB_PACKET_NAME.set(packet, name);
+            ReflectionConstants.TAB_PACKET_NAME.set(tabPacket, name);
         }
 
-        this.sendPacket(player, packet);
+        this.sendPacket(player, tabPacket);
+        this.sendPacket(player, scoreboardPacket);
     }
 
     /**
@@ -120,10 +121,6 @@ public class Tablist {
      * Update the tablist
      */
     public void update() {
-        if (!this.initiated) {
-            this.addFakePlayers();
-        }
-
         final TablistManager manager = TablistManager.INSTANCE;
 
         if (manager != null) {

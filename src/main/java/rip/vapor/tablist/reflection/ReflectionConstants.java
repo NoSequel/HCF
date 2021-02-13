@@ -8,14 +8,11 @@ public class ReflectionConstants {
 
     // base tablist
     public static final Class<?> TAB_PACKET_CLASS = Reflection.getMinecraftClass("PacketPlayOutPlayerInfo");
-    public static final Reflection.ConstructorInvoker TAB_PACKET_CONSTRUCTOR = Reflection
-            .getConstructor(TAB_PACKET_CLASS);
-    public static final Reflection.FieldAccessor<Integer> TAB_PACKET_ACTION = Reflection.getField(TAB_PACKET_CLASS,
-            int.class, 5);
+    public static final Reflection.ConstructorInvoker TAB_PACKET_CONSTRUCTOR = Reflection.getConstructor(TAB_PACKET_CLASS);
+    public static final Reflection.FieldAccessor<Integer> TAB_PACKET_ACTION = Reflection.getField(TAB_PACKET_CLASS, int.class, 5);
 
     // 1.7 tablist
-    public static final Reflection.FieldAccessor<String> TAB_PACKET_NAME = Reflection.getField(TAB_PACKET_CLASS,
-            String.class, 0);
+    public static final Reflection.FieldAccessor<String> TAB_PACKET_NAME = Reflection.getField(TAB_PACKET_CLASS, String.class, 0);
     public static final Reflection.FieldAccessor<Integer> TAB_PACKET_LATENCY = Reflection.getField(TAB_PACKET_CLASS, int.class, 7);
 
     // 1.8 tablist
@@ -37,34 +34,21 @@ public class ReflectionConstants {
     public static final Class<?> NMS_PLAYER_CLASS = Reflection.getMinecraftClass("EntityPlayer");
     public static final Class<?> PLAYER_CONNECTION_CLASS = Reflection.getMinecraftClass("PlayerConnection");
     public static final Class<?> NETWORK_MANAGER_CLASS = Reflection.getMinecraftClass("NetworkManager");
-    public static final Reflection.MethodInvoker GET_HANDLE_METHOD = Reflection.getMethod(CRAFT_PLAYER_CLASS,
-            "getHandle");
-    public static final Reflection.MethodInvoker GET_PROFILE_METHOD = Reflection.getMethod(CRAFT_PLAYER_CLASS,
-            "getProfile");
-    public static final Reflection.MethodInvoker VERSION_METHOD = Reflection.getMethod(NETWORK_MANAGER_CLASS,
-            "getVersion");
-    public static final Reflection.MethodInvoker SEND_PACKET = Reflection.getMethod(PLAYER_CONNECTION_CLASS,
-            "sendPacket", NMS_PACKET_CLASS);
-    public static final Reflection.FieldAccessor<?> PLAYER_CONNECTION = Reflection.getField(NMS_PLAYER_CLASS,
-            PLAYER_CONNECTION_CLASS, 0);
-    public static final Reflection.FieldAccessor<?> NETWORK_MANAGER = Reflection.getField(PLAYER_CONNECTION_CLASS,
-            NETWORK_MANAGER_CLASS, 0);
+    public static final Reflection.MethodInvoker GET_HANDLE_METHOD = Reflection.getMethod(CRAFT_PLAYER_CLASS, "getHandle");
+    public static final Reflection.MethodInvoker GET_PROFILE_METHOD = Reflection.getMethod(CRAFT_PLAYER_CLASS, "getProfile");
+    public static final Reflection.MethodInvoker VERSION_METHOD = Reflection.getMethod(NETWORK_MANAGER_CLASS, "getVersion");
+    public static final Reflection.MethodInvoker SEND_PACKET = Reflection.getMethod(PLAYER_CONNECTION_CLASS, "sendPacket", NMS_PACKET_CLASS);
+    public static final Reflection.FieldAccessor<?> PLAYER_CONNECTION = Reflection.getField(NMS_PLAYER_CLASS, PLAYER_CONNECTION_CLASS, 0);
+    public static final Reflection.FieldAccessor<?> NETWORK_MANAGER = Reflection.getField(PLAYER_CONNECTION_CLASS, NETWORK_MANAGER_CLASS, 0);
     public static final Class<?> SCOREBOARD_TEAM_CLASS = Reflection.getMinecraftClass("PacketPlayOutScoreboardTeam");
-    public static final Reflection.ConstructorInvoker SCOREBOARD_TEAM_CONSTRUCTOR = Reflection
-            .getConstructor(SCOREBOARD_TEAM_CLASS);
-    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_NAME = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, String.class, 0);
-    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_PREFIX = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, String.class, 2);
-    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_SUFFIX = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, String.class, 3);
+    public static final Reflection.ConstructorInvoker SCOREBOARD_TEAM_CONSTRUCTOR = Reflection.getConstructor(SCOREBOARD_TEAM_CLASS);
+    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_NAME = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 0);
+    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_PREFIX = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 2);
+    public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_SUFFIX = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 3);
     @SuppressWarnings("rawtypes")
-    public static final Reflection.FieldAccessor<Collection> SCOREBOARD_TEAM_PLAYERS = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, Collection.class, 0);
-    public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_ACTION = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 0);
-    public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_OPTIONS = Reflection
-            .getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 1);
+    public static final Reflection.FieldAccessor<Collection> SCOREBOARD_TEAM_PLAYERS = Reflection.getField(SCOREBOARD_TEAM_CLASS, Collection.class, 0);
+    public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_ACTION = Reflection.getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 0);
+    public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_OPTIONS = Reflection.getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 1);
 
     public static Class<Object> getUntypedClasses(String... lookupNames) {
         for (String lookupName : lookupNames) {
