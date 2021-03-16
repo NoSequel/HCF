@@ -62,7 +62,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
                 timerModule.findTimer(SpawnProtectionTimer.class).start(player);
             }
 
-            if(!playerData.hasData(BalanceData.class)) {
+            if (!playerData.hasData(BalanceData.class)) {
                 playerData.addData(new BalanceData());
             }
 

@@ -19,7 +19,7 @@ public class TablistUpdateTask extends Thread {
                 Bukkit.getOnlinePlayers().stream()
                         .map(manager::find)
                         .filter(Objects::nonNull)
-                        .forEach(tablist -> tablist.hideRealPlayers().update());
+                        .forEach(tab -> tab.hideRealPlayers().update());
             }
 
             try {

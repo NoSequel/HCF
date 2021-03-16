@@ -17,12 +17,12 @@ import java.util.UUID;
 @Getter
 public class Tablist {
 
-    public static String[] BLANK_SKIN = {
+    public String[] blankSkin = {
             "eyJ0aW1lc3RhbXAiOjE0MTEyNjg3OTI3NjUsInByb2ZpbGVJZCI6IjNmYmVjN2RkMGE1ZjQwYmY5ZDExODg1YTU0NTA3MTEyIiwicHJvZmlsZU5hbWUiOiJsYXN0X3VzZXJuYW1lIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzg0N2I1Mjc5OTg0NjUxNTRhZDZjMjM4YTFlM2MyZGQzZTMyOTY1MzUyZTNhNjRmMzZlMTZhOTQwNWFiOCJ9fX0=",
             "u8sG8tlbmiekrfAdQjy4nXIcCfNdnUZzXSx9BE1X5K27NiUvE1dDNIeBBSPdZzQG1kHGijuokuHPdNi/KXHZkQM7OJ4aCu5JiUoOY28uz3wZhW4D+KG3dH4ei5ww2KwvjcqVL7LFKfr/ONU5Hvi7MIIty1eKpoGDYpWj3WjnbN4ye5Zo88I2ZEkP1wBw2eDDN4P3YEDYTumQndcbXFPuRRTntoGdZq3N5EBKfDZxlw4L3pgkcSLU5rWkd5UH4ZUOHAP/VaJ04mpFLsFXzzdU4xNZ5fthCwxwVBNLtHRWO26k/qcVBzvEXtKGFJmxfLGCzXScET/OjUBak/JEkkRG2m+kpmBMgFRNtjyZgQ1w08U6HHnLTiAiio3JswPlW5v56pGWRHQT5XWSkfnrXDalxtSmPnB5LmacpIImKgL8V9wLnWvBzI7SHjlyQbbgd+kUOkLlu7+717ySDEJwsFJekfuR6N/rpcYgNZYrxDwe4w57uDPlwNL6cJPfNUHV7WEbIU1pMgxsxaXe8WSvV87qLsR7H06xocl2C0JFfe2jZR4Zh3k9xzEnfCeFKBgGb4lrOWBu1eDWYgtKV67M2Y+B3W5pjuAjwAxn0waODtEn/3jKPbc/sxbPvljUCw65X+ok0UUN1eOwXV5l2EGzn05t3Yhwq19/GxARg63ISGE8CKw="};
 
-    private Object[] gameProfiles;
-    private String[] tabNames;
+    private final Object[] gameProfiles = new Object[80];
+    private final String[] tabNames = new String[80];
 
     private final ClientVersion version;
     private final Player player;
@@ -48,9 +48,6 @@ public class Tablist {
      * Setup the profiles
      */
     private void setupProfiles() {
-        this.gameProfiles = new Object[80];
-        this.tabNames = new String[80];
-
         for (int i = 0; i < 80; i++) {
             final int x = i % 4;
             final int y = i / 4;
@@ -59,11 +56,6 @@ public class Tablist {
             final UUID id = UUID.randomUUID();
 
             final Object profile = ReflectionConstants.GAME_PROFILE_CONSTRUCTOR.invoke(id, name);
-
-            ReflectionConstants.PROPERTY_MAP_PUT.invoke(
-                    ReflectionConstants.PROPERTY_MAP_GET.invoke(profile),
-                    "textures",
-                    ReflectionConstants.PROPERTY_CONSTRUCTOR.invoke("textures", BLANK_SKIN[0], BLANK_SKIN[1]));
 
             this.tabNames[i] = name;
             this.gameProfiles[i] = profile;
@@ -148,7 +140,6 @@ public class Tablist {
      * @return the split text
      */
     private String[] splitText(String text) {
-
         if (text.length() < 17) {
             return new String[]{text, ""};
         } else {
@@ -181,6 +172,7 @@ public class Tablist {
                         } else {
                             ReflectionConstants.TAB_PACKET_NAME.set(packet, other.getName());
                         }
+
                         ReflectionConstants.TAB_PACKET_ACTION.set(packet, 4);
 
                         this.sendPacket(player, packet);
@@ -196,7 +188,7 @@ public class Tablist {
      * @return the current tab instance
      */
     public Tablist hideFakePlayers() {
-        if (!initiated) {
+        if (initiated) {
             final boolean useProfiles = version.ordinal() != 0;
 
             Arrays.stream(this.gameProfiles).forEach(other -> {
@@ -233,6 +225,10 @@ public class Tablist {
 
                 if (useProfiles) {
                     ReflectionConstants.TAB_PACKET_PROFILE.set(packet, profile);
+                    ReflectionConstants.PROPERTY_MAP_PUT.invoke(
+                            ReflectionConstants.PROPERTY_MAP_GET.invoke(profile),
+                            "textures",
+                            ReflectionConstants.PROPERTY_CONSTRUCTOR.invoke("textures", blankSkin[0], blankSkin[1]));
                 } else {
                     ReflectionConstants.TAB_PACKET_NAME.set(packet, ReflectionConstants.GAME_PROFILE_NAME.get(profile));
                 }

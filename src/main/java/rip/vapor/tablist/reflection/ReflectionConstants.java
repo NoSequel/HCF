@@ -45,10 +45,8 @@ public class ReflectionConstants {
     public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_NAME = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 0);
     public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_PREFIX = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 2);
     public static final Reflection.FieldAccessor<String> SCOREBOARD_TEAM_SUFFIX = Reflection.getField(SCOREBOARD_TEAM_CLASS, String.class, 3);
-    @SuppressWarnings("rawtypes")
     public static final Reflection.FieldAccessor<Collection> SCOREBOARD_TEAM_PLAYERS = Reflection.getField(SCOREBOARD_TEAM_CLASS, Collection.class, 0);
     public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_ACTION = Reflection.getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 0);
-    public static final Reflection.FieldAccessor<Integer> SCOREBOARD_TEAM_OPTIONS = Reflection.getField(SCOREBOARD_TEAM_CLASS, Integer.TYPE, 1);
 
     public static Class<Object> getUntypedClasses(String... lookupNames) {
         for (String lookupName : lookupNames) {

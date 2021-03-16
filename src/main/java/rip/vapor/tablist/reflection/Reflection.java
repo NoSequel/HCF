@@ -64,13 +64,6 @@ public final class Reflection {
          */
         void set(Object target, Object value);
 
-        /**
-         * Determine if the given object has this field.
-         *
-         * @param target - the object to test.
-         * @return TRUE if it does, FALSE otherwise.
-         */
-        boolean hasField(Object target);
     }
 
     // Deduce the net.minecraft.server.v* package
@@ -79,35 +72,7 @@ public final class Reflection {
     private static final String VERSION = OBC_PREFIX.replace("org.bukkit.craftbukkit", "").replace(".", "");
 
     // Variable replacement
-    private static final Pattern MATCH_VARIABLE = Pattern.compile("\\{([^\\}]+)\\}");
-
-    private Reflection() {
-        // Seal class
-    }
-
-    /**
-     * Retrieve a field accessor for a specific field type and name.
-     *
-     * @param target - the target type.
-     * @param name - the name of the field, or NULL to ignore.
-     * @param fieldType - a compatible field type.
-     * @return The field accessor.
-     */
-    public static <T> FieldAccessor<T> getField(Class<?> target, String name, Class<T> fieldType) {
-        return getField(target, name, fieldType, 0);
-    }
-
-    /**
-     * Retrieve a field accessor for a specific field type and name.
-     *
-     * @param className - lookup name of the class, see {@link #getClass(String)}.
-     * @param name - the name of the field, or NULL to ignore.
-     * @param fieldType - a compatible field type.
-     * @return The field accessor.
-     */
-    public static <T> FieldAccessor<T> getField(String className, String name, Class<T> fieldType) {
-        return getField(getClass(className), name, fieldType, 0);
-    }
+    private static final Pattern MATCH_VARIABLE = Pattern.compile("\\{([^}]+)}");
 
     /**
      * Retrieve a field accessor for a specific field type and name.
@@ -119,18 +84,6 @@ public final class Reflection {
      */
     public static <T> FieldAccessor<T> getField(Class<?> target, Class<T> fieldType, int index) {
         return getField(target, null, fieldType, index);
-    }
-
-    /**
-     * Retrieve a field accessor for a specific field type and name.
-     *
-     * @param className - lookup name of the class, see {@link #getClass(String)}.
-     * @param fieldType - a compatible field type.
-     * @param index - the number of compatible fields to skip.
-     * @return The field accessor.
-     */
-    public static <T> FieldAccessor<T> getField(String className, Class<T> fieldType, int index) {
-        return getField(getClass(className), fieldType, index);
     }
 
     // Common method
@@ -160,12 +113,6 @@ public final class Reflection {
                             throw new RuntimeException("Cannot access reflection.", e);
                         }
                     }
-
-                    @Override
-                    public boolean hasField(Object target) {
-                        // target instanceof DeclaringClass
-                        return field.getDeclaringClass().isAssignableFrom(target.getClass());
-                    }
                 };
             }
         }
@@ -175,19 +122,6 @@ public final class Reflection {
             return getField(target.getSuperclass(), name, fieldType, index);
 
         throw new IllegalArgumentException("Cannot find field with type " + fieldType);
-    }
-
-    /**
-     * Search for the first publicly and privately defined method of the given name and parameter count.
-     *
-     * @param className - lookup name of the class, see {@link #getClass(String)}.
-     * @param methodName - the method name, or NULL to skip.
-     * @param params - the expected parameters.
-     * @return An object that invokes this specific method.
-     * @throws IllegalStateException If we cannot find this method.
-     */
-    public static MethodInvoker getMethod(String className, String methodName, Class<?>... params) {
-        return getTypedMethod(getClass(className), methodName, null, params);
     }
 
     /**
@@ -220,17 +154,12 @@ public final class Reflection {
                     && Arrays.equals(method.getParameterTypes(), params)) {
                 method.setAccessible(true);
 
-                return new MethodInvoker() {
-
-                    @Override
-                    public Object invoke(Object target, Object... arguments) {
-                        try {
-                            return method.invoke(target, arguments);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Cannot invoke method " + method, e);
-                        }
+                return (target, arguments) -> {
+                    try {
+                        return method.invoke(target, arguments);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Cannot invoke method " + method, e);
                     }
-
                 };
             }
         }
@@ -240,18 +169,6 @@ public final class Reflection {
             return getMethod(clazz.getSuperclass(), methodName, params);
 
         throw new IllegalStateException(String.format("Unable to find method %s (%s).", methodName, Arrays.asList(params)));
-    }
-
-    /**
-     * Search for the first publically and privately defined constructor of the given name and parameter count.
-     *
-     * @param className - lookup name of the class, see {@link #getClass(String)}.
-     * @param params - the expected parameters.
-     * @return An object that invokes this constructor.
-     * @throws IllegalStateException If we cannot find this method.
-     */
-    public static ConstructorInvoker getConstructor(String className, Class<?>... params) {
-        return getConstructor(getClass(className), params);
     }
 
     /**
@@ -267,17 +184,12 @@ public final class Reflection {
             if (Arrays.equals(constructor.getParameterTypes(), params)) {
                 constructor.setAccessible(true);
 
-                return new ConstructorInvoker() {
-
-                    @Override
-                    public Object invoke(Object... arguments) {
-                        try {
-                            return constructor.newInstance(arguments);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Cannot invoke constructor " + constructor, e);
-                        }
+                return arguments -> {
+                    try {
+                        return constructor.newInstance(arguments);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Cannot invoke constructor " + constructor, e);
                     }
-
                 };
             }
         }
@@ -379,14 +291,14 @@ public final class Reflection {
 
         while (matcher.find()) {
             String variable = matcher.group(1);
-            String replacement = "";
+            String replacement;
 
             // Expand all detected variables
-            if ("nms".equalsIgnoreCase(variable))
+            if (variable.equalsIgnoreCase("nms"))
                 replacement = NMS_PREFIX;
-            else if ("obc".equalsIgnoreCase(variable))
+            else if (variable.equalsIgnoreCase("obc"))
                 replacement = OBC_PREFIX;
-            else if ("version".equalsIgnoreCase(variable))
+            else if (variable.equalsIgnoreCase("version"))
                 replacement = VERSION;
             else
                 throw new IllegalArgumentException("Unknown variable: " + variable);

@@ -85,7 +85,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
         final CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
         this.getModule().getLoggers().stream()
-                .filter(logger -> logger.getPlayerUuid().equals(player.getUniqueId()))
+                .filter(logger -> logger.getPlayerUuid() != null && logger.getPlayerUuid().equals(player.getUniqueId()))
                 .forEach(CombatLogger::destruct);
 
         if (combatLoggerData != null && combatLoggerData.isKilled()) {

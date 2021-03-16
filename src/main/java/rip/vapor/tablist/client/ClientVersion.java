@@ -7,7 +7,6 @@ public enum ClientVersion {
 
     v1_7, v1_8;
 
-
     public static ClientVersion getVersion(Player player) {
         Object handle = ReflectionConstants.GET_HANDLE_METHOD.invoke(player);
         Object connection = ReflectionConstants.PLAYER_CONNECTION.get(handle);

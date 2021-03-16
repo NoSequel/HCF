@@ -41,33 +41,38 @@ public class TeamCommand implements Controllable<TeamModule> {
     private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
 
     @Command(label = "faction", aliases = {"f", "team", "t"})
-    @Subcommand(label = "help", parentLabel = "faction")
-    public void help(Player player) {
+    public void execute(Player player) {
         if(controller.findTeam(player).isPresent()) {
             new GeneralTeamMenu(player, controller.findTeam(player).get()).updateMenu();
         } else {
-            player.sendMessage(new String[]{
-                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
-                    ChatColor.BLUE + "General Commands: ",
-                    ChatColor.YELLOW + "/team help" + ChatColor.GRAY + " - Shows you this page",
-                    ChatColor.YELLOW + "/team create <name>" + ChatColor.GRAY + " - Create a new team",
-                    ChatColor.YELLOW + "/team disband" + ChatColor.GRAY + " - Disband your current team",
-                    ChatColor.YELLOW + "/team invite <target>" + ChatColor.GRAY + " - Invite someone to your team",
-                    ChatColor.YELLOW + "/team accept <team>" + ChatColor.GRAY + " - Accept an invite",
-                    "",
-                    ChatColor.BLUE + "Captain Commands: ",
-                    ChatColor.YELLOW + "/team rename <newName>" + ChatColor.GRAY + " - Rename your team's name",
-                    ChatColor.YELLOW + "/team sethome" + ChatColor.GRAY + " - Set the team's HQ",
-                    ChatColor.YELLOW + "/team home" + ChatColor.GRAY + " - Teleport to the team's HQ",
-                    "",
-                    ChatColor.BLUE + "Leader Commands: ",
-                    ChatColor.YELLOW + "/team promote <player>" + ChatColor.GRAY + " - Promote a player to a higher role",
-                    ChatColor.YELLOW + "/team demote <player>" + ChatColor.GRAY + " - Demote a player to a lower role",
-                    ChatColor.YELLOW + "/team leader <player>" + ChatColor.GRAY + " - Transfer leadership to someone else",
-                    ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
-            });
+            this.help(player);
         }
     }
+
+    @Subcommand(label = "help", parentLabel = "faction")
+    public void help(Player player) {
+        player.sendMessage(new String[]{
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52),
+                ChatColor.BLUE + "General Commands: ",
+                ChatColor.YELLOW + "/team help" + ChatColor.GRAY + " - Shows you this page",
+                ChatColor.YELLOW + "/team create <name>" + ChatColor.GRAY + " - Create a new team",
+                ChatColor.YELLOW + "/team disband" + ChatColor.GRAY + " - Disband your current team",
+                ChatColor.YELLOW + "/team invite <target>" + ChatColor.GRAY + " - Invite someone to your team",
+                ChatColor.YELLOW + "/team accept <team>" + ChatColor.GRAY + " - Accept an invite",
+                "",
+                ChatColor.BLUE + "Captain Commands: ",
+                ChatColor.YELLOW + "/team rename <newName>" + ChatColor.GRAY + " - Rename your team's name",
+                ChatColor.YELLOW + "/team sethome" + ChatColor.GRAY + " - Set the team's HQ",
+                ChatColor.YELLOW + "/team home" + ChatColor.GRAY + " - Teleport to the team's HQ",
+                "",
+                ChatColor.BLUE + "Leader Commands: ",
+                ChatColor.YELLOW + "/team promote <player>" + ChatColor.GRAY + " - Promote a player to a higher role",
+                ChatColor.YELLOW + "/team demote <player>" + ChatColor.GRAY + " - Demote a player to a lower role",
+                ChatColor.YELLOW + "/team leader <player>" + ChatColor.GRAY + " - Transfer leadership to someone else",
+                ChatColor.GOLD + ChatColor.STRIKETHROUGH.toString() + StringUtils.repeat("-", 52)
+        });
+    }
+
 
     @Subcommand(label = "create", parentLabel = "faction")
     public void create(Player player, @Parameter(name = "teamName") String teamName) {
