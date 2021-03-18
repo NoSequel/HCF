@@ -66,8 +66,7 @@ public abstract class Class<T extends ClassData> implements Listener, BoardProvi
 
         this.equipped.add(player);
 
-        Arrays.stream(this.potionEffects)
-                .forEach(player::addPotionEffect);
+        Arrays.stream(this.potionEffects).forEach(player::addPotionEffect);
     }
 
     /**

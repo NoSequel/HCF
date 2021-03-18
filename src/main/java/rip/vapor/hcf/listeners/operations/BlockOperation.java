@@ -6,13 +6,13 @@ public interface BlockOperation<T extends BlockState> {
 
     /**
      * Edit the time of a block
-     * 
+     *
      * @param state    the block
      * @param duration the duration
      * @return whether it should remove it from the list of operations
      */
     boolean editTimeCasted(BlockState state, int duration);
-    
+
     /**
      * Edit the time of the block
      *

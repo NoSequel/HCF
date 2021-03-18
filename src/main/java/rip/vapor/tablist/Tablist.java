@@ -228,7 +228,8 @@ public class Tablist {
                     ReflectionConstants.PROPERTY_MAP_PUT.invoke(
                             ReflectionConstants.PROPERTY_MAP_GET.invoke(profile),
                             "textures",
-                            ReflectionConstants.PROPERTY_CONSTRUCTOR.invoke("textures", blankSkin[0], blankSkin[1]));
+                            ReflectionConstants.PROPERTY_CONSTRUCTOR.invoke("textures", blankSkin[0], blankSkin[1])
+                    );
                 } else {
                     ReflectionConstants.TAB_PACKET_NAME.set(packet, ReflectionConstants.GAME_PROFILE_NAME.get(profile));
                 }

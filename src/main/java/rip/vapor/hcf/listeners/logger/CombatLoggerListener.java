@@ -82,18 +82,21 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final PlayerData data = playerController.findPlayerData(player.getUniqueId());
-        final CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
-        this.getModule().getLoggers().stream()
-                .filter(logger -> logger.getPlayerUuid() != null && logger.getPlayerUuid().equals(player.getUniqueId()))
-                .forEach(CombatLogger::destruct);
+        if (data != null && data.hasData(CombatLoggerData.class)) {
+            final CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
-        if (combatLoggerData != null && combatLoggerData.isKilled()) {
-            combatLoggerData.setKilled(false);
+            this.getModule().getLoggers().stream()
+                    .filter(logger -> logger.getPlayerUuid() != null && logger.getPlayerUuid().equals(player.getUniqueId()))
+                    .forEach(CombatLogger::destruct);
 
-            player.getInventory().clear();
-            player.getInventory().setArmorContents(new ItemStack[player.getInventory().getArmorContents().length]);
-            player.setHealth(0);
+            if (combatLoggerData != null && combatLoggerData.isKilled()) {
+                combatLoggerData.setKilled(false);
+
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(new ItemStack[player.getInventory().getArmorContents().length]);
+                player.setHealth(0);
+            }
         }
     }
 }

@@ -72,6 +72,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -93,13 +94,6 @@
             <version>3.12.4</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>bson</artifactId>
-            <version>3.6.0</version>
-        </dependency>
-
         <dependency>
             <groupId>com.github.ThatKawaiiSam</groupId>
             <artifactId>Assemble</artifactId>
@@ -110,12 +104,6 @@
             <groupId>com.github.NoSequel</groupId>
             <artifactId>Katakuna</artifactId>
             <version>df2d672bde</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.58.Final</version>
         </dependency>
     </dependencies>
 
