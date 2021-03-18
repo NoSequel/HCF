@@ -24,7 +24,7 @@ public class EnderpearlTimer extends PlayerTimer {
     public void onEnderpearl(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         final ItemStack item = event.getItem() == null ? player.getItemInHand() : event.getItem();
-        final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class);
+        final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class).get();
 
         if (!player.getGameMode().equals(GameMode.CREATIVE) && item != null && player.getItemInHand().getType().equals(Material.ENDER_PEARL) && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
             if (this.isOnCooldown(player)) {

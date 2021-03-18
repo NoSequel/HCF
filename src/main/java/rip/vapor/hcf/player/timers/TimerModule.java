@@ -5,10 +5,12 @@ import rip.vapor.hcf.module.Module;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import rip.vapor.hcf.player.timers.impl.PlayerTimer;
+import rip.vapor.hcf.player.timers.impl.global.SOTWTimer;
 import rip.vapor.hcf.player.timers.impl.player.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 public class TimerModule implements Module {
@@ -32,10 +34,10 @@ public class TimerModule implements Module {
      * @param <T> the type of the timer
      * @return the timer | or null
      */
-    public <T extends PlayerTimer> T findTimer(Class<T> clazz) {
-        return clazz.cast(this.timers.stream()
+    public <T extends Timer> Optional<T> findTimer(Class<T> clazz) {
+        return (Optional<T>) this.timers.stream()
                 .filter(timer -> timer.getClass().equals(clazz))
-                .findFirst().orElse(null));
+                .findFirst();
     }
 
     /**

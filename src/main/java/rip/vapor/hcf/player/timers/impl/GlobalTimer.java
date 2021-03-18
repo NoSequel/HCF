@@ -32,6 +32,7 @@ public abstract class GlobalTimer implements Timer {
         this.trailing = trailing;
 
         this.thread = new GlobalTimerThread(this, shouldSubtract);
+        this.thread.setCurrentDuration(defaultDuration);
         this.thread.runTaskTimer(Vapor.getInstance(), 2L, 0L);
     }
 

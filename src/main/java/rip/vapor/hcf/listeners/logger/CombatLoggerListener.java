@@ -72,8 +72,9 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     public void onQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final PlayerData data = playerController.findPlayerData(player.getUniqueId());
+        final Optional<CombatTimer> combatTimer = timerController.findTimer(CombatTimer.class);
 
-        if (data != null && timerController.findTimer(CombatTimer.class).isOnCooldown(player) && !player.isDead()) {
+        if (data != null && combatTimer.isPresent() && combatTimer.get().isOnCooldown(player) && !player.isDead()) {
             new CombatLogger(player);
         }
     }

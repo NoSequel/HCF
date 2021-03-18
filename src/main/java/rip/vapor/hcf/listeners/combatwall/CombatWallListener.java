@@ -51,8 +51,8 @@ public class CombatWallListener implements Listener {
      * @return the wall type
      */
     private CombatWallType getWallType(Player player) {
-        return this.timerModule.findTimer(CombatTimer.class).isOnCooldown(player) ? CombatWallType.SPAWN_TAG
-                : this.timerModule.findTimer(SpawnProtectionTimer.class).isOnCooldown(player) ? CombatWallType.INVINCIBILITY
+        return this.timerModule.findTimer(CombatTimer.class).get().isOnCooldown(player) ? CombatWallType.SPAWN_TAG
+                : this.timerModule.findTimer(SpawnProtectionTimer.class).get().isOnCooldown(player) ? CombatWallType.INVINCIBILITY
                 : CombatWallType.NONE;
     }
 

@@ -5,6 +5,7 @@ import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.operations.BlockOperationListener;
 import rip.vapor.hcf.listeners.operations.BlockOperationModifierModule;
+import rip.vapor.hcf.player.timers.commands.SOTWCommand;
 import rip.vapor.hcf.team.koth.KothListener;
 import rip.vapor.hcf.listeners.BorderListener;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
@@ -96,6 +97,7 @@ public class Vapor extends JavaPlugin {
                 new SystemTeamCommand(),
                 new TimerCommand(),
                 new PvPCommand(),
+                new SOTWCommand(),
                 new KothCommand(),
                 new EcoCommand()
         );

@@ -266,18 +266,18 @@ public class TeamCommand implements Controllable<TeamModule> {
                 return;
             }
 
-            final CombatTimer combatTimer = this.timerController.findTimer(CombatTimer.class);
-            final EnderpearlTimer enderpearlTimer = this.timerController.findTimer(EnderpearlTimer.class);
+            final Optional<CombatTimer> combatTimer = this.timerController.findTimer(CombatTimer.class);
+            final Optional<EnderpearlTimer> enderpearlTimer = this.timerController.findTimer(EnderpearlTimer.class);
 
-            if (enderpearlTimer.isOnCooldown(player)) {
+            if (enderpearlTimer.isPresent() && enderpearlTimer.get().isOnCooldown(player)) {
                 player.sendMessage(ChatColor.RED + "You are still under an enderpearl cooldown.");
                 return;
-            } else if (combatTimer.isOnCooldown(player)) {
+            } else if (combatTimer.isPresent() && combatTimer.get().isOnCooldown(player)) {
                 player.sendMessage(ChatColor.RED + "You are currently in combat");
                 return;
             }
 
-            this.timerController.findTimer(TeleportTimer.class).start(player);
+            this.timerController.findTimer(TeleportTimer.class).ifPresent(timer -> timer.start(player));
         }
     }
 

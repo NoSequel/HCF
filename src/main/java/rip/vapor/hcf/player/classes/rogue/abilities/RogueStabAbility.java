@@ -16,7 +16,7 @@ import rip.vapor.hcf.player.timers.impl.player.RogueStabTimer;
 public class RogueStabAbility extends Ability {
 
     private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
-    private final RogueStabTimer rogueStabTimer = timerController.findTimer(RogueStabTimer.class);
+    private final RogueStabTimer rogueStabTimer = timerController.findTimer(RogueStabTimer.class).get();
 
     @EventHandler
     public void onDamge(EntityDamageByEntityEvent event) {

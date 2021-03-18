@@ -26,7 +26,7 @@ public class GlobalTimerThread extends TimerThread<GlobalTimer> {
     @Override
     public void run() {
         if (this.shouldSubtract) {
-            if ((this.currentDuration = this.currentDuration - 50) <= 0) {
+            if ((this.currentDuration -= 50) <= 0) {
                 this.getTimer().handleEnd();
             }
         }

@@ -47,7 +47,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
 
             if (deathbanData.getExpiration() - System.currentTimeMillis() <= 0) {
                 playerData.removeData(deathbanData);
-                timerModule.findTimer(SpawnProtectionTimer.class).start(player);
+                timerModule.findTimer(SpawnProtectionTimer.class).ifPresent(timer -> timer.start(player));
 
                 return;
             }
@@ -59,7 +59,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
             final Optional<Team> team = this.teamModule.findTeam(player);
 
             if (!player.hasPlayedBefore()) {
-                timerModule.findTimer(SpawnProtectionTimer.class).start(player);
+                timerModule.findTimer(SpawnProtectionTimer.class).ifPresent(timer -> timer.start(player));;
             }
 
             if (!playerData.hasData(BalanceData.class)) {
@@ -68,7 +68,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
 
             if (playerData.hasData(SpawnProtectionData.class)) {
                 final SpawnProtectionData data = playerData.findData(SpawnProtectionData.class);
-                timerModule.findTimer(SpawnProtectionTimer.class).start(player, data.getDurationLeft());
+                timerModule.findTimer(SpawnProtectionTimer.class).ifPresent(timer -> timer.start(player, data.getDurationLeft()));
             }
 
             if (team.isPresent() && team.get().hasData(PlayerTeamData.class)) {

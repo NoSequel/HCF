@@ -21,7 +21,7 @@ public class SpawnProtectionTimer extends PlayerTimer {
     private final Map<Player, PlayerData> data = new HashMap<>();
 
     public SpawnProtectionTimer() {
-        super("SpawnProt", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);
+        super("SpawnProtection", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);
     }
 
     @EventHandler

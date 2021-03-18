@@ -19,22 +19,8 @@ public class TimerBoardProvider implements BoardProvider {
 
     @Override
     public List<String> getStrings(Player player) {
-        final List<String> strings = new ArrayList<>();
-
-        strings.addAll(timerController.getTimers().stream()
-                .filter(timer -> timer instanceof PlayerTimer)
-                .map(timer -> ((PlayerTimer) timer))
-                .filter(timer -> timer.isOnCooldown(player))
-                .map(timer -> timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(timer.getDuration(player), timer.isTrailing()))
-                .collect(Collectors.toList()));
-
-        strings.addAll(timerController.getTimers().stream()
-                .filter(timer -> timer instanceof GlobalTimer)
-                .map(timer -> ((GlobalTimer) timer))
-                .filter(timer -> timer.getThread().isActive())
-                .map(timer -> timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(timer.getThread().getCurrentDuration(), timer.isTrailing()))
-                .collect(Collectors.toList()));
-
-        return strings;
+        return timerController.getTimers().stream()
+                .filter(timer -> (timer instanceof PlayerTimer && ((PlayerTimer) timer).isOnCooldown(player)) || (timer instanceof GlobalTimer && ((GlobalTimer) timer).getThread().isActive()))
+                .map(timer -> timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(timer instanceof PlayerTimer ? ((PlayerTimer) timer).getDuration(player) : ((GlobalTimer) timer).getThread().getCurrentDuration(), timer.isTrailing())).collect(Collectors.toList());
     }
 }

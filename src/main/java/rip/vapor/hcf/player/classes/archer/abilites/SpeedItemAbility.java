@@ -17,27 +17,31 @@ import rip.vapor.hcf.player.classes.archer.ArcherClass;
 import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.player.timers.impl.player.ArcherSpeedTimer;
 
+import java.util.Optional;
+
 public class SpeedItemAbility extends Ability {
 
-    private final ArcherSpeedTimer timer = Vapor.getInstance().getHandler().find(TimerModule.class).findTimer(ArcherSpeedTimer.class);
+    private final Optional<ArcherSpeedTimer> timer = Vapor.getInstance().getHandler().find(TimerModule.class).findTimer(ArcherSpeedTimer.class);
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         final ItemStack itemStack = event.getItem();
         final Player player = event.getPlayer();
 
-        if (this.equippedArcher(player)) {
-            if (itemStack != null && itemStack.getType().equals(Material.SUGAR) && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
-                if (timer.isOnCooldown(player)) {
-                    player.sendMessage(ChatColor.RED + "You are still on a cooldown.");
-                    return;
+        if (timer.isPresent()) {
+            if (this.equippedArcher(player)) {
+                if (itemStack != null && itemStack.getType().equals(Material.SUGAR) && (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+                    if (timer.get().isOnCooldown(player)) {
+                        player.sendMessage(ChatColor.RED + "You are still on a cooldown.");
+                        return;
+                    }
+
+                    player.removePotionEffect(PotionEffectType.SPEED);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 20, 3));
+                    timer.get().start(player);
+
+                    this.runSpeedTask(player);
                 }
-
-                player.removePotionEffect(PotionEffectType.SPEED);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 8 * 20, 3));
-                timer.start(player);
-
-                this.runSpeedTask(player);
             }
         }
     }

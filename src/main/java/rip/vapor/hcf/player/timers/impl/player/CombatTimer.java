@@ -24,7 +24,7 @@ public class CombatTimer extends PlayerTimer {
         if (!event.isCancelled() && event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             final Player player = (Player) event.getEntity();
             final Player damager = (Player) event.getDamager();
-            final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class);
+            final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class).get();
 
             Arrays.asList(player, damager).forEach(target -> {
                 this.start(target);
