@@ -75,8 +75,10 @@ public class SpawnProtectionTimer extends PlayerTimer {
         final PlayerData data = this.findData(player);
         final SpawnProtectionData protectionData = data.findData(SpawnProtectionData.class);
 
-        if(this.isOnCooldown(player) && protectionData == null) {
+        if (this.isOnCooldown(player) && protectionData == null) {
             data.addData(new SpawnProtectionData(this.getDuration(player)));
+        } else if (!this.isOnCooldown(player) && protectionData != null) {
+            protectionData.setDurationLeft(0L);
         }
     }
 
