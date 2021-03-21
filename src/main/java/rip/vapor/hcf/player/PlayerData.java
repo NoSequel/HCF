@@ -30,10 +30,10 @@ public class PlayerData implements Loadable<Data> {
         this.uniqueId = uniqueId;
         this.data = new ArrayList<>(data);
 
-        if(this.data.isEmpty()) {
+        if (this.data.isEmpty()) {
             controller.load(this);
-        } else {
-            controller.getPlayerData().add(this);
         }
+
+        controller.getPlayerData().add(this);
     }
 }
