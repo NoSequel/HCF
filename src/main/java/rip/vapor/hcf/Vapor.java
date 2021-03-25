@@ -1,6 +1,8 @@
 package rip.vapor.hcf;
 
 import io.github.nosequel.menus.MenuHandler;
+import io.github.nosequel.tab.shared.TabHandler;
+import io.github.nosequel.tab.v1_7_r4.v1_7_R4TabAdapter;
 import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.operations.BlockOperationListener;
@@ -41,8 +43,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import rip.vapor.tablist.TablistManager;
-import rip.vapor.tablist.provider.TablistProvider;
+import rip.vapor.hcf.tablist.TablistProvider;
 
 import java.util.logging.Level;
 
@@ -121,7 +122,7 @@ public class Vapor extends JavaPlugin {
 
         // setup scoreboard
         new Assemble(this, new BoardProviderHandler()).setTicks(1L);
-        new TablistManager(this, new TablistProvider(), 750L);
+        new TabHandler(new v1_7_R4TabAdapter(), new TablistProvider(), this, 5L);
     }
 
     @Override

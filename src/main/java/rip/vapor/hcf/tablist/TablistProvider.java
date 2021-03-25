@@ -1,5 +1,7 @@
-package rip.vapor.tablist.provider;
+package rip.vapor.hcf.tablist;
 
+import io.github.nosequel.tab.shared.entry.TabElement;
+import io.github.nosequel.tab.shared.entry.TabElementHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -13,22 +15,26 @@ import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
 import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.util.StringUtils;
-import rip.vapor.tablist.entry.TablistElement;
-import rip.vapor.tablist.entry.TablistElementSupplier;
 
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TablistProvider implements TablistElementSupplier {
+public class TablistProvider implements TabElementHandler {
 
     private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
 
     @Override
-    public TablistElement getEntries(Player player) {
-        final TablistElement element = new TablistElement();
+    public TabElement getElement(Player player) {
+        final TabElement element = new TabElement();
         final Optional<Team> team = teamController.findTeam(player);
         final int increment = team.isPresent() ? 8 : 0;
+
+        element.header(ChatColor.AQUA + ChatColor.BOLD.toString() + "Vapor Network");
+        element.footer(
+                "\n" +
+                ChatColor.AQUA + "You are currently playing on " + ChatColor.WHITE + "vapor.rip" + ChatColor.AQUA + "!"
+        );
 
         element.add(0, increment, ChatColor.AQUA + "Player Info");
         element.add(0, 1 + increment, ChatColor.WHITE + "Kills: " + player.getStatistic(Statistic.PLAYER_KILLS));

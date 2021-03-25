@@ -105,6 +105,18 @@
             <artifactId>Katakuna</artifactId>
             <version>df2d672bde</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.NoSequel.TabAPI</groupId>
+            <artifactId>shared</artifactId>
+            <version>6a26afe9d8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.NoSequel.TabAPI</groupId>
+            <artifactId>v1_7_R4</artifactId>
+            <version>6a26afe9d8</version>
+        </dependency>
     </dependencies>
 
 </project>
