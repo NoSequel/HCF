@@ -2,6 +2,7 @@ package rip.vapor.hcf.tablist;
 
 import io.github.nosequel.tab.shared.entry.TabElement;
 import io.github.nosequel.tab.shared.entry.TabElementHandler;
+import io.github.nosequel.tab.shared.skin.SkinUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -16,6 +17,7 @@ import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.util.StringUtils;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,11 +32,8 @@ public class TablistProvider implements TabElementHandler {
         final Optional<Team> team = teamController.findTeam(player);
         final int increment = team.isPresent() ? 8 : 0;
 
-        element.header(ChatColor.AQUA + ChatColor.BOLD.toString() + "Vapor Network");
-        element.footer(
-                "\n" +
-                ChatColor.AQUA + "You are currently playing on " + ChatColor.WHITE + "vapor.rip" + ChatColor.AQUA + "!"
-        );
+        element.header(null);
+        element.footer(null);
 
         element.add(0, increment, ChatColor.AQUA + "Player Info");
         element.add(0, 1 + increment, ChatColor.WHITE + "Kills: " + player.getStatistic(Statistic.PLAYER_KILLS));
@@ -65,7 +64,11 @@ public class TablistProvider implements TabElementHandler {
 
             playerTeamData.getOnlineMembers().stream()
                     .sorted(Comparator.comparingInt(target -> -playerTeamData.getRole(target.getUniqueId()).priority))
-                    .forEach(target -> element.add(1, index.getAndIncrement(), ChatColor.GRAY + playerTeamData.getRole(target.getUniqueId()).astrix + ChatColor.DARK_GREEN + target.getName()));
+                    .forEach(target -> element.add(
+                            1, index.getAndIncrement(),
+                            ChatColor.GRAY + playerTeamData.getRole(target.getUniqueId()).astrix + ChatColor.DARK_GREEN + target.getName(),
+                            -1, SkinUtil.getSkinDataThrown(target.getUniqueId())
+                    ));
         }
 
         element.add(2, 0, ChatColor.AQUA + "End Portals");
