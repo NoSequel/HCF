@@ -50,7 +50,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
         if (!this.teams.isEmpty()) {
             this.teams.forEach(team -> team.setGeneralData(team.findData(GeneralData.class)));
         } else {
-            Vapor.getInstance().getLogger().log(Level.INFO, "Setting up default teams.");
+            Bukkit.getLogger().log(Level.INFO, "Setting up default teams.");
 
             final Claim spawnClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), 100, 100, 100), new Location(Bukkit.getWorlds().get(0), -100, -100, -100)), ClaimPriority.NORMAL);
             final Claim warzoneClaim = new Claim(new Cuboid(new Location(Bukkit.getWorlds().get(0), VaporConstants.WARZONE_RADIUS, VaporConstants.WARZONE_RADIUS, VaporConstants.WARZONE_RADIUS), new Location(Bukkit.getWorlds().get(0), -VaporConstants.WARZONE_RADIUS, -VaporConstants.WARZONE_RADIUS, -VaporConstants.WARZONE_RADIUS)), ClaimPriority.NORMAL);
@@ -66,12 +66,12 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
 
     @Override
     public void disable() {
-        teams.forEach(loadable -> Vapor.getInstance().getHandler().find(DatabaseModule.class).getDataHandler().save(loadable, "teams"));
+        teams.forEach(loadable -> Vapor.getPlugin(Vapor.class).getHandler().find(DatabaseModule.class).getDataHandler().save(loadable, "teams"));
     }
 
     @Override
     public void loadAll() {
-        Vapor.getInstance().getHandler().find(DatabaseModule.class).getDataHandler().loadAll(this, "teams", Team.class);
+        Vapor.getPlugin(Vapor.class).getHandler().find(DatabaseModule.class).getDataHandler().loadAll(this, "teams", Team.class);
     }
 
     /**
@@ -131,7 +131,7 @@ public class TeamModule implements Module, DataController<Team, TeamData> {
         final Optional<Claim> claim = this.teams.stream()
                 .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim() != null)
                 .map(team -> team.findData(ClaimTeamData.class).getClaim())
-                .sorted(Comparator.comparing(claim1 -> ((Claim) claim1).getPriority().priority).reversed())
+                .sorted(Comparator.comparing(target -> -target.getPriority().priority))
                 .filter($claim -> $claim.getCuboid().isLocationInCuboid(location))
                 .findFirst();
 

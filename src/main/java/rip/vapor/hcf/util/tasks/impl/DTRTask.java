@@ -1,6 +1,6 @@
 package rip.vapor.hcf.util.tasks.impl;
 
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.util.tasks.Task;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -8,34 +8,32 @@ import rip.vapor.hcf.team.data.impl.player.DTRData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class DTRTask extends Task {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TeamModule teamModule;
 
-    public DTRTask() {
+    public DTRTask(ModuleHandler handler) {
         super(0);
+        this.teamModule = handler.find(TeamModule.class);
     }
 
     @Override
     public void tick() {
-        final List<Team> teams = new ArrayList<>(teamController.getTeams());
+        final List<Team> teams = new ArrayList<>(teamModule.getTeams());
 
-        teams.stream()
-                .map(team -> team.findData(DTRData.class))
-                .filter(Objects::nonNull)
-                .filter(data -> data.getDtr() > data.getMaxDtr())
-                .forEach(data -> data.setDtr(data.getMaxDtr()));
+        for(Team team : teams) {
+            final DTRData dtrData = team.findData(DTRData.class);
 
-        teamController.getTeams().stream()
-                .filter(team -> team.hasData(DTRData.class))
-                .map(team -> team.findData(DTRData.class))
-                .filter(data -> data.getDtr() < data.getMaxDtr() && System.currentTimeMillis() - data.getLastRegen() >= 150000)
-                .forEach(data -> {
-                    data.setLastRegen(System.currentTimeMillis());
-                    data.setDtr(data.getDtr() + 0.1);
-                });
+            if(dtrData != null) {
+                if(dtrData.getDtr() > dtrData.getMaxDtr()) {
+                    dtrData.setDtr(dtrData.getMaxDtr());
+                } else if(dtrData.getDtr() < dtrData.getMaxDtr() && System.currentTimeMillis() - dtrData.getLastRegen() >= 150000) {
+                    dtrData.setLastRegen(System.currentTimeMillis());
+                    dtrData.setDtr(dtrData.getDtr() + 0.1);
+                }
+            }
+        }
     }
 
     @Override

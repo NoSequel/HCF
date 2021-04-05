@@ -53,7 +53,7 @@ public abstract class Class<T extends ClassData> implements Listener, BoardProvi
         this(className, requiredArmor, potionEffects);
 
         this.abilities = Arrays.asList(abilities);
-        this.getAbilities().forEach(ability -> Bukkit.getPluginManager().registerEvents(ability, Vapor.getInstance()));
+        this.getAbilities().forEach(ability -> Bukkit.getPluginManager().registerEvents(ability, Vapor.getPlugin(Vapor.class)));
     }
 
     /**

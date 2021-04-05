@@ -55,14 +55,14 @@ public class PlayerDataModule implements Module, DataController<PlayerData, Data
 
     @Override
     public void disable() {
-        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
+        final DatabaseModule controller = Vapor.getPlugin(Vapor.class).getHandler().find(DatabaseModule.class);
 
         playerData.forEach(loadable -> controller.getDataHandler().save(loadable, "profiles"));
     }
 
     @Override
     public void load(PlayerData loadable) {
-        final DatabaseModule controller = Vapor.getInstance().getHandler().find(DatabaseModule.class);
+        final DatabaseModule controller = Vapor.getPlugin(Vapor.class).getHandler().find(DatabaseModule.class);
 
         controller.getDataHandler().load(this, PlayerData.class, loadable.getUniqueId(), "profiles");
     }

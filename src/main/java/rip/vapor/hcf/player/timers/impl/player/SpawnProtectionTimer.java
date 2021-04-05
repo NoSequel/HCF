@@ -92,6 +92,6 @@ public class SpawnProtectionTimer extends PlayerTimer {
         return data.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(player))
                 .map(Map.Entry::getValue)
-                .findFirst().orElseGet(() -> Vapor.getInstance().getHandler().find(PlayerDataModule.class).findPlayerData(player.getUniqueId()));
+                .findFirst().orElse(null);
     }
 }

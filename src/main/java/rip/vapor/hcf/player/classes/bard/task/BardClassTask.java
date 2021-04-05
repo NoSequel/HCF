@@ -1,6 +1,6 @@
 package rip.vapor.hcf.player.classes.bard.task;
 
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.classes.ClassModule;
 import rip.vapor.hcf.player.classes.ability.TickableAbility;
 import rip.vapor.hcf.player.classes.bard.BardClass;
@@ -9,11 +9,11 @@ import rip.vapor.hcf.util.tasks.Task;
 
 public class BardClassTask extends Task {
 
-    private final ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
-    private final BardClass bardClass = classController.findClass(BardClass.class);
+    private final BardClass bardClass;
 
-    public BardClassTask() {
+    public BardClassTask(ModuleHandler handler) {
         super(20);
+        this.bardClass = handler.find(ClassModule.class).findClass(BardClass.class);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package rip.vapor.hcf.listeners.team;
 
-import rip.vapor.hcf.Vapor;
+import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.VaporConstants;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
@@ -23,16 +24,19 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class DeathListeners implements Listener {
 
-    private final PlayerDataModule controller = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final ModuleHandler handler;
+
+    private final PlayerDataModule playerDataModule = handler.find(PlayerDataModule.class);
+    private final TeamModule teamModule = handler.find(TeamModule.class);
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
-        final PlayerData playerData = controller.findPlayerData(player.getUniqueId());
-        final Optional<Team> team = teamController.findTeam(player);
+        final PlayerData playerData = playerDataModule.findPlayerData(player.getUniqueId());
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if (!VaporConstants.KITMAP_ENABLED) {
             final DeathbanData data = player.getKiller() == null

@@ -220,7 +220,7 @@ public class PlayerTeamData extends SavableTeamData {
      * @return the team
      */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().find(TeamModule.class).getTeams().stream()
+        return this.getModule().getTeams().stream()
                 .filter($team -> $team.getData().contains(this))
                 .findFirst().orElse(null);
     }

@@ -1,7 +1,9 @@
 package rip.vapor.hcf.listeners.team;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.EventPriority;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import org.bukkit.ChatColor;
@@ -12,9 +14,11 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class ChatListener implements Listener {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final ModuleHandler handler;
+    private final TeamModule teamModule = handler.find(TeamModule.class);
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncPlayerChatEvent event) {
@@ -22,7 +26,7 @@ public class ChatListener implements Listener {
             event.setCancelled(true);
 
             final Player player = event.getPlayer();
-            final Optional<Team> team = teamController.findTeam(player);
+            final Optional<Team> team = teamModule.findTeam(player);
 
             event.getRecipients().forEach(recipient -> recipient.sendMessage(this.getTeamString(team.orElse(null), recipient) + event.getFormat()));
         }

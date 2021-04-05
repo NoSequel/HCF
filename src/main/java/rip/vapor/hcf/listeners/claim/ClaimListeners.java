@@ -1,7 +1,7 @@
 package rip.vapor.hcf.listeners.claim;
 
 import org.bukkit.Material;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
@@ -19,9 +19,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class ClaimListeners implements Listener, Controllable<TeamModule> {
+public class ClaimListeners implements Listener {
 
-    private final TeamModule teamModule = this.getModule();
+    private final TeamModule teamModule;
+
+    /**
+     * Constructor to make a new claim listener instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public ClaimListeners(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {

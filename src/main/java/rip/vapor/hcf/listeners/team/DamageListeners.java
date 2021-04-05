@@ -1,6 +1,6 @@
 package rip.vapor.hcf.listeners.team;
 
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.enums.TeamType;
 import org.bukkit.ChatColor;
@@ -12,7 +12,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class DamageListeners implements Listener {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TeamModule teamModule;
+
+    /**
+     * Constructor to make a new damage listener object
+     *
+     * @param handler the handler to get the modules from
+     */
+    public DamageListeners(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -26,12 +35,12 @@ public class DamageListeners implements Listener {
                 damager = (Player) event.getDamager();
             }
 
-            if (teamController.findTeam(player.getLocation()).orElse(null).getGeneralData().getType().equals(TeamType.SAFEZONE_TEAM)) {
+            if (teamModule.findTeam(player.getLocation()).get().getGeneralData().getType().equals(TeamType.SAFEZONE_TEAM)) {
                 event.setCancelled(true);
             }
 
             if (damager != null) {
-                if (teamController.findTeam(player).isPresent() && teamController.findTeam(damager).isPresent() && teamController.findTeam(damager).get().equals(teamController.findTeam(player).get())) {
+                if (teamModule.findTeam(player).isPresent() && teamModule.findTeam(damager).isPresent() && teamModule.findTeam(damager).get().equals(teamModule.findTeam(player).get())) {
                     damager.sendMessage(ChatColor.YELLOW + "You cannot hurt " + ChatColor.DARK_GREEN + player.getName() + ChatColor.YELLOW + ".");
                     event.setCancelled(true);
                 }

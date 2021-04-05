@@ -1,8 +1,10 @@
 package rip.vapor.hcf.commands;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.BalanceData;
@@ -10,9 +12,11 @@ import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Parameter;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
 
+@RequiredArgsConstructor
 public class EcoCommand {
 
-    private final PlayerDataModule playerDataModule = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final ModuleHandler handler;
+    private final PlayerDataModule playerDataModule = handler.find(PlayerDataModule.class);
 
     @Command(label = "eco", aliases = {"balance", "bal"})
     public void eco(Player player, @Parameter(name = "target", value = "@SELF") Player target) {

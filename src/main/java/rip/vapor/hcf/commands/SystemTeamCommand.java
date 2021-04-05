@@ -1,7 +1,7 @@
 package rip.vapor.hcf.commands;
 
-import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.module.Controllable;
+import lombok.RequiredArgsConstructor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
@@ -22,10 +22,21 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class SystemTeamCommand implements Controllable<TeamModule> {
+@RequiredArgsConstructor
+public class SystemTeamCommand {
 
-    private final TeamModule controller = this.getModule();
-    private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
+    private final TeamModule controller;
+    private final PlayerDataModule playerDataController;
+
+    /**
+     * Constructor to make a new system team object
+     *
+     * @param handler the handler to get the modules from
+     */
+    public SystemTeamCommand(ModuleHandler handler) {
+        this.controller = handler.find(TeamModule.class);
+        this.playerDataController = handler.find(PlayerDataModule.class);
+    }
 
     @Command(label = "systemteam", aliases = {"systeam", "steam"})
     @Subcommand(label = "help", parentLabel = "systemteam")

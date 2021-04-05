@@ -1,6 +1,7 @@
 package rip.vapor.hcf.player.timers.impl.player;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
@@ -16,10 +17,11 @@ import java.util.Optional;
 
 public class TeleportTimer extends PlayerTimer {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TeamModule teamModule;
 
-    public TeleportTimer() {
+    public TeleportTimer(ModuleHandler handler) {
         super("Home", ChatColor.BLUE + "Home", true, 10000);
+        this.teamModule = handler.find(TeamModule.class);
     }
 
     @EventHandler
@@ -51,7 +53,7 @@ public class TeleportTimer extends PlayerTimer {
 
     @Override
     public void handleEnd(Player player) {
-        final Optional<Team> team = teamController.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final ClaimTeamData data = team.get().findData(ClaimTeamData.class);

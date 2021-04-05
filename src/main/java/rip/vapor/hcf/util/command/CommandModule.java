@@ -1,6 +1,7 @@
 package rip.vapor.hcf.util.command;
 
 import rip.vapor.hcf.module.Module;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.util.command.adapter.TypeAdapter;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
@@ -37,7 +38,7 @@ public class CommandModule implements Module {
      *
      * @param fallbackPrefix the fallback prefix
      */
-    public CommandModule(String fallbackPrefix) {
+    public CommandModule(String fallbackPrefix, ModuleHandler handler) {
         instance = this;
 
         this.fallbackPrefix = fallbackPrefix;
@@ -46,10 +47,10 @@ public class CommandModule implements Module {
                 new OfflinePlayerTypeAdapter(),
                 new LongTypeAdapter(),
                 new IntegerTypeAdapter(),
-                new TeamTypeAdapter(),
+                new TeamTypeAdapter(handler),
                 new PlayerTypeAdapter(),
-                new TimerTypeAdapter(),
-                new KothTypeAdapter()
+                new TimerTypeAdapter(handler),
+                new KothTypeAdapter(handler)
         ));
     }
 

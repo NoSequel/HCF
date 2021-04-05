@@ -43,7 +43,7 @@ public class Koth {
     public Koth(String kothName, long defaultDuration) {
         this.kothName = kothName;
         this.defaultDuration = defaultDuration;
-        this.kothTimer = new KothTimer(this.getKothName(), this);
+        this.kothTimer = new KothTimer(this.getKothName(), this, Vapor.getPlugin(Vapor.class).getHandler());
         this.kothTeam = new Team(UUID.randomUUID(), this.getKothName(), TeamType.KOTH_TEAM, this);
     }
 
@@ -57,9 +57,9 @@ public class Koth {
         this.defaultDuration = object.get("defaultDuration").getAsLong();
         this.capzone = new Claim(JsonUtils.getParser().parse(object.get("capzone").getAsString()).getAsJsonObject());
 
-        this.kothTimer = new KothTimer(this.getKothName(), this);
+        this.kothTimer = new KothTimer(this.getKothName(), this, Vapor.getPlugin(Vapor.class).getHandler());
 
-        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> Vapor.getInstance().getHandler().find(TeamModule.class).findTeam(this.getKothName()).ifPresent(team -> this.kothTeam = team), 2L);
+        Bukkit.getScheduler().runTaskLater(Vapor.getPlugin(Vapor.class), () -> Vapor.getPlugin(Vapor.class).getHandler().find(TeamModule.class).findTeam(this.getKothName()).ifPresent(team -> this.kothTeam = team), 2L);
     }
 
     /**

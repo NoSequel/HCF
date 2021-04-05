@@ -1,5 +1,6 @@
 package rip.vapor.hcf.listeners.logger;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -11,8 +12,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.CombatLoggerData;
@@ -21,20 +21,33 @@ import rip.vapor.hcf.player.timers.impl.player.CombatTimer;
 
 import java.util.Optional;
 
-public class CombatLoggerListener implements Listener, Controllable<CombatLoggerModule> {
+@RequiredArgsConstructor
+public class CombatLoggerListener implements Listener {
 
-    private final PlayerDataModule playerController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
-    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final CombatLoggerModule combatLoggerModule;
+    private final PlayerDataModule playerDataModule;
+    private final TimerModule timerModule;
+
+    /**
+     * Constructor to make a new combat logger listener instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public CombatLoggerListener(ModuleHandler handler) {
+        this.combatLoggerModule = handler.find(CombatLoggerModule.class);
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
         final Entity entity = event.getEntity();
-        final Optional<CombatLogger> logger = this.getModule().getLoggers().stream()
+        final Optional<CombatLogger> logger = this.combatLoggerModule.getLoggers().stream()
                 .filter(combatLogger -> combatLogger.getVillager().equals(entity))
                 .findFirst();
 
         if (logger.isPresent() && Bukkit.getPlayer(logger.get().getPlayerUuid()) == null) {
-            final PlayerData data = playerController.findPlayerData(logger.get().getPlayerUuid());
+            final PlayerData data = this.playerDataModule.findPlayerData(logger.get().getPlayerUuid());
             CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
             logger.get().dropItems();
@@ -51,7 +64,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         final Entity entity = event.getEntity();
-        final Optional<CombatLogger> logger = this.getModule().getLoggers().stream()
+        final Optional<CombatLogger> logger = this.combatLoggerModule.getLoggers().stream()
                 .filter(combatLogger -> combatLogger.getVillager().equals(entity))
                 .findFirst();
 
@@ -62,7 +75,7 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() != null && this.getModule().getLoggers().stream()
+        if (event.getRightClicked() != null && this.combatLoggerModule.getLoggers().stream()
                 .anyMatch(logger -> logger.getVillager().equals(event.getRightClicked()))) {
             event.setCancelled(true);
         }
@@ -71,8 +84,8 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData data = playerController.findPlayerData(player.getUniqueId());
-        final Optional<CombatTimer> combatTimer = timerController.findTimer(CombatTimer.class);
+        final PlayerData data = this.playerDataModule.findPlayerData(player.getUniqueId());
+        final Optional<CombatTimer> combatTimer = this.timerModule.findTimer(CombatTimer.class);
 
         if (data != null && combatTimer.isPresent() && combatTimer.get().isOnCooldown(player) && !player.isDead()) {
             new CombatLogger(player);
@@ -82,12 +95,12 @@ public class CombatLoggerListener implements Listener, Controllable<CombatLogger
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData data = playerController.findPlayerData(player.getUniqueId());
+        final PlayerData data = this.playerDataModule.findPlayerData(player.getUniqueId());
 
         if (data != null && data.hasData(CombatLoggerData.class)) {
             final CombatLoggerData combatLoggerData = data.findData(CombatLoggerData.class);
 
-            this.getModule().getLoggers().stream()
+            this.combatLoggerModule.getLoggers().stream()
                     .filter(logger -> logger.getPlayerUuid() != null && logger.getPlayerUuid().equals(player.getUniqueId()))
                     .forEach(CombatLogger::destruct);
 

@@ -1,9 +1,9 @@
 package rip.vapor.hcf.listeners;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.BalanceData;
@@ -25,17 +25,27 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Optional;
 
-public class PlayerListeners implements Listener, Controllable<PlayerDataModule> {
+public class PlayerListeners implements Listener {
 
-    private final PlayerDataModule module = this.getModule();
-    private final TeamModule teamModule = Vapor.getInstance().getHandler().find(TeamModule.class);
-    private final TimerModule timerModule = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final PlayerDataModule playerDataModule;
+    private final TeamModule teamModule;
+    private final TimerModule timerModule;
 
+    /**
+     * Constructor to make a new player listener object
+     *
+     * @param handler the handler to get the modules from
+     */
+    public PlayerListeners(ModuleHandler handler) {
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.teamModule = handler.find(TeamModule.class);
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData playerData = module.findOrElseMake(player.getUniqueId());
+        final PlayerData playerData = playerDataModule.findOrElseMake(player.getUniqueId());
 
         if (player.isDead()) {
             player.getInventory().clear();
@@ -59,7 +69,7 @@ public class PlayerListeners implements Listener, Controllable<PlayerDataModule>
             final Optional<Team> team = this.teamModule.findTeam(player);
 
             if (!player.hasPlayedBefore()) {
-                timerModule.findTimer(SpawnProtectionTimer.class).ifPresent(timer -> timer.start(player));;
+                timerModule.findTimer(SpawnProtectionTimer.class).ifPresent(timer -> timer.start(player));
             }
 
             if (!playerData.hasData(BalanceData.class)) {

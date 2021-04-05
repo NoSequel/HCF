@@ -1,6 +1,7 @@
 package rip.vapor.hcf.player.timers.commands;
 
-import rip.vapor.hcf.Vapor;
+import lombok.RequiredArgsConstructor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.util.command.annotation.Command;
@@ -10,9 +11,19 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+@RequiredArgsConstructor
 public class TimerCommand {
 
-    private final TimerModule controller = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final TimerModule timerModule;
+
+    /**
+     * Constructor to make a new timer module instance
+     *
+     * @param handler the handler to get the timer module from
+     */
+    public TimerCommand(ModuleHandler handler) {
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @Command(label = "timer", permission = "staff")
     @Subcommand(label = "help", parentLabel = "timer", permission = "staff")
@@ -53,7 +64,7 @@ public class TimerCommand {
 
     @Subcommand(label = "clear", permission = "staff", parentLabel = "timer")
     public void clear(Player player, Player target) {
-        controller.getTimers().stream()
+        this.timerModule.getTimers().stream()
                 .filter(timer -> timer instanceof PlayerTimer)
                 .map(timer -> ((PlayerTimer) timer))
                 .filter(timer -> timer.isOnCooldown(target))

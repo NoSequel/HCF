@@ -75,7 +75,7 @@ public class Claim {
      * @return the team
      */
     public Team getTeam() {
-        return Vapor.getInstance().getHandler().find(TeamModule.class).getTeams().stream()
+        return Vapor.getPlugin(Vapor.class).getHandler().find(TeamModule.class).getTeams().stream()
                 .filter(team -> team.hasData(ClaimTeamData.class) && team.findData(ClaimTeamData.class).getClaim().equals(this))
                 .findFirst().orElse(null);
     }

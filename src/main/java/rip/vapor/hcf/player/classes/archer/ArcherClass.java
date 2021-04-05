@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes.archer;
 
+import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.classes.Class;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.archer.abilites.ArcherTagAbility;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class ArcherClass extends Class<ArcherClassData> {
 
-    public ArcherClass() {
+    public ArcherClass(Vapor plugin) {
         super("Archer", new Material[]{
                 Material.LEATHER_HELMET,
                 Material.LEATHER_CHESTPLATE,
@@ -23,7 +24,7 @@ public class ArcherClass extends Class<ArcherClassData> {
         }, new PotionEffect[]{new PotionEffect(PotionEffectType.SPEED, 9999999, 2)
         }, new Ability[]{
                 new ArcherTagAbility(),
-                new SpeedItemAbility()
+                new SpeedItemAbility(plugin)
         });
     }
 

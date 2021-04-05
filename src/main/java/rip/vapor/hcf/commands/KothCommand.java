@@ -1,12 +1,12 @@
 package rip.vapor.hcf.commands;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.koth.Koth;
-import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
@@ -18,11 +18,23 @@ import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
 import rip.vapor.hcf.util.database.DatabaseModule;
 
-public class KothCommand implements Controllable<TeamModule> {
+@RequiredArgsConstructor
+public class KothCommand {
 
-    private final TeamModule teamModule = this.getModule();
-    private final PlayerDataModule playerDataModule = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
-    private final DatabaseModule databaseModule = Vapor.getInstance().getHandler().find(DatabaseModule.class);
+    private final TeamModule teamModule;
+    private final PlayerDataModule playerDataModule;
+    private final DatabaseModule databaseModule;
+
+    /**
+     * Constructor to make a new koth command object
+     *
+     * @param handler the handler to get the modules from
+     */
+    public KothCommand(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.databaseModule = handler.find(DatabaseModule.class);
+    }
 
     @Command(label = "koth", permission = "hcteams.koth")
     public void execute(Player player) {
@@ -75,7 +87,7 @@ public class KothCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "create", parentLabel = "koth", permission = "hcteams.koth.manage")
     public void create(Player player, String name) {
-        if (this.getModule().findTeam(name).isPresent()) {
+        if (this.teamModule.findTeam(name).isPresent()) {
             player.sendMessage(ChatColor.RED + "A team with that name already exists.");
             return;
         }

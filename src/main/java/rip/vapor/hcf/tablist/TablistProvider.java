@@ -3,12 +3,13 @@ package rip.vapor.hcf.tablist;
 import io.github.nosequel.tab.shared.entry.TabElement;
 import io.github.nosequel.tab.shared.entry.TabElementHandler;
 import io.github.nosequel.tab.shared.skin.SkinUtil;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.VaporConstants;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
@@ -17,14 +18,22 @@ import rip.vapor.hcf.team.data.impl.player.DTRData;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
 import rip.vapor.hcf.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TablistProvider implements TabElementHandler {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final TeamModule teamController;
+
+    /**
+     * Constructor to make a new tablist provider instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public TablistProvider(ModuleHandler handler) {
+        this.teamController = handler.find(TeamModule.class);
+    }
 
     @Override
     public TabElement getElement(Player player) {

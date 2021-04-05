@@ -1,11 +1,11 @@
 package rip.vapor.hcf.player.timers;
 
+import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.Module;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import rip.vapor.hcf.player.timers.impl.PlayerTimer;
-import rip.vapor.hcf.player.timers.impl.global.SOTWTimer;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.timers.impl.player.*;
 
 import java.util.ArrayList;
@@ -13,15 +13,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Getter
+@RequiredArgsConstructor
 public class TimerModule implements Module {
 
+    private final ModuleHandler handler;
     private final List<Timer> timers = new ArrayList<>();
 
     @Override
     public void enable() {
-        this.registerTimer(new EnderpearlTimer());
-        this.registerTimer(new CombatTimer());
-        this.registerTimer(new TeleportTimer());
+        this.registerTimer(new EnderpearlTimer(this.handler));
+        this.registerTimer(new CombatTimer(this.handler));
+        this.registerTimer(new TeleportTimer(this.handler));
         this.registerTimer(new SpawnProtectionTimer());
         this.registerTimer(new ArcherSpeedTimer());
         this.registerTimer(new RogueStabTimer());
@@ -46,7 +48,7 @@ public class TimerModule implements Module {
      * @param timer the timer
      */
     public void registerTimer(Timer timer) {
-        Bukkit.getPluginManager().registerEvents(timer, Vapor.getInstance());
+        Bukkit.getPluginManager().registerEvents(timer, Vapor.getPlugin(Vapor.class));
 
         this.timers.add(timer);
     }

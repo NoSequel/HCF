@@ -10,7 +10,7 @@ import java.util.Map;
 @UtilityClass
 public class VaporConstants {
 
-    private final FileConfiguration config = Vapor.getInstance().getConfig();
+    private final FileConfiguration config = Vapor.getPlugin(Vapor.class).getConfig();
 
     public boolean KITMAP_ENABLED = config.getBoolean("kitmap.kitmap_enabled");
 

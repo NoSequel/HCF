@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class Task extends BukkitRunnable {
 
     public Task(long duration) {
-        this.runTaskTimer(Vapor.getInstance(), 0, duration);
+        this.runTaskTimer(Vapor.getPlugin(Vapor.class), 0, duration);
     }
 
     @SneakyThrows

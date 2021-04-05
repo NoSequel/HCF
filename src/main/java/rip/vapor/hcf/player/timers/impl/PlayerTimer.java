@@ -29,7 +29,7 @@ public abstract class PlayerTimer implements Timer {
         this.trailing = trailing;
 
         this.thread = new PlayerTimerThread(this);
-        this.thread.runTaskTimer(Vapor.getInstance(), 2L, 0L);
+        this.thread.runTaskTimer(Vapor.getPlugin(Vapor.class), 2L, 0L);
     }
 
     /**

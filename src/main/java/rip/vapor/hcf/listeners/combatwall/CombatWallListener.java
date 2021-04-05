@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.listeners.combatwall.block.CombatWallBlockList;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.claim.ClaimTeamData;
@@ -19,9 +19,20 @@ import java.util.*;
 
 public class CombatWallListener implements Listener {
 
-    private final TeamModule teamModule = Vapor.getInstance().getHandler().find(TeamModule.class);
-    private final TimerModule timerModule = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final TeamModule teamModule;
+    private final TimerModule timerModule;
+
     private final Set<CombatWallBlockList> visualizedBlocks = new HashSet<>();
+
+    /**
+     * Constructor to make a new combat wall listener object
+     *
+     * @param handler the handler to get the modules from
+     */
+    public CombatWallListener(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {

@@ -1,10 +1,10 @@
 package rip.vapor.hcf.listeners.claim;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.VaporConstants;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.ClaimSelectionData;
@@ -26,15 +26,26 @@ import rip.vapor.hcf.util.Cuboid;
 
 import java.util.Optional;
 
-public class ClaimSelectionListener implements Listener, Controllable<PlayerDataModule> {
+@RequiredArgsConstructor
+public class ClaimSelectionListener implements Listener {
 
-    private final PlayerDataModule controller = this.getModule();
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final PlayerDataModule playerDataModule;
+    private final TeamModule teamModule;
+
+    /**
+     * Constructor to make a new claim selection listener instnace
+     *
+     * @param handler the handler to get the modules from
+     */
+    public ClaimSelectionListener(ModuleHandler handler) {
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        final PlayerData playerData = controller.findPlayerData(player.getUniqueId());
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
 
         if (playerData != null && playerData.hasData(ClaimSelectionData.class) && (player.getItemInHand() == null || player.getItemInHand().getType().equals(Material.AIR))) {
             final ClaimSelectionData data = playerData.findData(ClaimSelectionData.class);
@@ -70,8 +81,8 @@ public class ClaimSelectionListener implements Listener, Controllable<PlayerData
                             return;
                         }
 
-                        final Optional<Team> pos1 = this.teamController.findTeam(claimSelection.getLocation1());
-                        final Optional<Team> pos2 = this.teamController.findTeam(claimSelection.getLocation2());
+                        final Optional<Team> pos1 = this.teamModule.findTeam(claimSelection.getLocation1());
+                        final Optional<Team> pos2 = this.teamModule.findTeam(claimSelection.getLocation2());
 
                         if (pos1.isPresent() && pos2.isPresent() && !pos1.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && !pos2.get().getGeneralData().getType().equals(TeamType.WILDERNESS_TEAM) && claimSelection.getTeam().getGeneralData().getType().equals(TeamType.PLAYER_TEAM)) {
                             player.sendMessage(ChatColor.GRAY + "The current selection contains non-wilderness regions.");

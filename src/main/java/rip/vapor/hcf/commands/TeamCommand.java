@@ -1,8 +1,8 @@
 package rip.vapor.hcf.commands;
 
-import rip.vapor.hcf.Vapor;
+import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.VaporConstants;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.BalanceData;
@@ -34,16 +34,28 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TeamCommand implements Controllable<TeamModule> {
+@RequiredArgsConstructor
+public class TeamCommand {
+    
+    private final TeamModule teamModule;
+    private final PlayerDataModule playerDataModule;
+    private final TimerModule timerModule;
 
-    private final TeamModule controller = this.getModule();
-    private final PlayerDataModule playerDataController = Vapor.getInstance().getHandler().find(PlayerDataModule.class);
-    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
+    /**
+     * Constructor to make a new team command instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public TeamCommand(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @Command(label = "faction", aliases = {"f", "team", "t"})
     public void execute(Player player) {
-        if(controller.findTeam(player).isPresent()) {
-            new GeneralTeamMenu(player, controller.findTeam(player).get()).updateMenu();
+        if(teamModule.findTeam(player).isPresent()) {
+            new GeneralTeamMenu(player, teamModule.findTeam(player).get()).updateMenu();
         } else {
             this.help(player);
         }
@@ -76,7 +88,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "create", parentLabel = "faction")
     public void create(Player player, @Parameter(name = "teamName") String teamName) {
-        if (controller.findTeam(teamName).isPresent()) {
+        if (teamModule.findTeam(teamName).isPresent()) {
             player.sendMessage(ChatColor.RED + "That team already exists!");
             return;
         }
@@ -90,7 +102,7 @@ public class TeamCommand implements Controllable<TeamModule> {
         } else if (!StringUtils.isAlphanumeric(teamName)) {
             player.sendMessage(ChatColor.RED + "Your team name has to be alphanumeric.");
             return;
-        } else if (controller.findTeam(player).isPresent()) {
+        } else if (teamModule.findTeam(player).isPresent()) {
             player.sendMessage(ChatColor.RED + "You are already in a team!");
             return;
         }
@@ -108,7 +120,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = controller.findTeam(player);
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -133,7 +145,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = controller.findTeam(player);
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if(team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -147,7 +159,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             } else if (!StringUtils.isAlphanumeric(name)) {
                 player.sendMessage(ChatColor.RED + "Your team name has to be alphanumeric.");
                 return;
-            } else if (controller.findTeam(name).isPresent()) {
+            } else if (teamModule.findTeam(name).isPresent()) {
                 player.sendMessage(ChatColor.RED + "That name is already taken.");
                 return;
             }
@@ -230,7 +242,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = controller.findTeam(player);
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
@@ -256,7 +268,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "home", parentLabel = "faction")
     public void home(Player player) {
-        final Optional<Team> team = controller.findTeam(player);
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final ClaimTeamData data = team.get().findData(ClaimTeamData.class);
@@ -266,8 +278,8 @@ public class TeamCommand implements Controllable<TeamModule> {
                 return;
             }
 
-            final Optional<CombatTimer> combatTimer = this.timerController.findTimer(CombatTimer.class);
-            final Optional<EnderpearlTimer> enderpearlTimer = this.timerController.findTimer(EnderpearlTimer.class);
+            final Optional<CombatTimer> combatTimer = this.timerModule.findTimer(CombatTimer.class);
+            final Optional<EnderpearlTimer> enderpearlTimer = this.timerModule.findTimer(EnderpearlTimer.class);
 
             if (enderpearlTimer.isPresent() && enderpearlTimer.get().isOnCooldown(player)) {
                 player.sendMessage(ChatColor.RED + "You are still under an enderpearl cooldown.");
@@ -277,7 +289,7 @@ public class TeamCommand implements Controllable<TeamModule> {
                 return;
             }
 
-            this.timerController.findTimer(TeleportTimer.class).ifPresent(timer -> timer.start(player));
+            this.timerModule.findTimer(TeleportTimer.class).ifPresent(timer -> timer.start(player));
         }
     }
 
@@ -287,8 +299,8 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
-        final Optional<Team> team = this.controller.findTeam(player);
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             if (playerData.hasData(ClaimSelectionData.class)) {
@@ -309,7 +321,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if(team.isPresent()) {
             final PlayerTeamData playerTeamData = team.get().findData(PlayerTeamData.class);
@@ -368,7 +380,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -398,7 +410,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -429,7 +441,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if(team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -457,7 +469,7 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -484,7 +496,7 @@ public class TeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label = "leave", parentLabel = "faction")
     public void leave(Player player) {
-        final Optional<Team> team = this.controller.findTeam(player);
+        final Optional<Team> team = this.teamModule.findTeam(player);
 
         if (team.isPresent()) {
             final PlayerTeamData data = team.get().findData(PlayerTeamData.class);
@@ -507,8 +519,8 @@ public class TeamCommand implements Controllable<TeamModule> {
             return;
         }
 
-        final Optional<Team> team = this.controller.findTeam(player);
-        final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
+        final Optional<Team> team = this.teamModule.findTeam(player);
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
 
         if (playerData.hasData(BalanceData.class) && team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
             final BalanceData balanceData = playerData.findData(BalanceData.class);
@@ -524,8 +536,8 @@ public class TeamCommand implements Controllable<TeamModule> {
 
     @Subcommand(label="withdraw", aliases = {"w", "wit"}, parentLabel = "faction")
     public void withdraw(Player player, @Parameter(name = "amount", value = "999999") Integer amount) {
-        final Optional<Team> team = this.controller.findTeam(player);
-        final PlayerData playerData = this.playerDataController.findPlayerData(player.getUniqueId());
+        final Optional<Team> team = this.teamModule.findTeam(player);
+        final PlayerData playerData = this.playerDataModule.findPlayerData(player.getUniqueId());
 
         if (playerData.hasData(BalanceData.class) && team.isPresent() && team.get().hasData(PlayerTeamData.class)) {
             final BalanceData balanceData = playerData.findData(BalanceData.class);
@@ -547,7 +559,7 @@ public class TeamCommand implements Controllable<TeamModule> {
      * @return whether it should proceed
      */
     private boolean shouldProceed(Player player, PlayerRole requiredRole) {
-        final Optional<Team> team = controller.findTeam(player);
+        final Optional<Team> team = teamModule.findTeam(player);
 
         if (!team.isPresent()) {
             player.sendMessage(ChatColor.RED + "You are not in a team!");

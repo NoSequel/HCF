@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes;
 
+import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.classes.archer.ArcherClass;
 import rip.vapor.hcf.player.classes.bard.BardClass;
 import rip.vapor.hcf.module.Module;
@@ -15,11 +16,11 @@ public class ClassModule implements Module {
 
     private final List<Class<?>> classes = new ArrayList<>();
 
-    public ClassModule() {
+    public ClassModule(Vapor vapor) {
         classes.addAll(Arrays.asList(
                 new BardClass(),
-                new ArcherClass(),
-                new RogueClass()
+                new ArcherClass(vapor),
+                new RogueClass(vapor.getHandler())
         ));
     }
 

@@ -1,6 +1,6 @@
 package rip.vapor.hcf.player.timers.impl.player;
 
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.timers.impl.PlayerTimer;
 import rip.vapor.hcf.player.timers.TimerModule;
 import org.bukkit.ChatColor;
@@ -13,10 +13,11 @@ import java.util.Arrays;
 
 public class CombatTimer extends PlayerTimer {
 
-    private final TimerModule timerController = Vapor.getInstance().getHandler().find(TimerModule.class);
+    private final TimerModule timerModule;
 
-    public CombatTimer() {
+    public CombatTimer(ModuleHandler handler) {
         super("Combat", ChatColor.RED + ChatColor.BOLD.toString() + "Spawn Tag", false, 30000);
+        this.timerModule = handler.find(TimerModule.class);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -24,7 +25,7 @@ public class CombatTimer extends PlayerTimer {
         if (!event.isCancelled() && event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
             final Player player = (Player) event.getEntity();
             final Player damager = (Player) event.getDamager();
-            final TeleportTimer teleportTimer = timerController.findTimer(TeleportTimer.class).get();
+            final TeleportTimer teleportTimer = timerModule.findTimer(TeleportTimer.class).get();
 
             Arrays.asList(player, damager).forEach(target -> {
                 this.start(target);

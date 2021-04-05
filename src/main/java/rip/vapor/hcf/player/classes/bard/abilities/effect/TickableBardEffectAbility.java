@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes.bard.abilities.effect;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,7 +22,8 @@ import java.util.Optional;
 
 public abstract class TickableBardEffectAbility extends TickableAbility {
 
-    private final TeamModule teamController = Vapor.getInstance().getHandler().find(TeamModule.class);
+    private final Vapor plugin = Vapor.getPlugin(Vapor.class);
+    private final TeamModule teamController = plugin.getHandler().find(TeamModule.class);
     private ClassModule classController;
 
     /**
@@ -73,7 +75,7 @@ public abstract class TickableBardEffectAbility extends TickableAbility {
     public void onInteract(PlayerInteractEvent event) {
         if (this.getClickEffect() != null) {
             if (this.classController == null) {
-                this.classController = Vapor.getInstance().getHandler().find(ClassModule.class);
+                this.classController = plugin.getHandler().find(ClassModule.class);
             }
 
             final Player player = event.getPlayer();

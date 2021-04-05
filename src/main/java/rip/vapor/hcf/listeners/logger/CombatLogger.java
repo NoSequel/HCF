@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.module.Controllable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -19,7 +18,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 @Getter
-public class CombatLogger implements Controllable<CombatLoggerModule> {
+public class CombatLogger {
 
     private final UUID playerUuid;
     private final ItemStack[] drops;
@@ -44,7 +43,7 @@ public class CombatLogger implements Controllable<CombatLoggerModule> {
         this.villager = (Villager) location.getWorld().spawnEntity(location, EntityType.VILLAGER);
         this.setupVillager(playerName);
 
-        this.getModule().getLoggers().add(this);
+        Vapor.getPlugin(Vapor.class).getHandler().find(CombatLoggerModule.class).getLoggers().add(this);
     }
 
     /**
@@ -68,7 +67,7 @@ public class CombatLogger implements Controllable<CombatLoggerModule> {
         this.villager.setCustomName(ChatColor.YELLOW + name);
         this.villager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6000000, 9999));
 
-        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), this::destruct, 20 * 15);
+        Bukkit.getScheduler().runTaskLater(Vapor.getPlugin(Vapor.class), this::destruct, 20 * 15);
     }
 
     /**

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import rip.vapor.hcf.module.Controllable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.claim.Claim;
@@ -13,9 +13,18 @@ import rip.vapor.hcf.team.data.impl.KothTeamData;
 
 import java.util.Optional;
 
-public class KothListener implements Listener, Controllable<TeamModule> {
+public class KothListener implements Listener {
 
-    private final TeamModule teamModule = this.getModule();
+    private final TeamModule teamModule;
+
+    /**
+     * Constructor to make a new koth listener instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public KothListener(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {

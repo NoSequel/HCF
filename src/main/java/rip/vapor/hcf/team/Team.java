@@ -1,9 +1,9 @@
 package rip.vapor.hcf.team;
 
+import org.bukkit.Bukkit;
 import rip.vapor.hcf.Vapor;
-import rip.vapor.hcf.data.Data;
-import rip.vapor.hcf.module.Controllable;
 import rip.vapor.hcf.data.Loadable;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.team.koth.Koth;
 import rip.vapor.hcf.team.claim.Claim;
 import rip.vapor.hcf.team.data.TeamData;
@@ -28,10 +28,11 @@ import java.util.logging.Level;
 
 @Getter
 @Setter
-public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
+public class Team implements Loadable<TeamData> {
 
-    private final TeamModule teamModule = this.getModule();
-    private final DatabaseModule databaseModule = Vapor.getInstance().getHandler().find(DatabaseModule.class);
+    private final ModuleHandler handler = Vapor.getPlugin(Vapor.class).getHandler();
+    private final TeamModule teamModule = this.handler.find(TeamModule.class);
+    private final DatabaseModule databaseModule = this.handler.find(DatabaseModule.class);
 
     private GeneralData generalData;
     private UUID uniqueId;
@@ -75,7 +76,7 @@ public class Team implements Controllable<TeamModule>, Loadable<TeamData> {
         this.generalData = new GeneralData(name, type, ChatColor.WHITE);
         this.setupData();
 
-        Vapor.getInstance().getLogger().log(Level.INFO, "Creating new team" + (this.hasData(GeneralData.class) ? " with name " + this.findData(GeneralData.class).getName() : ""));
+        Bukkit.getLogger().log(Level.INFO, "Creating new team" + (this.hasData(GeneralData.class) ? " with name " + this.findData(GeneralData.class).getName() : ""));
     }
 
     /**

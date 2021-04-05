@@ -9,6 +9,8 @@ import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.operations.BlockOperationListener;
 import rip.vapor.hcf.listeners.operations.BlockOperationModifierModule;
 import rip.vapor.hcf.player.timers.commands.SOTWCommand;
+import rip.vapor.hcf.scoreboard.provider.impl.ClassBoardProvider;
+import rip.vapor.hcf.scoreboard.provider.impl.TimerBoardProvider;
 import rip.vapor.hcf.team.koth.KothListener;
 import rip.vapor.hcf.listeners.BorderListener;
 import rip.vapor.hcf.listeners.EnchantmentLimiterListener;
@@ -45,21 +47,16 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import rip.vapor.hcf.tablist.TablistProvider;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 @Getter
 public class Vapor extends JavaPlugin {
 
-    @Getter
-    private static Vapor instance;
-
     private final ModuleHandler handler = new ModuleHandler();
 
     @Override
     public void onEnable() {
-        // register the instance
-        instance = this;
-
         // save default config
         this.saveDefaultConfig();
         this.debugConfig();
@@ -83,46 +80,50 @@ public class Vapor extends JavaPlugin {
 
         // register controllers
         this.handler.register(databaseModule);
-        this.handler.register(new TimerModule());
+        this.handler.register(new TimerModule(this.handler));
         this.handler.register(new TeamModule());
         this.handler.register(new PlayerDataModule());
-        this.handler.register(new ClassModule());
+        this.handler.register(new ClassModule(this));
         this.handler.register(new BlockOperationModifierModule());
-        this.handler.register(new TaskModule());
+        this.handler.register(new TaskModule(this.handler));
         this.handler.register(new CombatLoggerModule(this));
 
         // register commands
-        final CommandModule commandController = handler.register(new CommandModule("vapor"));
+        final CommandModule commandController = handler.register(new CommandModule("hcf", this.handler));
         commandController.registerCommand(
-                new TeamCommand(),
-                new SystemTeamCommand(),
-                new TimerCommand(),
-                new PvPCommand(),
-                new SOTWCommand(),
-                new KothCommand(),
-                new EcoCommand()
+                new TeamCommand(this.handler),
+                new SystemTeamCommand(this.handler),
+                new TimerCommand(this.handler),
+                new PvPCommand(this.handler),
+                new SOTWCommand(this.handler),
+                new KothCommand(this.handler),
+                new EcoCommand(this.handler)
         );
 
         // register listeners
         final PluginManager pluginManager = Bukkit.getPluginManager();
 
-        pluginManager.registerEvents(new ClaimListeners(), this);
-        pluginManager.registerEvents(new ClaimSelectionListener(), this);
-        pluginManager.registerEvents(new PlayerListeners(), this);
-        pluginManager.registerEvents(new DamageListeners(), this);
-        pluginManager.registerEvents(new DeathListeners(), this);
-        pluginManager.registerEvents(new ChatListener(), this);
-        pluginManager.registerEvents(new EquipListener(), this);
-        pluginManager.registerEvents(new EnvironmentListener(), this);
-        pluginManager.registerEvents(new CombatWallListener(), this);
+        pluginManager.registerEvents(new ClaimListeners(this.handler), this);
+        pluginManager.registerEvents(new ClaimSelectionListener(this.handler), this);
+        pluginManager.registerEvents(new PlayerListeners(this.handler), this);
+        pluginManager.registerEvents(new DamageListeners(this.handler), this);
+        pluginManager.registerEvents(new DeathListeners(this.handler), this);
+        pluginManager.registerEvents(new ChatListener(this.handler), this);
+        pluginManager.registerEvents(new EquipListener(this), this);
+        pluginManager.registerEvents(new EnvironmentListener(this.handler), this);
+        pluginManager.registerEvents(new CombatWallListener(this.handler), this);
         pluginManager.registerEvents(new EnchantmentLimiterListener(), this);
-        pluginManager.registerEvents(new KothListener(), this);
+        pluginManager.registerEvents(new KothListener(this.handler), this);
         pluginManager.registerEvents(new BorderListener(), this);
-        pluginManager.registerEvents(new BlockOperationListener(), this);
+        pluginManager.registerEvents(new BlockOperationListener(this.handler), this);
 
         // setup scoreboard
-        new ScoreboardHandler(this, new BoardProviderHandler(), 1L);
-        new TabHandler(new v1_7_R4TabAdapter(), new TablistProvider(), this, 5L);
+        new ScoreboardHandler(this, new BoardProviderHandler(Arrays.asList(
+                new TimerBoardProvider(this.handler),
+                new ClassBoardProvider(this.handler)
+        )), 2L);
+
+        new TabHandler(new v1_7_R4TabAdapter(), new TablistProvider(this.handler), this, 5L);
     }
 
     @Override

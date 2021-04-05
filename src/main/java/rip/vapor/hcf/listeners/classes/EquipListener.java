@@ -1,5 +1,6 @@
 package rip.vapor.hcf.listeners.classes;
 
+import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.classes.ClassModule;
 import org.bukkit.Bukkit;
@@ -16,9 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class EquipListener implements Listener {
 
-    private final ClassModule classController = Vapor.getInstance().getHandler().find(ClassModule.class);
+    private final Vapor plugin;
+    private final ClassModule classController = plugin.getHandler().find(ClassModule.class);
     private final Material[] armor = new Material[]{
             // BOOTS
             Material.IRON_BOOTS,
@@ -78,7 +81,7 @@ public class EquipListener implements Listener {
      * @param player the player
      */
     private void attemptEquip(Player player) {
-        Bukkit.getScheduler().runTaskLater(Vapor.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             this.classController.getClasses().stream()
                     .filter(clazz -> clazz.getEquipped().contains(player))
                     .filter(clazz -> Arrays.stream(clazz.getRequiredArmor()).anyMatch(type -> !Arrays.stream(player.getInventory().getArmorContents()).map(ItemStack::getType).collect(Collectors.toList()).contains(type)))
