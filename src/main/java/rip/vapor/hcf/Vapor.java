@@ -39,7 +39,6 @@ import rip.vapor.hcf.util.database.DatabaseModule;
 import rip.vapor.hcf.util.database.handler.data.MongoDataHandler;
 import rip.vapor.hcf.util.database.options.impl.MongoDatabaseOption;
 import rip.vapor.hcf.util.database.type.mongo.MongoDataType;
-import io.github.thatkawaiisam.assemble.Assemble;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;

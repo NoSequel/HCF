@@ -5,7 +5,6 @@ import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import rip.vapor.hcf.scoreboard.provider.impl.ClassBoardProvider;
 import rip.vapor.hcf.scoreboard.provider.impl.TimerBoardProvider;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
-import io.github.thatkawaiisam.assemble.AssembleAdapter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

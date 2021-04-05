@@ -95,12 +95,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.ThatKawaiiSam</groupId>
-            <artifactId>Assemble</artifactId>
-            <version>master-105d9baddc-1</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.NoSequel</groupId>
             <artifactId>Katakuna</artifactId>
             <version>df2d672bde</version>
