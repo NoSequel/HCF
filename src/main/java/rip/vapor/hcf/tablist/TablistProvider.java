@@ -32,8 +32,8 @@ public class TablistProvider implements TabElementHandler {
         final Optional<Team> team = teamController.findTeam(player);
         final int increment = team.isPresent() ? 8 : 0;
 
-        element.header(null);
-        element.footer(null);
+        element.setHeader(null);
+        element.setFooter(null);
 
         element.add(0, increment, ChatColor.AQUA + "Player Info");
         element.add(0, 1 + increment, ChatColor.WHITE + "Kills: " + player.getStatistic(Statistic.PLAYER_KILLS));

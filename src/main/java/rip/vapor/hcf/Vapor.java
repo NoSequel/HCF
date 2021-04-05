@@ -1,6 +1,7 @@
 package rip.vapor.hcf;
 
 import io.github.nosequel.menus.MenuHandler;
+import io.github.nosequel.scoreboard.ScoreboardHandler;
 import io.github.nosequel.tab.shared.TabHandler;
 import io.github.nosequel.tab.v1_7_r4.v1_7_R4TabAdapter;
 import rip.vapor.hcf.commands.EcoCommand;
@@ -121,7 +122,7 @@ public class Vapor extends JavaPlugin {
         pluginManager.registerEvents(new BlockOperationListener(), this);
 
         // setup scoreboard
-        new Assemble(this, new BoardProviderHandler()).setTicks(1L);
+        new ScoreboardHandler(this, new BoardProviderHandler(), 1L);
         new TabHandler(new v1_7_R4TabAdapter(), new TablistProvider(), this, 5L);
     }
 

@@ -1,6 +1,7 @@
 package rip.vapor.hcf.scoreboard.provider.impl;
 
 import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.player.timers.Timer;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
 import rip.vapor.hcf.player.timers.TimerModule;
 import rip.vapor.hcf.player.timers.impl.GlobalTimer;
@@ -19,8 +20,18 @@ public class TimerBoardProvider implements BoardProvider {
 
     @Override
     public List<String> getStrings(Player player) {
-        return timerController.getTimers().stream()
-                .filter(timer -> (timer instanceof PlayerTimer && ((PlayerTimer) timer).isOnCooldown(player)) || (timer instanceof GlobalTimer && ((GlobalTimer) timer).getThread().isActive()))
-                .map(timer -> timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(timer instanceof PlayerTimer ? ((PlayerTimer) timer).getDuration(player) : ((GlobalTimer) timer).getThread().getCurrentDuration(), timer.isTrailing())).collect(Collectors.toList());
+        final List<String> strings = new ArrayList<>();
+
+        for (Timer timer : timerController.getTimers()) {
+            if (timer instanceof PlayerTimer && ((PlayerTimer) timer).isOnCooldown(player)) {
+                strings.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((PlayerTimer) timer).getDuration(player), timer.isTrailing()));
+            } else if (timer instanceof GlobalTimer && timer.getThread().isActive()) {
+                if(((GlobalTimer) timer).getThread().getCurrentDuration() > 0) {
+                    strings.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((GlobalTimer) timer).getThread().getCurrentDuration(), timer.isTrailing()));
+                }
+            }
+        }
+
+        return strings;
     }
 }

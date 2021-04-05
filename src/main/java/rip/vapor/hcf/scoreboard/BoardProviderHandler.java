@@ -1,5 +1,7 @@
 package rip.vapor.hcf.scoreboard;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
+import io.github.nosequel.scoreboard.element.ScoreboardElementHandler;
 import rip.vapor.hcf.scoreboard.provider.impl.ClassBoardProvider;
 import rip.vapor.hcf.scoreboard.provider.impl.TimerBoardProvider;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
@@ -9,9 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class BoardProviderHandler implements AssembleAdapter {
+public class BoardProviderHandler implements ScoreboardElementHandler {
 
     private final List<BoardProvider> providers = new ArrayList<>(Arrays.asList(
             new TimerBoardProvider(),
@@ -19,23 +23,24 @@ public class BoardProviderHandler implements AssembleAdapter {
     ));
 
     @Override
-    public String getTitle(Player player) {
-        return ChatColor.AQUA + "Vapor" + ChatColor.GRAY + ChatColor.BOLD + " ｜ " + ChatColor.WHITE + "Squads";
-    }
+    public ScoreboardElement getElement(Player player) {
+        final ScoreboardElement element = new ScoreboardElement();
+        final List<String> lines = providers.stream().map(provider -> provider.getStrings(player)).flatMap(Collection::stream).collect(Collectors.toList());
 
-    @Override
-    public List<String> getLines(Player player) {
-        final List<String> strings = new ArrayList<>();
+        element.setTitle(ChatColor.AQUA + "Vapor" + ChatColor.GRAY + ChatColor.BOLD + " ｜ " + ChatColor.WHITE + "Squads");
+        element.add(" ");
+        element.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------");
 
-        providers.forEach(provider -> strings.addAll(provider.getStrings(player)));
+        if (!lines.isEmpty()) {
+            lines.forEach(element::add);
 
-        if (!strings.isEmpty()) {
-            strings.add(0, "&7&m-------------------");
-            strings.add("");
-            strings.add(ChatColor.AQUA + ChatColor.ITALIC.toString() + "vapor.rip");
-            strings.add("&7&m-------------------");
+            element.add("");
+            element.add(ChatColor.AQUA + ChatColor.ITALIC.toString() + "vapor.rip");
+            element.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------");
+        } else {
+            element.getLines().clear();
         }
 
-        return strings;
+        return element;
     }
 }

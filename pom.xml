@@ -107,15 +107,21 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.NoSequel</groupId>
+            <artifactId>ScoreboardAPI</artifactId>
+            <version>d86c2c6d87</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.NoSequel.TabAPI</groupId>
             <artifactId>shared</artifactId>
-            <version>e96239ee91</version>
+            <version>454f742a2b</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.NoSequel.TabAPI</groupId>
             <artifactId>v1_7_R4</artifactId>
-            <version>e96239ee91</version>
+            <version>454f742a2b</version>
         </dependency>
     </dependencies>
 
