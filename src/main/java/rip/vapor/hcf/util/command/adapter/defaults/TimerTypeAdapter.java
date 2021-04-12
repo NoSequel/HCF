@@ -10,8 +10,16 @@ import org.bukkit.command.CommandSender;
 @RequiredArgsConstructor
 public class TimerTypeAdapter implements TypeAdapter<PlayerTimer> {
 
-    private final ModuleHandler handler;
-    private final TimerModule timerModule = handler.find(TimerModule.class);
+    private final TimerModule timerModule;
+
+    /**
+     * Constructor to make a new timer type adapter instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public TimerTypeAdapter(ModuleHandler handler) {
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @Override
     public PlayerTimer convert(CommandSender sender, String source) throws Exception {

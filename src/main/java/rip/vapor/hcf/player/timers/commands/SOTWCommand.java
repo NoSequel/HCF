@@ -9,11 +9,18 @@ import rip.vapor.hcf.player.timers.impl.global.SOTWTimer;
 import rip.vapor.hcf.util.command.annotation.Command;
 import rip.vapor.hcf.util.command.annotation.Subcommand;
 
-@RequiredArgsConstructor
 public class SOTWCommand {
 
-    private final ModuleHandler handler;
-    private final TimerModule timerModule = this.handler.find(TimerModule.class);
+    private final TimerModule timerModule;
+
+    /**
+     * Constructor to make a new sotw command instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public SOTWCommand(ModuleHandler handler) {
+        this.timerModule = handler.find(TimerModule.class);
+    }
 
     @Command(label = "sotw")
     public void sotw(CommandSender sender) {

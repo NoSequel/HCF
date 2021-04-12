@@ -1,5 +1,6 @@
 package rip.vapor.hcf.scoreboard.provider.impl;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.module.ModuleHandler;
@@ -16,18 +17,15 @@ public class ClassBoardProvider implements BoardProvider {
     private final ClassModule classModule;
 
     /**
-     * Constructor to make a new class board provider object
+     * Get the strings of the part
      *
-     * @param handler the handler to get the modules from
+     * @param element the element to add the strings to
+     * @param player  the player
      */
-    public ClassBoardProvider(ModuleHandler handler) {
-        this.classModule = handler.find(ClassModule.class);
-    }
-
     @Override
-    public List<String> getStrings(Player player) {
-        return classModule.getClasses().stream()
+    public void getStrings(ScoreboardElement element, Player player) {
+        classModule.getClasses().stream()
                 .filter(clazz -> clazz.getEquipped().contains(player))
-                .map(clazz -> clazz.getStrings(player)).findFirst().orElseGet(ArrayList::new);
+                .forEach(clazz -> clazz.getStrings(element, player));
     }
 }

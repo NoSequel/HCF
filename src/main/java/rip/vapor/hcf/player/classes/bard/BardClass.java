@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes.bard;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import rip.vapor.hcf.player.classes.Class;
 import rip.vapor.hcf.player.classes.ability.Ability;
 import rip.vapor.hcf.player.classes.bard.abilities.BowDamageReduceAbility;
@@ -9,9 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.Collections;
-import java.util.List;
 
 public class BardClass extends Class<BardClassData> {
 
@@ -56,16 +54,20 @@ public class BardClass extends Class<BardClassData> {
         this.getClassData().remove(player);
     }
 
+    /**
+     * Get the strings of the part
+     *
+     * @param element the element to add the strings to
+     * @param player  the player
+     */
     @Override
-    public List<String> getStrings(Player player) {
+    public void getStrings(ScoreboardElement element, Player player) {
         final long requiredEnergy = this.getAbilities().stream()
                 .filter(ability -> ability instanceof TickableBardEffectAbility)
                 .map(TickableBardEffectAbility.class::cast)
                 .filter(ability -> player.getItemInHand() != null && ability.getItemType().equals(player.getItemInHand().getType()))
                 .map(TickableBardEffectAbility::getEnergy).findFirst().orElse(0L);
 
-        return Collections.singletonList(
-                ChatColor.AQUA + ChatColor.BOLD.toString() + "Bard Energy" + ChatColor.GRAY + ": " + ChatColor.RED + this.getClassData().get(player).getEnergy() + (requiredEnergy == 0L ? "" : "/" + requiredEnergy)
-        );
+        element.add(ChatColor.AQUA + ChatColor.BOLD.toString() + "Bard Energy" + ChatColor.GRAY + ": " + ChatColor.RED + this.getClassData().get(player).getEnergy() + requiredEnergy);
     }
 }

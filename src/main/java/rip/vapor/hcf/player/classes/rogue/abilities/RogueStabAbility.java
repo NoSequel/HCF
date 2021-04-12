@@ -18,9 +18,18 @@ import rip.vapor.hcf.player.timers.impl.player.RogueStabTimer;
 @RequiredArgsConstructor
 public class RogueStabAbility extends Ability {
 
-    private final ModuleHandler handler;
-    private final TimerModule timerController = handler.find(TimerModule.class);
-    private final RogueStabTimer rogueStabTimer = timerController.findTimer(RogueStabTimer.class).get();
+    private final TimerModule timerController;
+    private final RogueStabTimer rogueStabTimer;
+
+    /**
+     * Constructor to make a new rogue stab ability instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public RogueStabAbility(ModuleHandler handler) {
+        this.timerController = handler.find(TimerModule.class);
+        this.rogueStabTimer = timerController.findTimer(RogueStabTimer.class).get();
+    }
 
     @EventHandler
     public void onDamge(EntityDamageByEntityEvent event) {

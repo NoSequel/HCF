@@ -108,13 +108,13 @@
         <dependency>
             <groupId>com.github.NoSequel.TabAPI</groupId>
             <artifactId>shared</artifactId>
-            <version>454f742a2b</version>
+            <version>8625099fa3</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.NoSequel.TabAPI</groupId>
-            <artifactId>v1_7_R4</artifactId>
-            <version>454f742a2b</version>
+            <artifactId>v1_8_R3</artifactId>
+            <version>8625099fa3</version>
         </dependency>
     </dependencies>
 

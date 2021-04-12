@@ -3,7 +3,7 @@ package rip.vapor.hcf;
 import io.github.nosequel.menus.MenuHandler;
 import io.github.nosequel.scoreboard.ScoreboardHandler;
 import io.github.nosequel.tab.shared.TabHandler;
-import io.github.nosequel.tab.v1_7_r4.v1_7_R4TabAdapter;
+import io.github.nosequel.tab.v1_8_r3.v1_8_R3TabAdapter;
 import rip.vapor.hcf.commands.EcoCommand;
 import rip.vapor.hcf.commands.KothCommand;
 import rip.vapor.hcf.listeners.operations.BlockOperationListener;
@@ -120,10 +120,10 @@ public class Vapor extends JavaPlugin {
         // setup scoreboard
         new ScoreboardHandler(this, new BoardProviderHandler(Arrays.asList(
                 new TimerBoardProvider(this.handler),
-                new ClassBoardProvider(this.handler)
+                new ClassBoardProvider(this.handler.find(ClassModule.class))
         )), 2L);
 
-        new TabHandler(new v1_7_R4TabAdapter(), new TablistProvider(this.handler), this, 5L);
+        new TabHandler(new v1_8_R3TabAdapter(), new TablistProvider(this.handler), this, 5L);
     }
 
     @Override

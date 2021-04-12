@@ -24,7 +24,7 @@ public class TimerModule implements Module {
         this.registerTimer(new EnderpearlTimer(this.handler));
         this.registerTimer(new CombatTimer(this.handler));
         this.registerTimer(new TeleportTimer(this.handler));
-        this.registerTimer(new SpawnProtectionTimer());
+        this.registerTimer(new SpawnProtectionTimer(this.handler));
         this.registerTimer(new ArcherSpeedTimer());
         this.registerTimer(new RogueStabTimer());
     }

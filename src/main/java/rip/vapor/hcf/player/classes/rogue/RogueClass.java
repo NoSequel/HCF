@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes.rogue;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -29,8 +30,14 @@ public class RogueClass extends Class<RogueClassData> {
         });
     }
 
+    /**
+     * Get the strings of the part
+     *
+     * @param element the element to add the strings to
+     * @param player  the player
+     */
     @Override
-    public List<String> getStrings(Player player) {
-        return Collections.emptyList();
+    public void getStrings(ScoreboardElement element, Player player) {
+
     }
 }

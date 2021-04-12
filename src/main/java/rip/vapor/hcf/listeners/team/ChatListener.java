@@ -17,8 +17,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatListener implements Listener {
 
-    private final ModuleHandler handler;
-    private final TeamModule teamModule = handler.find(TeamModule.class);
+    private final TeamModule teamModule;
+
+    /**
+     * Constructor to make a new chat listener instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public ChatListener(ModuleHandler handler) {
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncPlayerChatEvent event) {

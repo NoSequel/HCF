@@ -1,7 +1,9 @@
 package rip.vapor.hcf.player.timers.impl.player;
 
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import rip.vapor.hcf.Vapor;
+import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
 import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
@@ -19,9 +21,11 @@ import java.util.Map;
 public class SpawnProtectionTimer extends PlayerTimer {
 
     private final Map<Player, PlayerData> data = new HashMap<>();
+    private final ModuleHandler handler;
 
-    public SpawnProtectionTimer() {
+    public SpawnProtectionTimer(ModuleHandler handler) {
         super("SpawnProtection", ChatColor.GREEN + ChatColor.BOLD.toString() + "Invincibility", false, 60000*30);
+        this.handler = handler;
     }
 
     @EventHandler
@@ -45,6 +49,11 @@ public class SpawnProtectionTimer extends PlayerTimer {
 
 
         data.setDurationLeft(this.getDuration(player));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onJoin(PlayerJoinEvent event) {
+        this.data.put(event.getPlayer(), handler.find(PlayerDataModule.class).findPlayerData(event.getPlayer().getUniqueId()));
     }
 
     @Override

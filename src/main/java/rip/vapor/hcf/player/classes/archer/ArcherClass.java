@@ -1,5 +1,6 @@
 package rip.vapor.hcf.player.classes.archer;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.classes.Class;
 import rip.vapor.hcf.player.classes.ability.Ability;
@@ -28,8 +29,14 @@ public class ArcherClass extends Class<ArcherClassData> {
         });
     }
 
+    /**
+     * Get the strings of the part
+     *
+     * @param element the element to add the strings to
+     * @param player  the player
+     */
     @Override
-    public List<String> getStrings(Player player) {
-        return Collections.emptyList();
+    public void getStrings(ScoreboardElement element, Player player) {
+
     }
 }

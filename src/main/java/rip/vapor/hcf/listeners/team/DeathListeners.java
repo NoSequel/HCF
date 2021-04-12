@@ -1,6 +1,5 @@
 package rip.vapor.hcf.listeners.team;
 
-import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.VaporConstants;
 import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.PlayerData;
@@ -24,13 +23,20 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class DeathListeners implements Listener {
 
-    private final ModuleHandler handler;
+    private final PlayerDataModule playerDataModule;
+    private final TeamModule teamModule;
 
-    private final PlayerDataModule playerDataModule = handler.find(PlayerDataModule.class);
-    private final TeamModule teamModule = handler.find(TeamModule.class);
+    /**
+     * Constructor to make a new death listener instance
+     *
+     * @param handler the handler to get the modules from
+     */
+    public DeathListeners(ModuleHandler handler) {
+        this.playerDataModule = handler.find(PlayerDataModule.class);
+        this.teamModule = handler.find(TeamModule.class);
+    }
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {

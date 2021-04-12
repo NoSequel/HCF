@@ -1,6 +1,5 @@
 package rip.vapor.hcf.listeners.classes;
 
-import lombok.RequiredArgsConstructor;
 import rip.vapor.hcf.Vapor;
 import rip.vapor.hcf.player.classes.ClassModule;
 import org.bukkit.Bukkit;
@@ -17,11 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class EquipListener implements Listener {
 
     private final Vapor plugin;
-    private final ClassModule classController = plugin.getHandler().find(ClassModule.class);
+    private final ClassModule classController;
     private final Material[] armor = new Material[]{
             // BOOTS
             Material.IRON_BOOTS,
@@ -51,6 +49,16 @@ public class EquipListener implements Listener {
             Material.IRON_HELMET,
             Material.LEATHER_HELMET
     };
+
+    /**
+     * Constructor to make a new equip listener object
+     *
+     * @param plugin the plugin to get the module handler from and register runnables to
+     */
+    public EquipListener(Vapor plugin) {
+        this.plugin = plugin;
+        this.classController = plugin.getHandler().find(ClassModule.class);
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {

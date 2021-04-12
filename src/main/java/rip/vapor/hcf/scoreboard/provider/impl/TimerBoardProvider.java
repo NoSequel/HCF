@@ -1,5 +1,6 @@
 package rip.vapor.hcf.scoreboard.provider.impl;
 
+import io.github.nosequel.scoreboard.element.ScoreboardElement;
 import rip.vapor.hcf.module.ModuleHandler;
 import rip.vapor.hcf.player.timers.Timer;
 import rip.vapor.hcf.scoreboard.provider.BoardProvider;
@@ -26,20 +27,22 @@ public class TimerBoardProvider implements BoardProvider {
         this.timerModule = handler.find(TimerModule.class);
     }
 
+    /**
+     * Get the strings of the part
+     *
+     * @param element the element to add the strings to
+     * @param player  the player
+     */
     @Override
-    public List<String> getStrings(Player player) {
-        final List<String> strings = new ArrayList<>();
-
+    public void getStrings(ScoreboardElement element, Player player) {
         for (Timer timer : timerModule.getTimers()) {
             if (timer instanceof PlayerTimer && ((PlayerTimer) timer).isOnCooldown(player)) {
-                strings.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((PlayerTimer) timer).getDuration(player), timer.isTrailing()));
+                element.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((PlayerTimer) timer).getDuration(player), timer.isTrailing()));
             } else if (timer instanceof GlobalTimer && timer.getThread().isActive()) {
                 if(((GlobalTimer) timer).getThread().getCurrentDuration() > 0) {
-                    strings.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((GlobalTimer) timer).getThread().getCurrentDuration(), timer.isTrailing()));
+                    element.add(timer.getScoreboardTag() + ChatColor.GRAY + ": " + ChatColor.RED + StringUtils.getFormattedTime(((GlobalTimer) timer).getThread().getCurrentDuration(), timer.isTrailing()));
                 }
             }
         }
-
-        return strings;
     }
 }

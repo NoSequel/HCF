@@ -9,6 +9,7 @@ import rip.vapor.hcf.player.PlayerDataModule;
 import rip.vapor.hcf.player.data.BalanceData;
 import rip.vapor.hcf.player.data.SpawnProtectionData;
 import rip.vapor.hcf.player.data.deathban.DeathbanData;
+import rip.vapor.hcf.player.timers.Timer;
 import rip.vapor.hcf.team.Team;
 import rip.vapor.hcf.team.TeamModule;
 import rip.vapor.hcf.team.data.impl.player.PlayerTeamData;
@@ -42,7 +43,7 @@ public class PlayerListeners implements Listener {
         this.timerModule = handler.find(TimerModule.class);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final PlayerData playerData = playerDataModule.findOrElseMake(player.getUniqueId());
@@ -102,10 +103,10 @@ public class PlayerListeners implements Listener {
     public void onRespawn(PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
 
-        this.timerModule.getTimers().stream()
-                .filter(timer -> timer instanceof PlayerTimer)
-                .map(timer -> ((PlayerTimer) timer))
-                .filter(timer -> timer.isOnCooldown(player))
-                .forEach(timer -> timer.cancel(player));
+        for(Timer timer : this.timerModule.getTimers()) {
+            if(timer instanceof PlayerTimer && ((PlayerTimer) timer).isOnCooldown(player)) {
+                ((PlayerTimer) timer).cancel(player);
+            }
+        }
     }
 }
